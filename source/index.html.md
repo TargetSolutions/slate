@@ -417,6 +417,8 @@ This contains the Crew Scheduler notes for the day formatted in <code>HTML</code
 
 # Time Off
 
+## GET /time_off_types
+
 <span class="get">GET</span> /time_off_types
 
 Get all non-deleted time off types in the system. 
@@ -467,6 +469,13 @@ secondary_color|	Text color of the type|	RGB hex
 force_include|	Ignore time off of this type in callbacks|	boolean
 forward|	Forward time off of this type to other admins if not handled|	boolean
 
+## POST /time_offs/:id/deny
+
+Deny time off request
+
+## POST /time_offs/:id/approve
+
+Approve time off request
 
 # Labels
 ## GET /labels
@@ -705,6 +714,17 @@ List all non-deleted, active users of the company
    ]
 }
 ```
+## GET /users/[user id]/titles
+
+Returns all CallBack lists user is associated with
+
+## GET /users/[user id]/filters
+
+Returns all Speciality Filers user is associated with
+
+## GET /users/[user id]/groups
+
+Returns all Groups user is associated with
 
 <span class="get"> GET</span> /users/:id
 
@@ -742,6 +762,18 @@ Create a new user. Send <code>JSON</code> data in the body
 <span class="patch"> PATCH</span> /users/:id
 
 Update a user with the <code>user_id</code>. Send <code>JSON</code> data in the request body. You only need to send data that you want to update.
+
+##  GET /users/:id/time_offs
+
+Retrieve time off entries for user(s)
+
+## POST /time_offs
+
+Request time off
+
+## PATCH /time_offs/:id
+
+Edit time off Data
 
 ## GET /users/:user_id/timeoff/accrual/bank
 
@@ -1054,3 +1086,8 @@ start |	start date / time of payroll range| Y
 end	| end date / time of payroll range | Y
 user_id | user id of employee |
 
+# Forms
+
+## GET /forms/:id/submissions
+
+Returns submitted form data
