@@ -28,7 +28,7 @@ At this time, the API is does not expose every part of the application, but you 
 do lots of very useful things with it! Query the department schedule, manage labels, create reports, add / edit work types, add / edit users, view system log,
 time off types, list shift trades and much more.
 
-Our examples are in PHP, using [Guzzle 6](http://docs.guzzlephp.org/en/latest/), and in shell script using curl.
+Our examples are in CURL.
 
 
 # Authentication
