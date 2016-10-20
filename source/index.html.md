@@ -2,21 +2,19 @@
 title: CrewSense API Reference
 
 language_tabs:
-  - shell: cURL
   - php: PHP
+  - shell: cURL
+
 
 toc_footers:
   - <a href='https://crewsense.com/Application/ControlPanel/Options'>Sign Up for a Developer Key</a>
-
-includes:
-  - errors
 
 search: true
 ---
 
 # Introduction
 
-Welcome to the CrewSense API documentation!
+Welcome to the CrewSense API!
 Find out how to send requests to our API, and what you can do with it.
 
 
@@ -27,8 +25,8 @@ $client = new \GuzzleHttp\Client([
 ]);
 ```
 
-The API is in a beta state and does not expose every part of the application, but you can already 
-do lots of very useful things with it! Query the department schedule, manage labels, work types, 
+At this time, the API is does not expose every part of the application, but you can already 
+do lots of very useful things with it! Query the department schedule, manage labels, create reports, add / edit work types, add / edit users, view system log,
 time off types, list shift trades and much more.
 
 Our examples are in PHP, using [Guzzle 6](http://docs.guzzlephp.org/en/latest/), and in shell script using curl.
@@ -47,153 +45,618 @@ To generate API key/secret pairs, go to the [System Settings](https://crewsense.
 
 If you no longer use the API credentials or you suspect they have been compromised, please delete them, and generate new ones instead, if needed.
 
-> Retrieve an access token:
+## Receiving an access token
+
+You use access tokens to authorize any requests made towards our API. To request an access token, issue a POST request to https://api.crewsense.com/oauth/access_token
+
+> Receiving an access token:
 
 ```shell
 curl -v https://api.crewsense.com/oauth/access_token \
-        -d "client_id=YOUR_CLIENT_ID" \
-        -d "client_secret=YOUR_SECRET_KEY" \
-        -d "grant_type=client_credentials"
+     -d "client_id=YOUR_CLIENT_ID" \
+     -d "client_secret=YOUR_SECRET_KEY" \
+     -d "grant_type=client_credentials"
 ```
 
-```php
-curl -v https://api.crewsense.com/oauth/access_token \
-        -d "client_id=YOUR_CLIENT_ID" \
-        -d "client_secret=YOUR_SECRET_KEY" \
-        -d "grant_type=client_credentials"
-```
-
-> Substitute your credentials for `YOUR_CLIENT_ID` and `YOUR_SECRET_KEY`
-
-Kittn uses API keys to allow access to the API. You can register a new Kittn API key at our [developer portal](http://example.com/developers).
-
-Kittn expects for the API key to be included in all API requests to the server in a header that looks like the following:
-
-`Authorization: meowmeowmeow`
-
-<aside class="notice">
-You must replace <code>meowmeowmeow</code> with your personal API key.
-</aside>
-
-# Kittens
-
-## Get All Kittens
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get()
-```
-
-```shell
-curl "http://example.com/api/kittens"
-  -H "Authorization: meowmeowmeow"
-```
-
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-let kittens = api.kittens.get();
-```
-
-> The above command returns JSON structured like this:
-
-```json
-[
-  {
-    "id": 1,
-    "name": "Fluffums",
-    "breed": "calico",
-    "fluffiness": 6,
-    "cuteness": 7
-  },
-  {
-    "id": 2,
-    "name": "Max",
-    "breed": "unknown",
-    "fluffiness": 5,
-    "cuteness": 10
-  }
-]
-```
-
-This endpoint retrieves all kittens.
-
-### HTTP Request
-
-`GET http://example.com/api/kittens`
-
-### Query Parameters
-
-Parameter | Default | Description
---------- | ------- | -----------
-include_cats | false | If set to true, the result will also include cats.
-available | true | If set to false, the result will include kittens that have already been adopted.
-
-<aside class="success">
-Remember — a happy kitten is an authenticated kitten!
-</aside>
-
-## Get a Specific Kitten
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get(2)
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get(2)
-```
-
-```shell
-curl "http://example.com/api/kittens/2"
-  -H "Authorization: meowmeowmeow"
-```
-
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-let max = api.kittens.get(2);
-```
-
-> The above command returns JSON structured like this:
+> If the request is successful and you credentials are correct, you should receive a JSON string like this:
 
 ```json
 {
-  "id": 2,
-  "name": "Max",
-  "breed": "unknown",
-  "fluffiness": 5,
-  "cuteness": 10
+    "access_token": "DZs3IeaMP5uEAc2I19kJYl8Tbvsmgq9GaPQPaMjN",
+    "token_type": "bearer",
+    "expires": 1426274440,
+    "expires_in": 86400
 }
 ```
 
-This endpoint retrieves a specific kitten.
 
-<aside class="warning">Inside HTML code blocks like this one, you can't use Markdown, so use <code>&lt;code&gt;</code> blocks to denote code.</aside>
+<aside class="notice">
+Substitute your credentials for `YOUR_CLIENT_ID` and `YOUR_SECRET_KEY` 
+</aside>
 
-### HTTP Request
+The <code>token_type</code> signifies that you have to use HTTP headers to authorize requests (see the next section). expires is a UNIX timestamp of the expiration date of the token (after which you have to request a new one). <code>expires_in</code> shows the expiration length in seconds.
 
-`GET http://example.com/kittens/<ID>`
+> Client access tokens currently expire in one week. If you try to use an expired access token, you might receive a response like:
 
-### URL Parameters
+```json
+{
+    "status": 401,
+    "error": "unauthorized",
+    "error_message": "Access token is not valid"
+}
+```
+> In this case, you simply have to request a new access token using the method described above.
 
-Parameter | Description
---------- | -----------
-ID | The ID of the kitten to retrieve
+## Authorizing requests
 
+To access protected resources in the API, you have to sign the HTTP requests with an <code>Authorization header</code>, using the <code>access_token</code> acquired in the previous step.
+
+<code>Authorization: Bearer DZs3IeaMP5uEAc2I19kJYl8Tbvsmgq9GaPQPaMjN</code>
+
+> curl example
+
+```shell
+curl -v https://api.crewsense.com/v1/schedule \
+     -H "Authorization: Bearer DZs3IeaMP5uEAc2I19kJYl8Tbvsmgq9GaPQPaMjN"
+```
+
+# Conventions
+
+We use a simplified version of the ISO 8601 standard. Dates are represented in the <code>YYYY-MM-DD</code> format. Most dates with timestamps follow the <code>YYYY-MM-DD hh:mm:ss</code> format (e.g. “2015-03-15 19:33:59”), where the timestamp is “timezoneless”, it is implied to be in your organization’s timezone (or the timezone is irrelevant).
+
+For a few timestamp type data fields, we use the (still ISO 8601 standard) <codE>YYYY-MM-DDThh:mm:ss+00:00</code> format (example: “2015-03-21T19:45:33-06:00”). This is used for fields like contact time, response time, creation date etc., where the timezone may be important (due to daylight savings time for example).
+
+# Schedule
+## GET /schedule
+### <span class="get">GET</span> /schedule
+
+> An example of returned schedule data looks like this:
+
+```json
+{
+   "start": "2015-03-15 08:00:00",
+   "end": "2015-03-22 08:00:00",
+
+   "days": [
+      {
+         "date": "2015-03-15",
+         "assignments": [
+            {
+               "shifts": [
+                  ... shift data ...
+               ],
+            }
+         ],
+         "time_off": [
+            {
+               ... time off data ...
+            }
+         ],
+         "callbacks": [
+            {
+               ... callback data ...
+            }
+         ],
+         "trades": [
+            {
+               ... trade data ...
+            }
+         ],
+         "misc": [
+            {
+               ... misc. hours data ...
+            }
+         ]
+      }
+   ],
+
+   "prev": {
+      "href": "https://api.crewsense.com/v1/schedule?start=2015-03-08%2008:00:00&end=2015-03-15%2008:00:00"
+   },
+   "next": {
+      "href": "https://api.crewsense.com/v1/schedule?start=2015-03-22%2008:00:00&end=2015-03-22%2008:00:00"
+   }
+}
+```
+
+The schedule consists of shifts, time offs, callbacks, trades, notes, activities and misc. hours. They are wrapped by a top-level object containing metadata about the requested schedule (start date, end date, links for the next and previous period).
+
+This endpoint has two required parameters:
+
+### Query Parameters
+
+Field | Description | Format
+--------- | ------- | -----------
+start | The date you need the data from | datetime
+end | 	The date you need the data to | datetime
+
+<aside class='warning'>While we are trying to make the API RESTful, some resources, including this one, are more of a convenient packaging of multiple resources for querying. You cannot issue a <code>POST</code> or <code>DELETE</code> request on this endpoint.</aside>
+
+In the following sections, we try to introduce all the important data in the schedule resource.
+
+## days
+
+<code>days</code>
+
+This array contains all days occurring between the start and end date requested. Each object in the array contains the <code>date</code> key, and arrays of objects occurring that day. For the following sections, we refer to one object in this array as a <code>day</code>.
+
+
+## day.assignments
+
+<code>day.assignments</code>
+
+> day.assignments
+
+This array contains the assignments of the day.
+
+```json
+{
+   "id": 1234,
+   "href": "https://api.crewsense.com/v1/assignments/1234",
+   "date": "2015-03-15",
+   "start": "2015-03-15 08:00:00",
+   "end": "2015-03-16 08:00:00",
+   "name": "Station 1",
+   "minimum_staffing": 3,
+   "shifts": [
+      ... see next section ...
+   ]
+}
+```
+
+### Query Parameters
+
+Field | Description | Type
+--------- | ------- | -----------
+id | Unique identifier of the assignment|integer
+href |Link to full object	| string (URL)
+date | The day the assignment starts on | date
+start | Start date of assignment |datetime
+end | End date of assignment | datetime
+name | Title of assignment | string
+minimum_staffing | Employees needed |	integer
+shifts | Employees working the assignment	| array
+
+## day.assignment.shifts
+
+> day.assignment.shifts
+
+This array holds data about the employees scheduled for the assignment on the given day.
+
+```json
+{
+   "id": 456789,
+   "href": "https://api.crewsense.com/v1/shifts/456789",
+   "start": "2015-03-15 08:00:00",
+   "end": "2015-03-16 08:00:00",
+   "hold_over": 0,
+   "recurring": true,
+   "user": {
+      "id": 848,
+      "href": "https://api.crewsense.com/v1/users/848",
+      "name": "John Doe"
+   },
+   "scheduled_by": {
+      "id": 138,
+      "href": "https://api.crewsense.com/v1/users/138",
+      "name": "Joe Boss"
+   },
+   "work_type": {
+      "id": 33,
+      "href": "https://api.crewsense.com/v1/work_types/33",
+      "name": "Regular Time",
+      "work_code": "REG001"
+   },
+   "labels": [
+      {
+         "id": 12,
+         "href": "https://api.crewsense.com/v1/labels/12",
+         "label": "ENG"
+      }
+   ]
+}
+```
+### Query Parameters
+
+Field | Description | Type
+--------- | ------- | -----------
+id | Unique identifier of the work shift|integer
+href |Link to full object	| string (URL)
+start | Start date of shift |datetime
+end | End date of shift | datetime
+recurring	| Is it a regularly occurring shift? | boolean
+user|Employee working the shift|	See Users
+scheduled_by|	Admin who assigned the shift|	See Users
+work_type|	Type of work shift|	See section-wt
+labels|	Applied Crew Scheduler labels|	array; see Labels
+
+You will notice that some of the included objects have <code>href</code> properties. This is because we are only returning a sensible subset of the available data about these objects. If you make a <span class="get">GET</span> request to the provided URL, you can retrieve all of the available information about them.
+
+## day.time_off
+
+All approved time off for the day is in this array, including long term and recurring leave that has an occurrence fall on this day. 
+
+> day.time_off
+
+```json
+{
+   "id": 623492,
+   "href": "https://api.crewsense.com/v1/time_off/623492",
+   "start": "2015-03-15 08:00:00",
+   "end": "2015-03-16 08:00:00",
+   "user": {
+      "id": 848,
+      "href": "https://api.crewsense.com/v1/users/848",
+      "name": "John Doe"
+   },
+   "admin": {
+      "id": 138,
+      "href": "https://api.crewsense.com/v1/users/138",
+      "name": "Joe Boss"
+   },
+   "time_off_type": {
+      "id": 45,
+      "href": "https://api.crewsense.com/v1/time_off_types/45",
+      "name": "Sick Leave [SL]"
+   }
+}
+```
+
+### Query Parameters
+
+Field | Description | Type
+--------- | ------- | -----------
+id | Unique identifier of the time off|integer
+href |Link to full object	| string (URL)
+start | Start date of time off entry|datetime
+end | End date of time off entry | datetime
+user|Employee on time off| See Users
+admin|	Admin who approved time off|	See Users
+time_off_type|	Type of time off |	See Time off Types
+
+## day.callbacks
+
+> day.callbacks
+
+In this array you will find all finalized callbacks for the day. Callback shifts that were drag & dropped to a work assignment will not be included, they are under <code>day.assignment.shifts</code>
+
+```json
+{
+   "id": 64012,
+   "href": "https://api.crewsense.com/v1/callbacks/64012",
+   "start": "2015-03-15 08:00:00",
+   "end": "2015-03-16 08:00:00",
+   "minimum_staffing": 1,
+   "records": [
+      {
+         "id": 2165743,
+         "user": {
+            "id": 848,
+            "href": "https://api.crewsense.com/v1/users/848",
+            "name": "John Doe"
+         },
+         "start": "2015-03-15 08:00:00",
+         "end": "2015-03-16 08:00:00",
+         "work_site": null
+      }
+   ]
+   "title": {
+      "id": 112,
+      "href": "https://api.crewsense.com/v1/titles/112",
+      "name": "Firefighter"
+   }
+}
+```
+
+### Query Parameters
+
+Field | Description | Type
+--------- | ------- | -----------
+id | Unique identifier of the callback|integer
+href |Link to full object	| string (URL)
+start | Start date of the callback shift|datetime
+end | End date of the callback shift| datetime
+minimum_staffing| Number of employees needed in this callback| integer
+records|	Accepting employees	array| ; see section-cbr
+title|Employee type needed time off|	See section-title
+
+<aside class="notice"><code>records</code> gives you all accepting employees of the callback. You can request more data about certain pieces of the callback using the <code>href</code> links provided.</aside>
+
+## day.trades
+> day.trades
+
+<code>trades</code> contains all accepted and finalized shift trades for the day.
+
+```json
+{
+   "id": 4355,
+   "href": "https://api.crewsense.com/v1/trades/4355",
+   "start": "2015-03-15 08:00:00",
+   "end": "2015-03-16 08:00:00",
+   "requesting_user": {
+      "id": 848,
+      "href": "https://api.crewsense.com/v1/users/848",
+      "name": "John Doe"
+   },
+   "accepting_user": {
+      "id": 138,
+      "href": "https://api.crewsense.com/v1/users/138",
+      "name": "Jack Smith"
+   },
+   "admin": {
+      "id": 98,
+      "href": "https://api.crewsense.com/v1/users/98",
+      "name": "Steve Boss"
+   }
+}
+```
+> Follow the top-level href link to receive all information about the trade.
+
+## day.misc
+
+> day.misc
+
+```json
+{
+   "id": 47711,
+   "href": "https://api.crewsense.com/v1/misc/47711",
+   "date": "2015-03-16",
+   "length": 4.5,
+   "user": {
+      "id": 848,
+      "href": "https://api.crewsense.com/v1/users/848",
+      "name": "John Doe"
+   },
+   "work_type": "Training"
+}
+```
+This array provides data about any miscellaneous hours added for the day.
+
+## day.notes, day.activities
+This contains the Crew Scheduler notes for the day formatted in <code>HTML</code> format
+
+
+# Time Off
+
+<span class="get">GET</span> /time_off_types
+
+Get all non-deleted time off types in the system. 
+
+> /time_off_types
+
+```json
+[
+   {
+      "id": "5",
+      "label": "Sick",
+      "work_code": "SL",
+      "required_buffer": "0.00",
+      "instance_limit": "1",
+      "primary_color": "#2474a9",
+      "secondary_color": "#FFFFFF",
+      "force_include": true,
+      "forward": false,
+      "href": "https://api.crewsense.com/v1/time_off_types/5"
+   }
+   {
+      "id": "6",
+      "label": "Vacation",
+      "work_code": "VAC",
+      "required_buffer": "0.00",
+      "instance_limit": "0",
+      "primary_color": "#3f5647",
+      "secondary_color": "#FFFFFF",
+      "force_include": false,
+      "forward": true,
+      "href": "https://api.crewsense.com/v1/time_off_types/6"
+   }
+]
+```
+
+### Query Parameters
+
+Field | Description | Type
+--------- | ------- | -----------
+id|	Unique identifier of the time off type|	integer
+href|	Link to full object|	string (URL)
+label|	Name of the time off type|	string
+work_code	|Shortcode of the time off type|	string
+required_buffer|	Hours needed between request and start of the time off entry|	decimal
+instance_limit|	Max. allowed number of this type in a yea|	integer
+primary_color|	Main color of the type (background color)|	RGB hex
+secondary_color|	Text color of the type|	RGB hex
+force_include|	Ignore time off of this type in callbacks|	boolean
+forward|	Forward time off of this type to other admins if not handled|	boolean
+
+
+# Labels
+## GET /labels
+
+> GET /labels
+
+<span class="get">GET</span> /labels
+
+Receive a list of all crew scheduler labels available for the company. 
+
+```json
+[
+   {
+      "id": "1773",
+      "label": "CPT",
+      "color": "#CCCCCC",
+      "text_color": "#333333",
+      "position": "1"
+   },
+   {
+      "id": "1774",
+      "label": "ENG",
+      "color": "#ff0000",
+      "text_color": "#ffffff",
+      "position": "2"
+   }
+]
+```
+### Query Parameters
+
+Field | Description | Type
+--------- | ------- | -----------
+id|	Unique identifier of the label|	integer
+label|	The text appearing on the label|	string
+color|	The background color of the label|	RGB hex
+text_color|	The text color of the label|	RGB hex
+position|	Relative position of shifts with this label|	integer
+
+
+## GET /labels/{id}
+
+> example: GET /labels/1773
+
+<span class="get">GET</span> /labels
+
+Receive the details of one particular label.
+
+
+```json
+{
+   "id": "1773",
+   "label": "CPT",
+   "color": "#CCCCCC",
+   "text_color": "#333333",
+   "position": "1"
+}
+```
+
+## POST /labels
+
+<span class="post">POST</span> /labels
+
+Create a new crew scheduler label in the system. Required fields:
+
+<code>label</code> - the text on the label
+
+<code>color</code> - the background color of the label, in HEX format (#RRGGBB)
+
+<code>text_color</code> - the text color of the label, in HEX format
+
+Optional fields:
+
+<code>position</code> - The relative position of shifts with this label inside an assignment
+
+## POST /labels/{id}
+
+<span class="post">POST</span> /labels/{id}
+
+Change an existing crew scheduler label in the system. Required fields:
+
+<code>label</code> - the text on the label
+
+<code>color</code> - the background color of the label, in HEX format (#RRGGBB)
+
+<code>text_color</code> - the text color of the label, in HEX format
+
+Optional fields:
+
+<code>position</code> - The relative position of shifts with this label inside an assignment
+
+## DELETE /labels/{id}
+
+<span class="delete">DELETE</span> /labels/{id}
+
+Remove an existing crew scheduler label from the system.
+
+# Filters
+
+Manage specialty classification filters
+
+### Query Parameters
+
+Field | Description | Type
+--------- | ------- | -----------
+id|	Unique identifier of the filter|	integer
+label|	The name of the filter|	string
+created_on|	Timestamp of the creation of this filter|	timestamp
+user|	The user who created this resource|	User
+
+## GET /filters
+
+<span class="get">GET</span> /filters
+
+> GET /filters example response:
+
+Receive a list of all active specialty classification filters 
+
+```json
+[
+   {
+      "id": "7",
+      "label": "Rescue Certified",
+      "created_on": "2014-10-29T02:17:51-0700",
+      "user": {
+         id: "848",
+         name: "John Doe"
+      }
+   },
+   {
+      "id": "8",
+      "label": "Dive Team",
+      "created_on": "2014-10-30T12:04:01-0700",
+      "user": {
+         id: "848",
+         name: "John Doe"
+      }
+   }
+]
+```
+
+## GET /filters/{id}
+
+<span class="get">GET</span> /filters/{id}
+
+> GET /filters/7 example response:
+
+```json
+{
+   "id": "7",
+      "label": "Rescue Certified",
+      "created_on": "2014-10-29T02:17:51-0700",
+      "deleted": "0",
+      "user": {
+         id: "848",
+         name: "John Doe"
+      }
+}
+```
+
+The <code>deleted</code> key indicates if the filter has been deleted, 0 - active, 1 - deleted.
+
+## POST /filters
+
+<span class="post">POST</span> /filters
+
+Create a new specialty classification filter in the system. Required fields:
+
+<code>label</code> - the name of the new specialty classification filter
+
+## POST /filters/{id}
+
+<span class="post">POST</span> /filters/{id}
+
+Change an existing specialty classification filter in the system. Required fields:
+
+<code>label</code> - the new name of the classification filter
+
+## DELETE /filters/{id}
+
+<span class="delete">DELETE</span> /filters/{id}
+
+Remove an existing specialty classification filter from the system.
+
+# Users
+
+# Logs
+
+# Announcements
+
+# Qualifiers
+
+# Payroll
