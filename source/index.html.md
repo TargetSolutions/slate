@@ -1,15 +1,12 @@
 ---
-title: API Reference
+title: CrewSense API Reference
 
 language_tabs:
-  - shell
-  - ruby
-  - python
-  - javascript
+  - shell: cURL
+  - php: PHP
 
 toc_footers:
-  - <a href='#'>Sign Up for a Developer Key</a>
-  - <a href='https://github.com/tripit/slate'>Documentation Powered by Slate</a>
+  - <a href='https://crewsense.com/Application/ControlPanel/Options'>Sign Up for a Developer Key</a>
 
 includes:
   - errors
@@ -19,41 +16,54 @@ search: true
 
 # Introduction
 
-Welcome to the Kittn API! You can use our API to access Kittn API endpoints, which can get information on various cats, kittens, and breeds in our database.
+Welcome to the CrewSense API documentation!
+Find out how to send requests to our API, and what you can do with it.
 
-We have language bindings in Shell, Ruby, and Python! You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.
 
-This example API documentation page was created with [Slate](https://github.com/tripit/slate). Feel free to edit it and use it as a base for your own API's documentation.
+```php
+> Initiating a client
+$client = new \GuzzleHttp\Client([
+    'base_uri' => 'https://api.crewsense.com'
+]);
+```
+
+The API is in a beta state and does not expose every part of the application, but you can already 
+do lots of very useful things with it! Query the department schedule, manage labels, work types, 
+time off types, list shift trades and much more.
+
+Our examples are in PHP, using [Guzzle 6](http://docs.guzzlephp.org/en/latest/), and in shell script using curl.
+
 
 # Authentication
 
-> To authorize, use this code:
+Our API uses OAuth 2.0 for authentication, specifically the _client credentials_ grant type.  
+The authentication process consists of requesting an access token with your organization's 
+_API key_ and _API secret_, and using this access token in the `Authentication` HTTP header 
+of any subsequent requests.
 
-```ruby
-require 'kittn'
+## Getting your API credentials
 
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-```
+To generate API key/secret pairs, go to the [System Settings](https://crewsense.com/Application/ControlPanel/Options/) page, click "Integrations", and click "Generate new API credentials". The credentials will be listed in the table on that page.
 
-```python
-import kittn
+If you no longer use the API credentials or you suspect they have been compromised, please delete them, and generate new ones instead, if needed.
 
-api = kittn.authorize('meowmeowmeow')
-```
+> Retrieve an access token:
 
 ```shell
-# With shell, you can just pass the correct header with each request
-curl "api_endpoint_here"
-  -H "Authorization: meowmeowmeow"
+curl -v https://api.crewsense.com/oauth/access_token \
+        -d "client_id=YOUR_CLIENT_ID" \
+        -d "client_secret=YOUR_SECRET_KEY" \
+        -d "grant_type=client_credentials"
 ```
 
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
+```php
+curl -v https://api.crewsense.com/oauth/access_token \
+        -d "client_id=YOUR_CLIENT_ID" \
+        -d "client_secret=YOUR_SECRET_KEY" \
+        -d "grant_type=client_credentials"
 ```
 
-> Make sure to replace `meowmeowmeow` with your API key.
+> Substitute your credentials for `YOUR_CLIENT_ID` and `YOUR_SECRET_KEY`
 
 Kittn uses API keys to allow access to the API. You can register a new Kittn API key at our [developer portal](http://example.com/developers).
 
