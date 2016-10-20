@@ -2,7 +2,6 @@
 title: CrewSense API Reference
 
 language_tabs:
-  - php: PHP
   - shell: cURL
 
 
@@ -653,10 +652,405 @@ Remove an existing specialty classification filter from the system.
 
 # Users
 
+## GET /users
+
+> GET /users
+
+```json
+[
+   {
+      "user_id": 1234,
+      "employee_id": "DEV123",
+      "username": "olinagy",
+      "first_name": "Oliver",
+      "last_name": "Nagy",
+      "full_name": "Oliver Nagy",
+      "role": "Deputy",
+      "emails": [
+         "oli.nagy@example.com",
+         "oli.nagy@otherexample.net"
+      ],
+      "phone_numbers": [
+         "5555555555",
+         "1231231232"
+      ]
+   },
+   ...
+]
+```
+<span class="get"> GET</span> /users
+
+List all non-deleted, active users of the company
+
+## GET /users/:id
+
+> GET /users/:id
+
+```json
+{
+   "user_id": 1234,
+   "employee_id": "DEV123",
+   "username": "olinagy",
+   "first_name": "Oliver",
+   "last_name": "Nagy",
+   "full_name": "Oliver Nagy",
+   "role": "Deputy",
+   "emails": [
+      "oli.nagy@example.com",
+      "oli.nagy@otherexample.net"
+   ],
+   "phone_numbers": [
+      "5555555555",
+      "1231231232"
+   ]
+}
+```
+
+<span class="get"> GET</span> /users/:id
+
+## PUT /users
+
+<span class="put">PUT</span> /users
+
+> PUT /users
+
+```json
+{
+   "employee_id": "DEV123",
+   "username": "olinagy",
+   "first_name": "Oliver",
+   "last_name": "Nagy",
+   "full_name": "Oliver Nagy",
+   "role": "Deputy",
+   "phone": "5555555555",
+   "mail": "info@example.com"
+}
+```
+Create a new user. Send <code>JSON</code> data in the body
+
+## PATCH /users/:id
+
+> PATCH /users/:id
+
+```json
+{
+   "first_name": "Oliver",
+   "last_name": "Nagy"
+}
+```
+
+<span class="patch"> PATCH</span> /users/:id
+
+Update a user with the <code>user_id</code>. Send <code>JSON</code> data in the request body. You only need to send data that you want to update.
+
+## GET /users/:user_id/timeoff/accrual/bank
+
+> example: GET /users/1234/timeoff/accrual/bank
+
+```json
+[
+   {
+      "hours": 1001,
+      "time_off_type": {
+         "id": 5,
+         "name": "Sick"
+      }
+   },
+   {
+      "hours": -125.024,
+      "time_off_type": {
+         "id": 6,
+         "name": "Vacation"
+      }
+   },
+   {
+      "hours": 29.2125,
+      "time_off_type": {
+         "id": 7,
+         "name": "Earned Time"
+      }
+   },
+
+   ...
+]
+```
+
+<span class="get">GET</span> /users/:user_id/timeoff/accrual/bank
+
+Return the current time off bank of the user with the <code>user_id</code>. 
+
+
+## GET /users/:user_id/timeoff/accrual/profile
+
+```json
+[
+   {
+      "time_off_type": {
+         "id": 5,
+         "name": "Sick"
+      },
+      "accrual_type": "Accrues 10 hours every 28 days"
+   },
+   {
+      "time_off_type": {
+         "id": 6,
+         "name": "Vacation"
+      },
+      "accrual_type": "Accrues one hour every 10 hours worked (max. 12 hours)"
+   },
+   {
+      "time_off_type": {
+         "id": 7,
+         "name": "Earned Time"
+      },
+      "accrual_type": "No automatic accrual"
+   },
+
+   ...
+
+]
+```
+<span class="get">GET</span> /users/:user_id/timeoff/accrual/profile
+
+Return the accrual type for each time off type based on the employee’s accrual profile.
+
 # Logs
+
+Query the system logs
+
+## GET /logs(/:after)
+
+> GET /logs(/:after)
+
+```json
+{
+   "data": [
+      {
+         "log_id": 329473,
+         "created": "2016-10-13T16:35:52+0200",
+         "event_description": "CallBack Staffing logged in.",
+         "user": {
+             "id": 1,
+             "name": "CallBack Staffing",
+             "href": "https://api.crewsense.com/v1/users/1"
+         }
+      },
+      ...
+   ],
+   "pagination": {
+      "prev": "https://api.crewsense.com/v1/logs/150",
+      "next": "https://api.crewsense.com/v1/logs/250"
+   }
+}
+```
+<span class="get"> GET</span> /logs(/:after)
+
+Whenever any change is made in the system, we add a system log entry. The endpoints below allow access to these system logs.
+
+We return 50 log entries per page. The <code>prev</code> and <code>next</code> links provide pagination through all of the system logs.
 
 # Announcements
 
+Manage system announcements of your company.
+
+## GET /announcements
+
+<span class="get">GET</span> /announcements
+
+> GET /announcements
+
+```json
+{
+   "data": [
+        {
+            "id": 238,
+            "company_id": 8,
+            "title": "Test",
+            "body": "<p>This is a great HTML <strong>message!</strong></p>",
+            "first_name": "Boss",
+            "last_name": "Doe",
+            "user": {
+                "id": 848,
+                "name": "Boss Doe",
+                "href": "https://api.crewsense.com/v1/users/848"
+            }
+        },
+        ...
+    ],
+    "pagination": {
+        "prev": null,
+        "next": null
+    }
+}
+```
+
+Retrieve the latest, non-deleted announcements.
+
+## POST /announcements
+
+<span class="post">POST</span> /announcements
+
+Create a new company announcement.
+
+### Query Parameters
+
+Field | Description | Required?
+--------- | ------- | -----------
+body|	The text of the announcement, in HTML. | Required
+title|	Announcement title
+
+## PUT /announcements/:id
+
+<span class="put"> PUT</span> /announcements/:id
+
+Update a company announcement identified by <code>:id</code>.
+
+Field | Description | Required?
+--------- | ------- | -----------
+body|	The text of the announcement, in HTML. | Required
+title|	Announcement title
+
+
+## DELETE /announcements/:id
+
+<span class="delete">DELETE</span> /announcements/:id
+
+Delete the announcement by the id <code>id</code>.
+
 # Qualifiers
 
+## GET /qualifiers
+
+<span class="get">GET</span> /qualifiers
+
+> GET /qualifiers
+
+```json
+[
+   {
+      "id": 7,
+      "name": "Captain",
+      "shortcode": "CPT",
+      "modified_by": null,
+      "modified_on": null
+   },
+   {
+      "id": 8,
+      "name": "Firefighter",
+      "shortcode": "FF",
+      "modified_by": null,
+      "modified_on": null
+   }
+]
+```
+
+Retrieve all active qualifiers in your system. 
+
+## GET /qualifiers/:id
+
+> GET /qualifiers/:id
+
+```json
+{
+   "id": 8,
+   "name": "Firefighter",
+   "shortcode": "FF-01",
+   "title_id": 23,
+   "created_by": 848,
+   "created_on": "2015-11-18 05:19:27",
+   "modified_by": null,
+   "modified_on": null,
+   "deleted_at": null,
+   "deleted_by": null
+}
+```
+
+Retreive all information about a specific qualifer by <code>id</code>.
+
+## POST /qualifers
+
+<span class="post">POST</span> /qualifiers
+
+Creates a new qualifier.
+
+> POST /qualifiers example response:
+
+```json
+{
+   "inserted": 1
+}
+```
+### Query Parameters
+
+Field | Description | Required?
+--------- | ------- | -----------
+name |	Descriptive name of the qualifier| Y
+shortcode	| Shortened name of the qualifier, to be displayed on the Crew Scheduler
+
+## DELETE /qualifiers/:id
+
+<span class="delete">DELETE</span> /qualifiers/:id
+
+Delete a qualifier. The qualifier will be soft-deleted, which means we can manually restore it if you think you’ve made a mistake deleting it.
+
+## GET /qualifiers/:id/users
+<span class="get">GET</span> /qualifiers/:id/users
+
+> GET /qualifiers/:id/users
+
+```json
+[
+   {
+      "id": 98,
+      "name": "Hass Brycen",
+      "ranking": 0
+   },
+   {
+      "id": 138,
+      "name": "Oliver Nagy",
+      "ranking": 0
+   },
+   ...
+]
+```
+
+Retrieve all associated users of a qualifier. 
+
 # Payroll
+
+## GET /payroll
+
+<span class="get">GET</span> /payroll
+
+> GET /payroll
+
+```json
+[
+  {
+    "type": "work shift",
+    "user_id": "19218",
+    "employee_id": "417",
+    "name": "DAVID SMITH",
+    "work_type": "Regular Time",
+    "work_code": "REG",
+    "start": "2016-08-13 08:00:00",
+    "end": "2016-08-14 08:00:00",
+    "assignment_name": "Engine 1",
+    "labels": "CPT",
+    "notes": null,
+    "total_hours": 24
+  },
+  ...
+]
+```
+
+Returns all payroll data for date range / time. Can optionally return single employee payroll data by passing <code>user_id</code>
+
+### Query Parameters
+
+Field | Description | Required?
+--------- | ------- | -----------
+start |	start date / time of payroll range| Y
+end	| end date / time of payroll range | Y
+user_id | user id of employee |
+
