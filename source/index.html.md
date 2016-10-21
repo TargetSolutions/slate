@@ -1071,7 +1071,7 @@ Access payroll data within the system, included hours; work types; work codes; p
 
 ## GET /payroll
 
-> GET /payroll example
+> GET /payroll example passing start and end parameters of a 24 hour period
 
 ```json
 [
@@ -1081,12 +1081,12 @@ Access payroll data within the system, included hours; work types; work codes; p
     "employee_id": "417",
     "name": "DAVID SMITH",
     "work_type": "Regular Time",
-    "work_code": "REG",
+    "work_code": "REG01",
     "start": "2016-08-13 08:00:00",
     "end": "2016-08-14 08:00:00",
     "assignment_name": "Engine 1",
     "labels": "CPT",
-    "notes": null,
+    "notes": "Worked as captain due to jones being sick",
     "total_hours": 24
   },
   ...
