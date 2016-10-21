@@ -16,19 +16,11 @@ search: true
 Welcome to the CrewSense API!
 Find out how to send requests to our API, and what you can do with it.
 
-
-```php
-> Initiating a client
-$client = new \GuzzleHttp\Client([
-    'base_uri' => 'https://api.crewsense.com'
-]);
-```
-
 At this time, the API is does not expose every part of the application, but you can already 
-do lots of very useful things with it! Query the department schedule, manage labels, create reports, add / edit work types, add / edit users, view system log,
+do lots of very useful things with it. Query the schedule, manage labels, create reports, add / edit work types, add / edit users, view system log,
 time off types, list shift trades and much more.
 
-Our examples are in CURL.
+Our examples are in cURL.
 
 
 # Authentication
@@ -46,8 +38,6 @@ If you no longer use the API credentials or you suspect they have been compromis
 
 ## Receiving an access token
 
-You use access tokens to authorize any requests made towards our API. To request an access token, issue a POST request to https://api.crewsense.com/oauth/access_token
-
 > Receiving an access token:
 
 ```shell
@@ -57,7 +47,7 @@ curl -v https://api.crewsense.com/oauth/access_token \
      -d "grant_type=client_credentials"
 ```
 
-> If the request is successful and you credentials are correct, you should receive a JSON string like this:
+> If the request is successful and you credentials are correct, you should receive a JSON response like this:
 
 ```json
 {
@@ -67,13 +57,13 @@ curl -v https://api.crewsense.com/oauth/access_token \
     "expires_in": 86400
 }
 ```
-
+You use access tokens to authorize any requests made towards our API. To request an access token, issue a POST request to <code>https://api.crewsense.com/oauth/access_token</code>
 
 <aside class="notice">
 Substitute your credentials for `YOUR_CLIENT_ID` and `YOUR_SECRET_KEY` 
 </aside>
 
-The <code>token_type</code> signifies that you have to use HTTP headers to authorize requests (see the next section). expires is a UNIX timestamp of the expiration date of the token (after which you have to request a new one). <code>expires_in</code> shows the expiration length in seconds.
+The <code>token_type</code> signifies that you have to use HTTP headers to authorize requests (see the next section). <code>expires</code> is a UNIX timestamp of the expiration date of the token (after which you have to request a new one). <code>expires_in</code> shows the expiration length in seconds.
 
 > Client access tokens currently expire in one week. If you try to use an expired access token, you might receive a response like:
 
@@ -88,16 +78,16 @@ The <code>token_type</code> signifies that you have to use HTTP headers to autho
 
 ## Authorizing requests
 
-To access protected resources in the API, you have to sign the HTTP requests with an <code>Authorization header</code>, using the <code>access_token</code> acquired in the previous step.
-
-<code>Authorization: Bearer DZs3IeaMP5uEAc2I19kJYl8Tbvsmgq9GaPQPaMjN</code>
-
 > curl example
 
 ```shell
 curl -v https://api.crewsense.com/v1/schedule \
      -H "Authorization: Bearer DZs3IeaMP5uEAc2I19kJYl8Tbvsmgq9GaPQPaMjN"
 ```
+
+To access protected resources in the API, you have to sign the HTTP requests with an <code>Authorization header</code>, using the <code>access_token</code> acquired in the previous step.
+
+<code>Authorization: Bearer DZs3IeaMP5uEAc2I19kJYl8Tbvsmgq9GaPQPaMjN</code>
 
 # Conventions
 
@@ -469,11 +459,11 @@ secondary_color|	Text color of the type|	RGB hex
 force_include|	Ignore time off of this type in callbacks|	boolean
 forward|	Forward time off of this type to other admins if not handled|	boolean
 
-## POST /time_offs/:id/deny
+## POST /time_offs/{id}/deny
 
 Deny time off request
 
-## POST /time_offs/:id/approve
+## POST /time_offs/{id}/approve
 
 Approve time off request
 
@@ -703,13 +693,13 @@ List all *non-deleted, active* users of the company
 
 <span class="get"> GET</span> /users
 
-## GET /users/:id
+## GET /users/{id
 
 Returns specific user info
 
-<span class="get"> GET</span> /users/:id
+<span class="get"> GET</span> /users/{id
 
-> GET /users/:id
+> GET /users/{id
 
 ```json
 {
@@ -768,9 +758,9 @@ Returns all Groups user is associated with
 ```
 Create a new user. Send <code>JSON</code> data in the body
 
-## PATCH /users/:id
+## PATCH /users/{id
 
-> PATCH /users/:id example
+> PATCH /users/{id example
 
 ```json
 {
@@ -779,15 +769,15 @@ Create a new user. Send <code>JSON</code> data in the body
 }
 ```
 
-<span class="patch"> PATCH</span> /users/:id
+<span class="patch"> PATCH</span> /users/{id
 
 Update a user with the <code>user_id</code>. Send <code>JSON</code> data in the request body. You only need to send data that you want to update.
 
-##  GET /users/:id/time_offs
+##  GET /users/{id}/time_offs
 
 Retrieve time off entries for user(s)
 
-<span class="get"> GET</span> /users/:id/time_offs
+<span class="get"> GET</span> /users/{id}/time_offs
 
 ## POST /time_offs
 
@@ -795,13 +785,13 @@ Request time off
 
 <span class="post"> POST</span> /time_offs
 
-## PATCH /time_offs/:id
+## PATCH /time_offs/{id
 
 Edit time off Data
 
-<span class="patch"> PATCH</span> /time_offs/:id
+<span class="patch"> PATCH</span> /time_offs/{id
 
-## GET /users/:user_id/timeoff/accrual/bank
+## GET /users/{user_id}/timeoff/accrual/bank
 
 > example: GET /users/1234/timeoff/accrual/bank
 
@@ -834,9 +824,9 @@ Edit time off Data
 ```
 Return the current time off bank of the user with the <code>user_id</code>. 
 
-<span class="get">GET</span> /users/:user_id/timeoff/accrual/bank
+<span class="get">GET</span> /users/{user_id}/timeoff/accrual/bank
 
-## GET /users/:user_id/timeoff/accrual/profile
+## GET /users/{user_id}/timeoff/accrual/profile
 
 ```json
 [
@@ -868,7 +858,7 @@ Return the current time off bank of the user with the <code>user_id</code>.
 ```
 Return the accrual type for each time off type based on the employee’s accrual profile.
 
-<span class="get">GET</span> /users/:user_id/timeoff/accrual/profile
+<span class="get">GET</span> /users/{user_id}/timeoff/accrual/profile
 
 # Logs
 
@@ -878,9 +868,9 @@ Whenever any change is made in the system, we add a system log entry. The endpoi
 
 We return 50 log entries per page. The <code>prev</code> and <code>next</code> links provide pagination through all of the system logs.
 
-## GET /logs(/:after)
+## GET /logs(/{after)
 
-> GET /logs(/:after)
+> GET /logs(/{after)
 
 ```json
 {
@@ -903,7 +893,7 @@ We return 50 log entries per page. The <code>prev</code> and <code>next</code> l
    }
 }
 ```
-<span class="get"> GET</span> /logs(/:after)
+<span class="get"> GET</span> /logs(/{after)
 
 # Announcements
 
@@ -955,11 +945,11 @@ Field | Description | Required?
 body|	The text of the announcement, in HTML. | Required
 title|	Announcement title
 
-## PUT /announcements/:id
+## PUT /announcements/{id
 
 Update a company announcement identified by <code>:id</code>.
 
-<span class="put"> PUT</span> /announcements/:id
+<span class="put"> PUT</span> /announcements/{id
 
 Field | Description | Required?
 --------- | ------- | -----------
@@ -967,11 +957,11 @@ body|	The text of the announcement, in HTML. | Required
 title|	Announcement title
 
 
-## DELETE /announcements/:id
+## DELETE /announcements/{id
 
 Delete the announcement by the id <code>id</code>.
 
-<span class="delete">DELETE</span> /announcements/:id
+<span class="delete">DELETE</span> /announcements/{id
 
 # Qualifiers
 
@@ -1002,9 +992,9 @@ Retrieve all active qualifiers in your system.
 
 <span class="get">GET</span> /qualifiers
 
-## GET /qualifiers/:id
+## GET /qualifiers/{id
 
-> GET /qualifiers/:id
+> GET /qualifiers/{id
 
 ```json
 {
@@ -1023,7 +1013,7 @@ Retrieve all active qualifiers in your system.
 
 Retreive all information about a specific qualifer by <code>id</code>.
 
-<span class="get">GET</span> /qualifiers/:id
+<span class="get">GET</span> /qualifiers/{id
 
 ## POST /qualifers
 
@@ -1045,15 +1035,15 @@ Field | Description | Required?
 name |	Descriptive name of the qualifier| Y
 shortcode	| Shortened name of the qualifier, to be displayed on the Crew Scheduler
 
-## DELETE /qualifiers/:id
+## DELETE /qualifiers/{id
 
 Delete a qualifier. The qualifier will be *soft-deleted*, which means we can manually restore it if you think you’ve made a mistake deleting it.
 
-<span class="delete">DELETE</span> /qualifiers/:id
+<span class="delete">DELETE</span> /qualifiers/{id
 
-## GET /qualifiers/:id/users
+## GET /qualifiers/{id}/users
 
-> GET /qualifiers/:id/users
+> GET /qualifiers/{id}/users
 
 ```json
 [
@@ -1073,7 +1063,7 @@ Delete a qualifier. The qualifier will be *soft-deleted*, which means we can man
 
 Retrieve all associated users of a specific qualifier. 
 
-<span class="get">GET</span> /qualifiers/:id/users
+<span class="get">GET</span> /qualifiers/{id}/users
 
 # Payroll
 
@@ -1121,8 +1111,8 @@ user_id | user id of employee |
 
 Returns all submitted form data within the company account.
 
-## GET /forms/:id/submissions
+## GET /forms/{id}/submissions
 
 Returns submitted form data
 
-<span class="get">GET</span> /forms/:id/submissions
+<span class="get">GET</span> /forms/{id}/submissions
