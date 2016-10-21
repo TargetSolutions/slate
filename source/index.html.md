@@ -1169,51 +1169,26 @@ Returns submitted form data
 
 Send ReadyAlert notifications
 
-## POST /readyalert/send/all
-> POST /readyalert/send/all example JSON body:
+## POST /readyalert/
+> POST /readyalert/ example JSON body:
 
 ```json
 {
+   "type": "all",
    "body": "2nd alarm fire in town. Please respond ASAP!",
-   "user": "Jeff Smith"
+   "user": "124"
 }
 ```
-<span class="post"> POST</span> /readyalert/send/all
-
-Send ReadyAlert to all users
-
-**Required Fields**
-
-<code>body</code> = message body
-
-<code>user</code> = who sent the ReadyAlert
-
+<span class="post"> POST</span> /readyalert
 *coming soon*
 
-## POST /readyalert/send/group/{id}
-<span class="post"> POST</span> /readyalert/send/group/{id}
+Send ReadyAlert
 
-Send ReadyAlert to all users in a group
+### Query Parameters
 
-*coming soon*
+Field | Description | Required?
+--------- | ------- | -----------
+type |	(all, title, group, classification, user)| Y
+body	| the body of the message| Y
+user | user id of employee sending ReadyAlert| Y
 
-## POST /readyalert/send/title/{id}
-<span class="post"> POST</span> /readyalert/send/title/{id}
-
-Send ReadyAlert to all users in a Title
-
-*coming soon*
-
-## POST /readyalert/send/user/{id}
-<span class="post"> POST</span> /readyalert/send/user/{id}
-
-Send ReadyAlert to specific user
-
-*coming soon*
-
-## POST /readyalert/send/classification/{id}
-<span class="post"> POST</span> /readyalert/send/classification/{id}
-
-Send ReadyAlert to all users in a classification
-
-*coming soon*
