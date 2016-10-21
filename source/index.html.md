@@ -1113,6 +1113,54 @@ Returns all submitted form data within the company account.
 
 ## GET /forms/{id}/submissions
 
+> example GET /forms/44/submissions:
+
+```json
+[
+  {
+    "user": {
+      "id": "953",
+      "name": "Casey McIntosh",
+      "href": "https://api.crewsense.com/v1/users/953"
+    },
+    "submitted_at": "2015-09-23T19:27:28-0700",
+    "submission": [
+      {
+        "title": "Date of Exposure",
+        "value": "9/23/2015"
+      },
+      {
+        "title": "Type of Exposure",
+        "value": "Chemical"
+      },
+      {
+        "title": "PPE Worn",
+        "values": [
+          "Gloves",
+          "Eye Protection"
+        ]
+      },
+      {
+        "title": "Location of Exposure",
+        "value": "Haz-Co"
+      },
+      {
+        "title": "Employee Name",
+        "value": "Joe Smith"
+      },
+      {
+        "title": "Description of Exposure",
+        "value": "While working in splash area; bleach was sprayed into the face of employee. No medical attention was required and standard cleanup processes were followed."
+      },
+      {
+        "title": "Witnesse(s)",
+        "value": "Jeff Davis"
+      },...
+]
+```
+
 Returns submitted form data
+
+<span class="get">GET</span> /forms/
 
 <span class="get">GET</span> /forms/{id}/submissions
