@@ -1164,3 +1164,40 @@ Returns submitted form data
 <span class="get">GET</span> /forms/
 
 <span class="get">GET</span> /forms/{id}/submissions
+
+# ReadyAlert
+
+Send ReadyAlert notifications
+
+## POST /readyalert/send/all
+<span class="post"> POST</span> /readyalert/send/all
+
+Send ReadyAlert to all users
+
+*coming soon*
+
+## POST /readyalert/send/group/{id}
+<span class="post"> POST</span> /readyalert/send/group/{id}
+
+Send ReadyAlert to all users in a group
+
+*coming soon*
+
+## POST /readyalert/send/title/{id}
+<span class="post"> POST</span> /readyalert/send/title/{id}
+
+Send ReadyAlert to all users in a Title
+
+## POST /readyalert/send/user/{id}
+<span class="post"> POST</span> /readyalert/send/user/{id}
+
+Send ReadyAlert to specific user
+
+*coming soon*
+
+## POST /readyalert/send/classification/{id}
+<span class="post"> POST</span> /readyalert/send/classification/{id}
+
+Send ReadyAlert to all users in a classification
+
+*coming soon*
