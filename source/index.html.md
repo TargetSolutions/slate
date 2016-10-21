@@ -1190,7 +1190,7 @@ Send ReadyAlert
 Field | Description | Required?
 --------- | ------- | -----------
 type |	(all, title, group, classification, user)| Y
-id | id of type | Y unless ALL is used
+ids | ids of type, array | Y unless ALL is used
 body	| the body of the message| Y
 user_id | user id of employee sending ReadyAlert| Y
 
