@@ -1170,9 +1170,23 @@ Returns submitted form data
 Send ReadyAlert notifications
 
 ## POST /readyalert/send/all
+> POST /readyalert/send/all example JSON body:
+
+```json
+{
+   "body": "2nd alarm fire in town. Please respond ASAP!",
+   "user": "Jeff Smith"
+}
+```
 <span class="post"> POST</span> /readyalert/send/all
 
 Send ReadyAlert to all users
+
+**Required Fields**
+
+<code>body</code> = message body
+
+<code>user</code> = who sent the ReadyAlert
 
 *coming soon*
 
@@ -1187,6 +1201,8 @@ Send ReadyAlert to all users in a group
 <span class="post"> POST</span> /readyalert/send/title/{id}
 
 Send ReadyAlert to all users in a Title
+
+*coming soon*
 
 ## POST /readyalert/send/user/{id}
 <span class="post"> POST</span> /readyalert/send/user/{id}
