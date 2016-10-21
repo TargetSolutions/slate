@@ -1175,8 +1175,9 @@ Send ReadyAlert notifications
 ```json
 {
    "type": "all",
+   "id": null,
    "body": "2nd alarm fire in town. Please respond ASAP!",
-   "user": "124"
+   "user_id": "124"
 }
 ```
 <span class="post"> POST</span> /readyalert
@@ -1189,6 +1190,7 @@ Send ReadyAlert
 Field | Description | Required?
 --------- | ------- | -----------
 type |	(all, title, group, classification, user)| Y
+id | id of type | Y unless ALL is used
 body	| the body of the message| Y
-user | user id of employee sending ReadyAlert| Y
+user_id | user id of employee sending ReadyAlert| Y
 
