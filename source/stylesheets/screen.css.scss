@@ -2,6 +2,8 @@
 @import 'normalize';
 @import 'variables';
 @import 'icon-font';
+@import url("https://fonts.googleapis.com/css?family=Oxygen");
+
 
 /*
 Copyright 2008-2013 Concur Technologies, Inc.
@@ -29,7 +31,7 @@ html, body {
   margin: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  @extend %default-font;
+  font-family: 'Oxygen', Serif;
   background-color: $main-bg;
   height: 100%;
   -webkit-text-size-adjust: none; /* Never autoresize text */
@@ -456,7 +458,7 @@ html, body {
   }
 
   code {
-    background-color: rgba(0,0,0,0.05);
+    background-color: #c5c5c5;
     padding: 3px;
     border-radius: 3px;
     @extend %break-words;

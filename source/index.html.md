@@ -106,10 +106,14 @@ We use a simplified version of the ISO 8601 standard. Dates are represented in t
 For a few timestamp type data fields, we use the (still ISO 8601 standard) <codE>YYYY-MM-DDThh:mm:ss+00:00</code> format (example: “2015-03-21T19:45:33-06:00”). This is used for fields like contact time, response time, creation date etc., where the timezone may be important (due to daylight savings time for example).
 
 # Schedule
-## GET /schedule
-### <span class="get">GET</span> /schedule
 
-> An example of returned schedule data looks like this:
+The schedule end point consists of shifts, time offs, callbacks, trades, notes, activities and misc. hours. They are wrapped by a top-level object containing metadata about the requested schedule (start date, end date, links for the next and previous period).
+
+In the following sections, we try to introduce all the important data in the schedule resource.
+
+## GET /schedule
+
+> An example of returned /schedule data GET request looks like this:
 
 ```json
 {
@@ -157,8 +161,7 @@ For a few timestamp type data fields, we use the (still ISO 8601 standard) <codE
    }
 }
 ```
-
-The schedule consists of shifts, time offs, callbacks, trades, notes, activities and misc. hours. They are wrapped by a top-level object containing metadata about the requested schedule (start date, end date, links for the next and previous period).
+<span class="get">GET</span> /schedule
 
 This endpoint has two required parameters:
 
@@ -171,14 +174,11 @@ end | 	The date you need the data to | datetime
 
 <aside class='warning'>While we are trying to make the API RESTful, some resources, including this one, are more of a convenient packaging of multiple resources for querying. You cannot issue a <code>POST</code> or <code>DELETE</code> request on this endpoint.</aside>
 
-In the following sections, we try to introduce all the important data in the schedule resource.
-
 ## days
 
 <code>days</code>
 
 This array contains all days occurring between the start and end date requested. Each object in the array contains the <code>date</code> key, and arrays of objects occurring that day. For the following sections, we refer to one object in this array as a <code>day</code>.
-
 
 ## day.assignments
 
@@ -186,7 +186,7 @@ This array contains all days occurring between the start and end date requested.
 
 > day.assignments
 
-This array contains the assignments of the day.
+This array contains the Crew Scheduler assignments of the day.
 
 ```json
 {
@@ -317,7 +317,7 @@ time_off_type|	Type of time off |	See Time off Types
 
 > day.callbacks
 
-In this array you will find all finalized callbacks for the day. Callback shifts that were drag & dropped to a work assignment will not be included, they are under <code>day.assignment.shifts</code>
+In this array you will find all finalized CallBacks for the day. CallBack shifts that were drag & dropped to a work assignment will not be included, they are found under <code>day.assignment.shifts</code>
 
 ```json
 {
@@ -364,7 +364,7 @@ title|Employee type needed time off|	See section-title
 ## day.trades
 > day.trades
 
-<code>trades</code> contains all accepted and finalized shift trades for the day.
+Contains all accepted and finalized shift trades for the day.
 
 ```json
 {
@@ -415,13 +415,13 @@ This array provides data about any miscellaneous hours added for the day.
 This contains the Crew Scheduler notes for the day formatted in <code>HTML</code> format
 
 
-# Time Off
+# Time Off's
 
 ## GET /time_off_types
 
-<span class="get">GET</span> /time_off_types
+Get all *non-deleted* time off types in the system. 
 
-Get all non-deleted time off types in the system. 
+<span class="get">GET</span> /time_off_types
 
 > /time_off_types
 
@@ -482,9 +482,10 @@ Approve time off request
 
 > GET /labels
 
+Receive a list of all crew scheduler labels available for the company. 
+
 <span class="get">GET</span> /labels
 
-Receive a list of all crew scheduler labels available for the company. 
 
 ```json
 [
@@ -519,9 +520,9 @@ position|	Relative position of shifts with this label|	integer
 
 > example: GET /labels/1773
 
-<span class="get">GET</span> /labels
-
 Receive the details of one particular label.
+
+<span class="get">GET</span> /labels
 
 
 ```json
@@ -536,9 +537,11 @@ Receive the details of one particular label.
 
 ## POST /labels
 
+Create a new crew scheduler label in the system.
+
 <span class="post">POST</span> /labels
 
-Create a new crew scheduler label in the system. Required fields:
+Required Fields:
 
 <code>label</code> - the text on the label
 
@@ -552,9 +555,11 @@ Optional fields:
 
 ## POST /labels/{id}
 
+Change an existing crew scheduler label in the system.
+
 <span class="post">POST</span> /labels/{id}
 
-Change an existing crew scheduler label in the system. Required fields:
+Required Fields:
 
 <code>label</code> - the text on the label
 
@@ -568,30 +573,18 @@ Optional fields:
 
 ## DELETE /labels/{id}
 
+Remove an existing crew scheduler label from the system.
+
 <span class="delete">DELETE</span> /labels/{id}
 
-Remove an existing crew scheduler label from the system.
 
 # Filters
 
 Manage specialty classification filters
 
-### Query Parameters
-
-Field | Description | Type
---------- | ------- | -----------
-id|	Unique identifier of the filter|	integer
-label|	The name of the filter|	string
-created_on|	Timestamp of the creation of this filter|	timestamp
-user|	The user who created this resource|	User
-
 ## GET /filters
 
-<span class="get">GET</span> /filters
-
 > GET /filters example response:
-
-Receive a list of all active specialty classification filters 
 
 ```json
 [
@@ -616,6 +609,19 @@ Receive a list of all active specialty classification filters
 ]
 ```
 
+Receive a list of all active specialty classification filters 
+
+<span class="get">GET</span> /filters
+
+### Query Parameters
+
+Field | Description | Type
+--------- | ------- | -----------
+id|	Unique identifier of the filter|	integer
+label|	The name of the filter|	string
+created_on|	Timestamp of the creation of this filter|	timestamp
+user|	The user who created this resource|	User
+
 ## GET /filters/{id}
 
 <span class="get">GET</span> /filters/{id}
@@ -635,31 +641,37 @@ Receive a list of all active specialty classification filters
 }
 ```
 
-The <code>deleted</code> key indicates if the filter has been deleted, 0 - active, 1 - deleted.
+The <code>deleted</code> key indicates if the filter has been deleted, <code>0</code> = active, <code>1</code>= deleted.
 
 ## POST /filters
 
+Create a new specialty classification filter in the system. Required fields:
+
 <span class="post">POST</span> /filters
 
-Create a new specialty classification filter in the system. Required fields:
+Required Fields:
 
 <code>label</code> - the name of the new specialty classification filter
 
 ## POST /filters/{id}
 
+Change an existing specialty classification filter in the system. Required fields:
+
 <span class="post">POST</span> /filters/{id}
 
-Change an existing specialty classification filter in the system. Required fields:
+Required Fields:
 
 <code>label</code> - the new name of the classification filter
 
 ## DELETE /filters/{id}
 
-<span class="delete">DELETE</span> /filters/{id}
-
 Remove an existing specialty classification filter from the system.
 
+<span class="delete">DELETE</span> /filters/{id}
+
 # Users
+
+Returns info on users in the system. Allows for deleting, updating, adding new users to the system.
 
 ## GET /users
 
@@ -687,11 +699,15 @@ Remove an existing specialty classification filter from the system.
    ...
 ]
 ```
+List all *non-deleted, active* users of the company
+
 <span class="get"> GET</span> /users
 
-List all non-deleted, active users of the company
-
 ## GET /users/:id
+
+Returns specific user info
+
+<span class="get"> GET</span> /users/:id
 
 > GET /users/:id
 
@@ -718,21 +734,25 @@ List all non-deleted, active users of the company
 
 Returns all CallBack lists user is associated with
 
+<span class="get"> GET</span> /users/[user id]/titles
+
 ## GET /users/[user id]/filters
 
 Returns all Speciality Filers user is associated with
+
+<span class="get"> GET</span> /users/[user id]/filters
 
 ## GET /users/[user id]/groups
 
 Returns all Groups user is associated with
 
-<span class="get"> GET</span> /users/:id
+<span class="get"> GET</span> /users/[user id]/groups
 
 ## PUT /users
 
 <span class="put">PUT</span> /users
 
-> PUT /users
+> PUT /users example JSON body
 
 ```json
 {
@@ -750,7 +770,7 @@ Create a new user. Send <code>JSON</code> data in the body
 
 ## PATCH /users/:id
 
-> PATCH /users/:id
+> PATCH /users/:id example
 
 ```json
 {
@@ -767,13 +787,19 @@ Update a user with the <code>user_id</code>. Send <code>JSON</code> data in the 
 
 Retrieve time off entries for user(s)
 
+<span class="get"> GET</span> /users/:id/time_offs
+
 ## POST /time_offs
 
 Request time off
 
+<span class="post"> POST</span> /time_offs
+
 ## PATCH /time_offs/:id
 
 Edit time off Data
+
+<span class="patch"> PATCH</span> /time_offs/:id
 
 ## GET /users/:user_id/timeoff/accrual/bank
 
@@ -806,11 +832,9 @@ Edit time off Data
    ...
 ]
 ```
-
-<span class="get">GET</span> /users/:user_id/timeoff/accrual/bank
-
 Return the current time off bank of the user with the <code>user_id</code>. 
 
+<span class="get">GET</span> /users/:user_id/timeoff/accrual/bank
 
 ## GET /users/:user_id/timeoff/accrual/profile
 
@@ -842,13 +866,17 @@ Return the current time off bank of the user with the <code>user_id</code>.
 
 ]
 ```
-<span class="get">GET</span> /users/:user_id/timeoff/accrual/profile
-
 Return the accrual type for each time off type based on the employee’s accrual profile.
+
+<span class="get">GET</span> /users/:user_id/timeoff/accrual/profile
 
 # Logs
 
 Query the system logs
+
+Whenever any change is made in the system, we add a system log entry. The endpoints below allow access to these system logs.
+
+We return 50 log entries per page. The <code>prev</code> and <code>next</code> links provide pagination through all of the system logs.
 
 ## GET /logs(/:after)
 
@@ -877,17 +905,11 @@ Query the system logs
 ```
 <span class="get"> GET</span> /logs(/:after)
 
-Whenever any change is made in the system, we add a system log entry. The endpoints below allow access to these system logs.
-
-We return 50 log entries per page. The <code>prev</code> and <code>next</code> links provide pagination through all of the system logs.
-
 # Announcements
 
 Manage system announcements of your company.
 
 ## GET /announcements
-
-<span class="get">GET</span> /announcements
 
 > GET /announcements
 
@@ -918,11 +940,13 @@ Manage system announcements of your company.
 
 Retrieve the latest, non-deleted announcements.
 
+<span class="get">GET</span> /announcements
+
 ## POST /announcements
 
-<span class="post">POST</span> /announcements
-
 Create a new company announcement.
+
+<span class="post">POST</span> /announcements
 
 ### Query Parameters
 
@@ -933,9 +957,9 @@ title|	Announcement title
 
 ## PUT /announcements/:id
 
-<span class="put"> PUT</span> /announcements/:id
-
 Update a company announcement identified by <code>:id</code>.
+
+<span class="put"> PUT</span> /announcements/:id
 
 Field | Description | Required?
 --------- | ------- | -----------
@@ -945,15 +969,13 @@ title|	Announcement title
 
 ## DELETE /announcements/:id
 
-<span class="delete">DELETE</span> /announcements/:id
-
 Delete the announcement by the id <code>id</code>.
+
+<span class="delete">DELETE</span> /announcements/:id
 
 # Qualifiers
 
 ## GET /qualifiers
-
-<span class="get">GET</span> /qualifiers
 
 > GET /qualifiers
 
@@ -978,6 +1000,8 @@ Delete the announcement by the id <code>id</code>.
 
 Retrieve all active qualifiers in your system. 
 
+<span class="get">GET</span> /qualifiers
+
 ## GET /qualifiers/:id
 
 > GET /qualifiers/:id
@@ -999,11 +1023,13 @@ Retrieve all active qualifiers in your system.
 
 Retreive all information about a specific qualifer by <code>id</code>.
 
+<span class="get">GET</span> /qualifiers/:id
+
 ## POST /qualifers
 
-<span class="post">POST</span> /qualifiers
+Create a new qualifier.
 
-Creates a new qualifier.
+<span class="post">POST</span> /qualifiers
 
 > POST /qualifiers example response:
 
@@ -1021,12 +1047,11 @@ shortcode	| Shortened name of the qualifier, to be displayed on the Crew Schedul
 
 ## DELETE /qualifiers/:id
 
+Delete a qualifier. The qualifier will be *soft-deleted*, which means we can manually restore it if you think you’ve made a mistake deleting it.
+
 <span class="delete">DELETE</span> /qualifiers/:id
 
-Delete a qualifier. The qualifier will be soft-deleted, which means we can manually restore it if you think you’ve made a mistake deleting it.
-
 ## GET /qualifiers/:id/users
-<span class="get">GET</span> /qualifiers/:id/users
 
 > GET /qualifiers/:id/users
 
@@ -1046,15 +1071,17 @@ Delete a qualifier. The qualifier will be soft-deleted, which means we can manua
 ]
 ```
 
-Retrieve all associated users of a qualifier. 
+Retrieve all associated users of a specific qualifier. 
+
+<span class="get">GET</span> /qualifiers/:id/users
 
 # Payroll
 
+Access payroll data within the system, included hours; work types; work codes; position data and more.
+
 ## GET /payroll
 
-<span class="get">GET</span> /payroll
-
-> GET /payroll
+> GET /payroll example
 
 ```json
 [
@@ -1078,6 +1105,10 @@ Retrieve all associated users of a qualifier.
 
 Returns all payroll data for date range / time. Can optionally return single employee payroll data by passing <code>user_id</code>
 
+<span class="get">GET</span> /payroll
+
+<span class="get">GET</span> /payroll/{user_id}}
+
 ### Query Parameters
 
 Field | Description | Required?
@@ -1088,6 +1119,10 @@ user_id | user id of employee |
 
 # Forms
 
+Returns all submitted form data within the company account.
+
 ## GET /forms/:id/submissions
 
 Returns submitted form data
+
+<span class="get">GET</span> /forms/:id/submissions
