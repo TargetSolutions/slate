@@ -476,6 +476,36 @@ Approve time off request
 
 ## GET /timeoff/accrual/profile
 
+> GET /timeoff/accrual/profile example response
+
+```json
+[
+   {
+      "time_off_type": {
+         "id": 5,
+         "name": "Sick"
+      },
+      "accrual_type": "Accrues 10 hours every 28 days"
+   },
+   {
+      "time_off_type": {
+         "id": 6,
+         "name": "Vacation"
+      },
+      "accrual_type": "Accrues one hour every 10 hours worked (max. 12 hours)"
+   },
+   {
+      "time_off_type": {
+         "id": 7,
+         "name": "Earned Time"
+      },
+      "accrual_type": "No automatic accrual"
+   },
+
+   ...
+
+]
+```
 List all accrual profiles for the company
 
 <span class="get">GET</span> /timeoff/accrual/profile
