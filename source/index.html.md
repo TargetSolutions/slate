@@ -16,7 +16,7 @@ search: true
 Welcome to the CrewSense API!
 Find out how to send requests to our API, and what you can do with it.
 
-At this time, the API is does not expose every part of the application, but you can already 
+At this time, the API does not expose every part of the application, but you can already 
 do lots of very useful things with it. Query the schedule, manage labels, create reports, add / edit work types, add / edit users, view system log,
 time off types, list shift trades and much more.
 
@@ -32,7 +32,9 @@ of any subsequent requests.
 
 ## Getting your API credentials
 
-To generate API key/secret pairs, go to the [System Settings](https://crewsense.com/Application/ControlPanel/Options/) page, click "Integrations", and click "Generate new API credentials". The credentials will be listed in the table on that page.
+To generate API key/secret pairs, go to the [System Settings](https://crewsense.com/Application/ControlPanel/Options/) page, click "Integrations", and click "Generate new API credentials". The credentials will be listed in the table on that page. 
+
+*note: Only users with System Settings permission will be able to access tokens / keys interface within the CrewSense platform*
 
 If you no longer use the API credentials or you suspect they have been compromised, please delete them, and generate new ones instead, if needed.
 
@@ -57,13 +59,17 @@ curl -v https://api.crewsense.com/oauth/access_token \
     "expires_in": 86400
 }
 ```
-You use access tokens to authorize any requests made towards our API. To request an access token, issue a POST request to <code>https://api.crewsense.com/oauth/access_token</code>
+You use access tokens to authorize any requests made towards our API. To request an access token, issue a <span class="post">POST</span> request to <code>https://api.crewsense.com/oauth/access_token</code>
 
 <aside class="notice">
 Substitute your credentials for `YOUR_CLIENT_ID` and `YOUR_SECRET_KEY` 
 </aside>
 
-The <code>token_type</code> signifies that you have to use HTTP headers to authorize requests (see the next section). <code>expires</code> is a UNIX timestamp of the expiration date of the token (after which you have to request a new one). <code>expires_in</code> shows the expiration length in seconds.
+The <code>token_type</code> signifies that you have to use HTTP headers to authorize requests (see the next section). 
+
+<code>expires</code> is a UNIX timestamp of the expiration date of the token (after which you have to request a new one). 
+
+<code>expires_in</code> shows the expiration length in seconds.
 
 > Client access tokens currently expire in one week. If you try to use an expired access token, you might receive a response like:
 
@@ -116,28 +122,28 @@ In the following sections, we try to introduce all the important data in the sch
          "assignments": [
             {
                "shifts": [
-                  ... shift data ...
+                  ...shift data displayed here...
                ],
             }
          ],
          "time_off": [
             {
-               ... time off data ...
+               ...time off data displayed here...
             }
          ],
          "callbacks": [
             {
-               ... callback data ...
+               ...callback data displayed here...
             }
          ],
          "trades": [
             {
-               ... trade data ...
+               ...trade data displayed here...
             }
          ],
          "misc": [
             {
-               ... misc. hours data ...
+               ... misc hours data displayed here...
             }
          ]
       }
@@ -162,7 +168,7 @@ Field | Description | Format
 start | The date you need the data from | datetime
 end | 	The date you need the data to | datetime
 
-<aside class='warning'>While we are trying to make the API RESTful, some resources, including this one, are more of a convenient packaging of multiple resources for querying. You cannot issue a <code>POST</code> or <code>DELETE</code> request on this endpoint.</aside>
+<aside class='warning'>While we are trying to make the API RESTful, some resources, including this one, are more of a convenient packaging of multiple resources for querying. You cannot issue a <span class="post">POST</span> or <span class="delete">DELETE</span> request on this endpoint.</aside>
 
 ## days
 
@@ -307,7 +313,7 @@ time_off_type|	Type of time off |	See Time off Types
 
 > day.callbacks
 
-In this array you will find all finalized CallBacks for the day. CallBack shifts that were drag & dropped to a work assignment will not be included, they are found under <code>day.assignment.shifts</code>
+In this array you will find all finalized CallBacks for the day. CallBack shifts that were drag & dropped to a work assignment will not be included, as they are found under <code>day.assignment.shifts</code>
 
 ```json
 {
@@ -349,12 +355,11 @@ minimum_staffing| Number of employees needed in this callback| integer
 records|	Accepting employees	array| ; see section-cbr
 title|Employee type needed time off|	See section-title
 
-<aside class="notice"><code>records</code> gives you all accepting employees of the callback. You can request more data about certain pieces of the callback using the <code>href</code> links provided.</aside>
+<aside class="notice"><code>records</code> returns all accepting employees pertinent to the CallBack. You can request more data about certain pieces of the CallBack data using the <code>href</code> links provided.</aside>
 
 ## day.trades
 > day.trades
 
-Contains all accepted and finalized shift trades for the day.
 
 ```json
 {
@@ -379,6 +384,8 @@ Contains all accepted and finalized shift trades for the day.
    }
 }
 ```
+Contains all accepted and finalized shift trades for the day.
+
 > Follow the top-level href link to receive all information about the trade.
 
 ## day.misc
@@ -503,7 +510,7 @@ id|	Unique identifier of the label|	integer
 label|	The text appearing on the label|	string
 color|	The background color of the label|	RGB hex
 text_color|	The text color of the label|	RGB hex
-position|	Relative position of shifts with this label|	integer
+position|	Relative CrewScheduler position order of this label|	integer
 
 
 ## GET /labels/{id}
@@ -693,13 +700,13 @@ List all *non-deleted, active* users of the company
 
 <span class="get"> GET</span> /users
 
-## GET /users/{id
+## GET /users/{user_id}
 
 Returns specific user info
 
-<span class="get"> GET</span> /users/{id
+<span class="get"> GET</span> /users/{user_id}
 
-> GET /users/{id
+> GET /users/{user_id}
 
 ```json
 {
@@ -720,23 +727,23 @@ Returns specific user info
    ]
 }
 ```
-## GET /users/[user id]/titles
+## GET /users/{user_id}/titles
 
 Returns all CallBack lists user is associated with
 
-<span class="get"> GET</span> /users/[user id]/titles
+<span class="get"> GET</span> /users/{user_id}/titles
 
-## GET /users/[user id]/filters
+## GET /users/{user_id}/filters
 
 Returns all Speciality Filers user is associated with
 
-<span class="get"> GET</span> /users/[user id]/filters
+<span class="get"> GET</span> /users/{user_id}/filters
 
-## GET /users/[user id]/groups
+## GET /users/{user_id}/groups
 
 Returns all Groups user is associated with
 
-<span class="get"> GET</span> /users/[user id]/groups
+<span class="get"> GET</span> /users/{user_id}/groups
 
 ## PUT /users
 
@@ -758,9 +765,9 @@ Returns all Groups user is associated with
 ```
 Create a new user. Send <code>JSON</code> data in the body
 
-## PATCH /users/{id
+## PATCH /users/{user_id}
 
-> PATCH /users/{id example
+> PATCH /users/{user_id} example:
 
 ```json
 {
@@ -769,31 +776,31 @@ Create a new user. Send <code>JSON</code> data in the body
 }
 ```
 
-<span class="patch"> PATCH</span> /users/{id
+<span class="patch"> PATCH</span> /users/{user_id}
 
 Update a user with the <code>user_id</code>. Send <code>JSON</code> data in the request body. You only need to send data that you want to update.
 
-##  GET /users/{id}/time_offs
+##  GET /users/{user_id}/time_offs
 
 Retrieve time off entries for user(s)
 
-<span class="get"> GET</span> /users/{id}/time_offs
+<span class="get"> GET</span> /users/{user_id}/time_offs
 
-## POST /time_offs
+## POST /users/{user_id}/time_offs
 
-Request time off
+Request time off for user
 
-<span class="post"> POST</span> /time_offs
+<span class="post"> POST</span> /users/{user_id}/time_offs
 
-## PATCH /time_offs/{id
+## PATCH /users/{user_id}/time_offs/{id}
 
-Edit time off Data
+Edit time off request Data
 
-<span class="patch"> PATCH</span> /time_offs/{id
+<span class="patch"> PATCH</span> /users/{user_id}/time_offs/{id}
 
 ## GET /users/{user_id}/timeoff/accrual/bank
 
-> example: GET /users/1234/timeoff/accrual/bank
+> GET /users/1234/timeoff/accrual/bank example:
 
 ```json
 [
@@ -827,6 +834,8 @@ Return the current time off bank of the user with the <code>user_id</code>.
 <span class="get">GET</span> /users/{user_id}/timeoff/accrual/bank
 
 ## GET /users/{user_id}/timeoff/accrual/profile
+
+> GET /users/1234/timeoff/accrual/profile example:
 
 ```json
 [
@@ -868,32 +877,49 @@ Whenever any change is made in the system, we add a system log entry. The endpoi
 
 We return 50 log entries per page. The <code>prev</code> and <code>next</code> links provide pagination through all of the system logs.
 
-## GET /logs(/{after)
+## GET /logs
 
-> GET /logs(/{after)
+> GET /logs example:
 
 ```json
 {
-   "data": [
-      {
-         "log_id": 329473,
-         "created": "2016-10-13T16:35:52+0200",
-         "event_description": "CallBack Staffing logged in.",
-         "user": {
-             "id": 1,
-             "name": "CallBack Staffing",
-             "href": "https://api.crewsense.com/v1/users/1"
-         }
-      },
-      ...
-   ],
-   "pagination": {
-      "prev": "https://api.crewsense.com/v1/logs/150",
-      "next": "https://api.crewsense.com/v1/logs/250"
-   }
+  "data": [
+    {
+      "log_id": "3359725",
+      "created": "2016-10-21T20:49:50-0700",
+      "event_description": "Brandon Rigaud logged in.",
+      "user": {
+        "id": "965",
+        "name": "Brandon Rigaud",
+        "href": "https://api.crewsense.com/v1/users/965"
+      }
+    },
+    {
+      "log_id": "3359722",
+      "created": "2016-10-21T20:49:08-0700",
+      "event_description": "Brandon CrewSense changed shift for Tim Stacy: 7308 now from 10-23-16 7:00 am to 10-24-16 7:00 am, originally from 10-23-16 7:00 am to 10-24-16 7:00 am Work Type: Overtime",
+      "user": {
+        "id": "34941",
+        "name": "Brandon CrewSense",
+        "href": "https://api.crewsense.com/v1/users/34941"
+      }
+    }...
+]
 }
-```
-<span class="get"> GET</span> /logs(/{after)
+````
+<span class="get"> GET</span> /logs
+
+Returns system log data. 
+
+Can pass optional <code>after</code> parameter to return only logs after specific date / time.
+
+<span class="get">GET</span> /logs/after
+
+### Query Parameters
+
+Field | Description | Required?
+--------- | ------- | -----------
+after|	date / time to return logs from | n
 
 # Announcements
 
@@ -945,11 +971,11 @@ Field | Description | Required?
 body|	The text of the announcement, in HTML. | Required
 title|	Announcement title
 
-## PUT /announcements/{id
+## PUT /announcements/{id}
 
-Update a company announcement identified by <code>:id</code>.
+Update a company announcement identified by <code>id</code>.
 
-<span class="put"> PUT</span> /announcements/{id
+<span class="put"> PUT</span> /announcements/{id}
 
 Field | Description | Required?
 --------- | ------- | -----------
@@ -957,11 +983,11 @@ body|	The text of the announcement, in HTML. | Required
 title|	Announcement title
 
 
-## DELETE /announcements/{id
+## DELETE /announcements/{id}
 
 Delete the announcement by the id <code>id</code>.
 
-<span class="delete">DELETE</span> /announcements/{id
+<span class="delete">DELETE</span> /announcements/{id}
 
 # Qualifiers
 
@@ -992,9 +1018,9 @@ Retrieve all active qualifiers in your system.
 
 <span class="get">GET</span> /qualifiers
 
-## GET /qualifiers/{id
+## GET /qualifiers/{id}
 
-> GET /qualifiers/{id
+> GET /qualifiers/{id}
 
 ```json
 {
@@ -1013,7 +1039,7 @@ Retrieve all active qualifiers in your system.
 
 Retreive all information about a specific qualifer by <code>id</code>.
 
-<span class="get">GET</span> /qualifiers/{id
+<span class="get">GET</span> /qualifiers/{id}
 
 ## POST /qualifers
 
@@ -1035,11 +1061,11 @@ Field | Description | Required?
 name |	Descriptive name of the qualifier| Y
 shortcode	| Shortened name of the qualifier, to be displayed on the Crew Scheduler
 
-## DELETE /qualifiers/{id
+## DELETE /qualifiers/{id}
 
 Delete a qualifier. The qualifier will be *soft-deleted*, which means we can manually restore it if you think you’ve made a mistake deleting it.
 
-<span class="delete">DELETE</span> /qualifiers/{id
+<span class="delete">DELETE</span> /qualifiers/{id}
 
 ## GET /qualifiers/{id}/users
 
@@ -1071,7 +1097,7 @@ Access payroll data within the system, included hours; work types; work codes; p
 
 ## GET /payroll
 
-> GET /payroll example passing start and end parameters of a 24 hour period
+> GET /payroll example passing start and end parameters for a 24 hour period
 
 ```json
 [
@@ -1093,11 +1119,13 @@ Access payroll data within the system, included hours; work types; work codes; p
 ]
 ```
 
-Returns all payroll data for date range / time. Can optionally return single employee payroll data by passing <code>user_id</code>
+Returns all payroll data for date range / time. 
+
+Can optionally return single employee payroll data by passing <code>user_id</code>
 
 <span class="get">GET</span> /payroll
 
-<span class="get">GET</span> /payroll/{user_id}}
+<span class="get">GET</span> /payroll/{user_id}
 
 ### Query Parameters
 

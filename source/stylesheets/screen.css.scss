@@ -276,7 +276,7 @@ html, body {
   // half of the content always this background color.
   .dark-box {
     width: $examples-width;
-    background-color: $examples-bg;
+    background-color: #091f2d;
     position: absolute;
     right: 0;
     top: 0;
@@ -342,7 +342,6 @@ html, body {
     padding: 0 $main-padding;
     box-sizing: border-box;
     display: block;
-    text-shadow: $main-embossed-text-shadow;
 
     @extend %left-col;
   }
@@ -473,7 +472,6 @@ html, body {
   aside {
     padding-top: 1em;
     padding-bottom: 1em;
-    text-shadow: 0 1px 0 lighten($aside-notice-bg, 15%);
     margin-top: 1.5em;
     margin-bottom: 1.5em;
     background: $aside-notice-bg;
@@ -481,12 +479,10 @@ html, body {
 
     &.warning {
       background-color: $aside-warning-bg;
-      text-shadow: 0 1px 0 lighten($aside-warning-bg, 15%);
     }
 
     &.success {
       background-color: $aside-success-bg;
-      text-shadow: 0 1px 0 lighten($aside-success-bg, 15%);
     }
   }
 
@@ -525,7 +521,7 @@ html, body {
 
 .content {
   pre, blockquote {
-    background-color: $code-bg;
+    background-color: #091f2d;
     color: #fff;
 
     padding: 2em $main-padding;
@@ -536,7 +532,6 @@ html, body {
     clear:right;
 
     box-sizing: border-box;
-    text-shadow: 0px 1px 2px rgba(0,0,0,0.4);
 
     @extend %right-col;
 
@@ -626,7 +621,13 @@ html, body {
 }
 
 .highlight, .highlight .w {
-  background-color: $code-bg;
+  background-color: #091f2d;
+}
+
+.highlight .err {
+    color: grey;
+    background-color: #091f2d;
+  
 }
 
 .get {
