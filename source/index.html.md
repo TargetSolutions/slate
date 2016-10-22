@@ -474,6 +474,12 @@ Deny time off request
 
 Approve time off request
 
+## GET /timeoff/accrual/profile
+
+List all accrual profiles for the company
+
+<span class="get">GET</span> /timeoff/accrual/profile
+
 # Labels
 ## GET /labels
 
@@ -832,6 +838,10 @@ Edit time off request Data
 Return the current time off bank of the user with the <code>user_id</code>. 
 
 <span class="get">GET</span> /users/{user_id}/timeoff/accrual/bank
+
+## POST /users/{user_id}/timeoff/accrual/bank
+
+Update user accrual bank. Reference <code>id</code> of accrual profile to update appropriate bank
 
 ## GET /users/{user_id}/timeoff/accrual/profile
 
