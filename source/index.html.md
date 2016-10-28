@@ -1235,21 +1235,24 @@ Returns submitted form data
 
 # ReadyAlert
 
-Send ReadyAlert notifications
+Send ReadyAlert notifications.
 
-## POST /readyalert/
-> POST /readyalert/ example JSON body:
+*note: Rate limits are in effect. Limited to 30 ReadyAlerts per day via API. To increase this limit, please contact us.*
+
+## POST /ready_alerts
+> POST /ready_alerts example JSON
 
 ```json
 {
    "type": "all",
-   "id": null,
+   "ids": null,
    "body": "2nd alarm fire in town. Please respond ASAP!",
-   "user_id": "124"
+   "user_id": "124",
+   "email": 0
 }
 ```
-<span class="post"> POST</span> /readyalert
-*coming soon*
+<span class="post"> POST</span> /ready_alerts
+
 
 Send ReadyAlert
 
@@ -1261,4 +1264,5 @@ type |	(all, title, group, classification, user)| Y
 ids | ids of type, array | Y unless ALL is used
 body	| the body of the message| Y
 user_id | user id of employee sending ReadyAlert| Y
+email | (boolean) send email as well? | 
 
