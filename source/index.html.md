@@ -472,7 +472,7 @@ forward|	Forward time off of this type to other admins if not handled|	boolean
 
 Create a new Time Off entry in system
 
-** note: you can immediately approve the time off by calling /time_offs/{id}/approve**
+** note: you can approve the time off by calling /time_offs/{id}/approve or sending status parameter of 1**
 
 ### Query Parameters
 
