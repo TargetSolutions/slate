@@ -466,6 +466,26 @@ secondary_color|	Text color of the type|	RGB hex
 force_include|	Ignore time off of this type in callbacks|	boolean
 forward|	Forward time off of this type to other admins if not handled|	boolean
 
+## POST /time_offs
+
+> POST /time_offs
+
+Create a new Time Off entry in system
+
+** note: you can immediately approve the time off by calling /time_offs/{id}/approve**
+
+### Query Parameters
+
+Field  | Required?
+--------- | -----------
+user_id|	Y
+admin_ids | Y
+start_date | Y
+end_date | Y
+time_off_type_id | Y
+status | N; boolean (0 = create pending request, 1 = approved time off entry)
+user_note | N; Max limit 1000 characters
+
 ## POST /time_offs/{id}/deny
 
 Deny time off request
@@ -1266,3 +1286,7 @@ body	| the body of the message| Y
 user_id | user id of employee sending ReadyAlert| Y
 email | (boolean) send email as well? | 
 
+# Company
+
+## GET /company
+Returns company information
