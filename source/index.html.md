@@ -468,29 +468,49 @@ forward|	Forward time off of this type to other admins if not handled|	boolean
 
 ## POST /time_offs
 
-> POST /time_offs
+<span class="get">POST</span> /time_offs
 
+> POST /time_offs example JSON body:
+
+```json
+{
+	"user_id": 138,
+	"admin_ids": [848, 6461],
+	"start_date": "2016-11-02 08:00:00",
+	"end_date": "2016-11-03 08:00:00",
+	"time_off_type_id": 456,
+	"user_note": "I would like to go to Hawaii",
+	"status": 1
+}
+```
 Create a new Time Off entry in system
 
 ** note: you can approve the time off by calling /time_offs/{id}/approve or sending status parameter of 1**
 
 ### Query Parameters
 
-Field  | Required?
---------- | -----------
-user_id|	Y
-admin_ids | Y
-start_date | Y
-end_date | Y
-time_off_type_id | Y
-status | N; boolean (0 = create pending request, 1 = approved time off entry)
-user_note | N; Max limit 1000 characters
+Field  | Description |Required?
+--------- | --------- | -----------
+user_id|	user id of employee | Y
+admin_ids | user id of approving admin | Y
+start_date | start date / time of time off entry| Y
+end_date | end date / time of time off entry| Y
+time_off_type_id | id of time off type to use| Y
+status | pending or approved? *boolean (0 = pending, 1 = approved)* | N
+user_note | brief note; Max limit 1000 characters | N
+
+## DELETE /time_offs/{id}
+<span class="delete">DELETE</span> /time_offs/{id}
+
+*coming soon...*
 
 ## POST /time_offs/{id}/deny
+<span class="post">POST</span> /time_offs/{id}/deny
 
 Deny time off request
 
 ## POST /time_offs/{id}/approve
+<span class="post">POST</span> /time_offs/{id}/deny
 
 Approve time off request
 
@@ -529,6 +549,20 @@ Approve time off request
 List all accrual profiles for the company
 
 <span class="get">GET</span> /timeoff/accrual/profile
+
+# Trades
+## GET /trades
+<span class="get">GET</span> /trades
+*coming soon....*
+
+## POST /trades
+<span class="post">POST</span> /trades
+*coming soon...*
+
+## PATCH /trades/{id}
+<span class="patch">PATCH</span> /trades/{id}
+
+*coming soon...*
 
 # Labels
 ## GET /labels
@@ -1289,4 +1323,8 @@ email | (boolean) send email as well? |
 # Company
 
 ## GET /company
+<span class="get">GET</span> /company
+
+*coming soon...*
+
 Returns company information
