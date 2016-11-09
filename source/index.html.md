@@ -1015,6 +1015,97 @@ Field | Description | Required?
 --------- | ------- | -----------
 after|	date / time to return logs from | n
 
+# CallBacks
+
+Retreive historical data on CallBacks
+
+## GET /callbacks
+
+> GET /callbacks sample response:
+
+```json
+{
+    "data": [ 
+        {
+            "id": 123456,
+            "title": {
+                "id": 456,
+                "name": "Firefighter"
+            },
+            "initiated_by": {
+                "id": 848,
+                "name": "John Doe"
+            },
+            "start": "2016-11-09 08:00:00",
+            "end": "2016-11-10 08:00:00",
+            "positions_to_fill": 2,
+            "scheduled_to": "2016-11-05T06:30:00-07:00",
+            "started_at": "2016-11-05T06:30:00-07:00",
+            "ended_at": "2016-11-05T07:12:44-07:00",
+            "deadline": "2016-11-05T10:00:00-07:00"
+            "status": "filled"
+        },{
+            "id": 123456,
+            "title": {
+                "id": 456,
+                "name": "Firefighter"
+            },
+            "initiated_by": {
+                "id": 848,
+                "name": "John Doe"
+            },
+            "start": "2016-11-09 08:00:00",
+            "end": "2016-11-10 08:00:00",
+            "positions_to_fill": 2,
+            "scheduled_to": "2016-11-05T06:30:00-07:00",
+            "started_at": "2016-11-05T06:30:00-07:00",
+            "ended_at": "2016-11-05T07:12:44-07:00",
+            "deadline": "2016-11-05T10:00:00-07:00"
+            "status": "filled"
+        }
+    ],
+    "pagination": {
+        "prev": "https://api.crewsense.com/v1/callbacks?offset=50",
+        "next": "https://api.crewsense.com/v1/callbacks?offset=150"
+    }
+}
+```
+
+*coming soon*
+
+<span class="get">GET</span> /callbacks
+
+## GET /callbacks/{id}
+
+*coming soon*
+
+Returns data for specific CallBack
+
+> GET /callbacks/123456 example
+
+```json 
+      {
+            "id": 123456,
+            "title": {
+                "id": 456,
+                "name": "Firefighter"
+            },
+            "initiated_by": {
+                "id": 848,
+                "name": "John Doe"
+            },
+            "start": "2016-11-09 08:00:00",
+            "end": "2016-11-10 08:00:00",
+            "positions_to_fill": 2,
+            "scheduled_to": "2016-11-05T06:30:00-07:00",
+            "started_at": "2016-11-05T06:30:00-07:00",
+            "ended_at": "2016-11-05T07:12:44-07:00",
+            "deadline": "2016-11-05T10:00:00-07:00",
+            "status": "filled"
+        }
+```
+<span class="get">GET</span> /callbacks/{id}
+
 # Announcements
 
 Manage system announcements of your company.
