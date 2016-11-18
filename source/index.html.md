@@ -170,6 +170,12 @@ end | 	The date you need the data to | datetime
 
 <aside class='warning'>While we are trying to make the API RESTful, some resources, including this one, are more of a convenient packaging of multiple resources for querying. You cannot issue a <span class="post">POST</span> or <span class="delete">DELETE</span> request on this endpoint.</aside>
 
+## POST /schedule
+Allows you to add employee to CrewScheduler Assignment
+
+<span class="post">POST</span> /schedule
+*coming soon*
+
 ## days
 
 <code>days</code>
@@ -412,7 +418,80 @@ This array provides data about any miscellaneous hours added for the day.
 This contains the Crew Scheduler notes for the day formatted in <code>HTML</code> format
 
 
+# Assignments
+
+Allows you to retrieve, modify and create new CrewScheduler Assignments
+
+## GET /assignments
+Return CrewScheduler Assignments
+
+<span class="get">GET</span> /assignmnets
+*coming soon*
+
+## GET /assignments/{id}
+
+<span class="get">GET</span> /assignmnets/{id}
+*coming soon*
+
+## POST /assignments
+Create new CrewScheduler Assignments
+
+<span class="post">POST</span> /assignments
+*coming soon* 
+
+## PATCH /assignments/{id}
+
+<span class="patch">PATCH</span> /assignmnets/{id}
+*coming soon*
+
+## DELETE /assignments/{id}
+
+<span class="delete">delete</span> /assignmnets/{id}
+*coming soon*
+
+## GET /assignments/{id}
+
+<span class="get">GET</span> /assignmnets/{id}/groups
+*coming soon*
+
+## PUT /assignments/{id}/groups
+
+<span class="put">PUT</span> /assignmnets/{id}/groups
+*coming soon*
+
+## DELETE /assignments/{id}/groups
+
+<span class="delete">DELETE</span> /assignments/{id}/groups
+*coming soon*
+
+## DELETE /assignments/{id}/groups/{group_id}
+
+<span class="delete">DELETE</span> /assignments/{id}/groups/{group_id}
+*coming soon*
+
+## GET /assignments/{id}/admins
+
+<span class="get">GET</span> /assignmnets/{id}/admins
+*coming soon*
+
+## PUT /assignments/{id}/admin
+
+<span class="put">PUT</span> /assignmnets/{id}/admins
+*coming soon*
+
+## DELETE /assignments/{id}/admin
+
+<span class="delete">DELETE</span> /assignmnets/{id}/admins
+*coming soon*
+
+## DELETE /assignments/{id}/admins/{admin_id}
+
+<span class="delete">DELETE</span> /assignmnets/{id}/admins/{admin_id}
+*coming soon*
+
 # Time Off's
+
+View, Edit and Create new Time Off entries in the system
 
 ## GET /time_off_types
 
@@ -555,13 +634,28 @@ List all accrual profiles for the company
 <span class="get">GET</span> /trades
 *coming soon....*
 
+##GET /trades/{id}
+<span class="get">GET</span> /trades/{id}
+*coming soon....*
+
+##GET /trades/{id}/users
+<span class="get">GET</span> /trades/{id}/users
+*coming soon....*
+
 ## POST /trades
 <span class="post">POST</span> /trades
 *coming soon...*
 
 ## PATCH /trades/{id}
 <span class="patch">PATCH</span> /trades/{id}
+*coming soon...*
 
+## DELETE /trades/{id}
+<span class="delete">DELETE</span> /trades/{id}
+*coming soon...*
+
+## PUT /trades/{id}
+<span class="put">PUT</span> /trades/{id}
 *coming soon...*
 
 # Labels
