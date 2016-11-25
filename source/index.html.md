@@ -630,33 +630,29 @@ List all accrual profiles for the company
 <span class="get">GET</span> /timeoff/accrual/profile
 
 # Trades
+View and modify Shift Trades
+
 ## GET /trades
 <span class="get">GET</span> /trades
-*coming soon....*
+
 
 ##GET /trades/{id}
 <span class="get">GET</span> /trades/{id}
-*coming soon....*
 
 ##GET /trades/{id}/users
 <span class="get">GET</span> /trades/{id}/users
-*coming soon....*
 
 ## POST /trades
 <span class="post">POST</span> /trades
-*coming soon...*
 
 ## PATCH /trades/{id}
 <span class="patch">PATCH</span> /trades/{id}
-*coming soon...*
 
 ## DELETE /trades/{id}
 <span class="delete">DELETE</span> /trades/{id}
-*coming soon...*
 
 ## PUT /trades/{id}
 <span class="put">PUT</span> /trades/{id}
-*coming soon...*
 
 # Labels
 ## GET /labels
@@ -1165,13 +1161,11 @@ Retreive historical data on CallBacks
 }
 ```
 
-*coming soon*
 
 <span class="get">GET</span> /callbacks
 
 ## GET /callbacks/{id}
 
-*coming soon*
 
 Returns data for specific CallBack
 
