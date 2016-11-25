@@ -1111,6 +1111,8 @@ Retreive historical data on CallBacks
 
 ## GET /callbacks
 
+Returns CallBacks in the system 
+
 > GET /callbacks sample response:
 
 ```json
@@ -1166,9 +1168,6 @@ Retreive historical data on CallBacks
 
 ## GET /callbacks/{id}
 
-
-Returns data for specific CallBack
-
 > GET /callbacks/123456 example
 
 ```json 
@@ -1192,7 +1191,46 @@ Returns data for specific CallBack
             "status": "filled"
         }
 ```
-<span class="get">GET</span> /callbacks/{id}
+Returns data for a specific CallBack
+
+<span class="get">GET</span> /callbacks/{id}/
+
+## GET /callbacks/{id}/users
+
+> GET /callbacks/123456/users example response
+
+Returns data for specific users of the CallBack
+
+```json
+[
+  {
+    "id": "972",
+    "position": "1",
+    "status": "denied",
+    "contact_method": "Mobile App",
+    "contact_time": "2016-11-22 12:52:21",
+    "response_time": "2016-11-22 13:00:39",
+    "start_time": null,
+    "end_time": null,
+    "uses_opportunity": "1",
+    "do_not_disturb": "0",
+    "auto_accepted": "0"
+  },
+  {
+    "id": "973",
+    "position": "2",
+    "status": "no answer",
+    "contact_method": "Text (SMS)",
+    "contact_time": "2016-11-22 12:58:25",
+    "response_time": null,
+    "start_time": null,
+    "end_time": null,
+    "uses_opportunity": "1",
+    "do_not_disturb": "0",
+    "auto_accepted": "0"
+  }
+]
+```
 
 # Announcements
 
