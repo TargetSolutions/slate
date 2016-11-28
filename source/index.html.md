@@ -463,23 +463,25 @@ Allows you to retrieve, modify and create new CrewScheduler Assignments
 Returns all *non-archived* assignments of your organization. An assignment is archive
 if it has an Until date in the past, or is non-recurring and has already ended.
 
+The return format is an array of JSON objects.
+
 ### Properties
 
-Name | Description
------|------------
-id | The unique identifier of the assignment
-position | The order in which assignments should be displayed
-name | Assignment name
-date | The date this assignment started on
-start | The full date/time of the start of the first occurrence of the assignment
-end | The full date/time of the end of the first occurrence of the assignment
-positions_to_fill | Number of required personnel on the assignment
-is_work_shift | If `false`, shifts in this assignment are ignored by the rest of the system
-self_scheduling | Are employees allowed to schedule themselves
-self_scheduling_requires_approval | Only if the above is true: if this is true, self scheduling requires the approval of an administrator
-crewsense_eligible | Should this assignment be analyzed with CrewSense Intelligence
-hide_open_slots | Condense the assignment in display, do not show vacant positions
-color | Background color of the assignment for display purposes, in HEX format
+Name | Description | Format | Default
+-----|-------------|--------|--------
+id | The unique identifier of the assignment | integer | 
+position | The order in which assignments should be displayed | integer | 
+name | Assignment name | string | 
+date | The date this assignment started on | date | 
+start | The full date/time of the start of the first occurrence of the assignment | datetime | 
+end | The full date/time of the end of the first occurrence of the assignment | datetime | 
+positions_to_fill | Number of required personnel on the assignment | integer | 1
+is_work_shift | If `false`, shifts in this assignment are ignored by the rest of the system | boolean | `true`
+self_scheduling | Are employees allowed to schedule themselves | boolean | `false`
+self_scheduling_requires_approval | Only if the above is true: if this is true, self scheduling requires the approval of an administrator | boolean | `false`
+crewsense_eligible | Should this assignment be analyzed with CrewSense Intelligence | boolean | `false`
+hide_open_slots | Condense the assignment in display, do not show vacant positions | boolean | `false`
+color | Background color of the assignment for display purposes, in HEX format | string `#RRGGBB` | #F5F4F2
 
 ## <span class="get">GET</span> /assignments/{id}
 
@@ -503,11 +505,27 @@ color | Background color of the assignment for display purposes, in HEX format
 
 Retrieve a specific assignment.
 
-## POST /assignments
-Create new CrewScheduler Assignments
+For the meaning and format of properties, see [GET /assignments](#get-assignments).
 
-<span class="post">POST</span> /assignments
-*coming soon* 
+## <span class="post">POST</span> /assignments
+
+Create a new Crew Scheduler Assignment.
+
+### Parameters
+
+Name | Description | Format | Required?
+-----|-------------|--------|----------
+name | Assignment name | string | yes
+start | The full date/time of the start of the first occurrence of the assignment | `2016-11-28 07:00:00` | yes
+end | The full date/time of the end of the first occurrence of the assignment | `2016-11-28 19:00:00` | yes
+positions_to_fill | Number of required personnel on the assignment | integer | yes
+position | The order in which assignments should be displayed | integer | 
+is_work_shift | If `false`, shifts in this assignment are ignored by the rest of the system | boolean | 
+self_scheduling | Are employees allowed to schedule themselves | boolean | 
+self_scheduling_requires_approval | Only if the above is true: if this is true, self scheduling requires the approval of an administrator | boolean | 
+crewsense_eligible | Should this assignment be analyzed with CrewSense Intelligence | boolean | 
+hide_open_slots | Condense the assignment in display, do not show vacant positions | boolean | 
+color | Background color of the assignment for display purposes, in HEX format | string `#RRGGBB` | 
 
 ## PATCH /assignments/{id}
 
