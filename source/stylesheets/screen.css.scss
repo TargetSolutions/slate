@@ -643,27 +643,27 @@ html, body {
 }
 
 .get {
-  @extends .rest-verb;
+  @extend .rest-verb;
   background-color: #73C070;
 }
 
 .post {
-  @extends .rest-verb;
+  @extend .rest-verb;
   background-color: #5FA6DA;
 }
 
 .patch {
-  @extends .rest-verb;
+  @extend .rest-verb;
   background-color: yellow;
   color: black;
 }
 
 .delete {
-  @extends .rest-verb;
+  @extend .rest-verb;
   background-color: #d9534f;
 }
 
 .put {
-  @extends .rest-verb;
+  @extend .rest-verb;
   background-color: grey;
 }
