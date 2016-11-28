@@ -422,9 +422,6 @@ This contains the Crew Scheduler notes for the day formatted in <code>HTML</code
 
 Allows you to retrieve, modify and create new CrewScheduler Assignments
 
-## GET /assignments
-Return CrewScheduler Assignments
-
 ```json
 [
   {
@@ -461,7 +458,7 @@ Return CrewScheduler Assignments
 ]
 ```
 
-<span class="get">GET</span> /assignments
+## <span class="get">GET</span> /assignments
 
 Returns all *non-archived* assignments of your organization. An assignment is archive
 if it has an Until date in the past, or is non-recurring and has already ended.
