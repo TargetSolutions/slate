@@ -422,6 +422,8 @@ This contains the Crew Scheduler notes for the day formatted in <code>HTML</code
 
 Allows you to retrieve, modify and create new CrewScheduler Assignments
 
+## <span class="get">GET</span> /assignments
+
 ```json
 [
   {
@@ -458,15 +460,30 @@ Allows you to retrieve, modify and create new CrewScheduler Assignments
 ]
 ```
 
-## <span class="get">GET</span> /assignments
-
 Returns all *non-archived* assignments of your organization. An assignment is archive
 if it has an Until date in the past, or is non-recurring and has already ended.
 
-## GET /assignments/{id}
+## <span class="get">GET</span> /assignments/{id}
 
-<span class="get">GET</span> /assignments/{id}
-*coming soon*
+```json
+{
+  "id": 670,
+  "position": 1,
+  "name": "Station 1",
+  "date": "2012-12-25 00:00:00",
+  "start": "2012-12-25 08:00:00",
+  "end": "2012-12-26 08:00:00",
+  "positions_to_fill": 2,
+  "is_work_shift": true,
+  "self_scheduling": true,
+  "self_scheduling_requires_approval": true,
+  "crewsense_eligible": true,
+  "hide_open_slots": false,
+  "color": "#F5F4F2"
+}
+```
+
+Retrieve a specific assignment.
 
 ## POST /assignments
 Create new CrewScheduler Assignments

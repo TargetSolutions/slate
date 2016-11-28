@@ -630,48 +630,40 @@ html, body {
   
 }
 
-.get {
-  background-color: #73C070;
+.rest-verb {
   padding:5px;
   border-radius: 4px;
   color: white;
   font-size: 11px;
   font-weight: 100;
+
+  h2 & {
+    font-size: 16px;
+  }
 }
 
+.get {
+  @extends .rest-verb;
+  background-color: #73C070;
+}
 
 .post {
+  @extends .rest-verb;
   background-color: #5FA6DA;
-  padding:5px;
-  border-radius: 4px;
-  color: white;
-  font-size: 11px;
-  font-weight: 100;
 }
 
 .patch {
+  @extends .rest-verb;
   background-color: yellow;
-  padding:5px;
-  border-radius: 4px;
   color: black;
-  font-size: 11px;
-  font-weight: 100;
 }
 
 .delete {
+  @extends .rest-verb;
   background-color: #d9534f;
-  padding:5px;
-  border-radius: 4px;
-  color: white;
-  font-size: 11px;
-  font-weight: 100;
 }
 
 .put {
+  @extends .rest-verb;
   background-color: grey;
-  padding:5px;
-  border-radius: 4px;
-  color: white;
-  font-size: 11px;
-  font-weight: 100;
 }
