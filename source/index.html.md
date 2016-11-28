@@ -425,12 +425,50 @@ Allows you to retrieve, modify and create new CrewScheduler Assignments
 ## GET /assignments
 Return CrewScheduler Assignments
 
-<span class="get">GET</span> /assignmnets
-*coming soon*
+```json
+[
+  {
+    "id": 123,
+    "position": 3,
+    "name": "Station 1",
+    "date": "2014-01-22",
+    "start": "2014-01-22 08:00:00",
+    "end": "2014-01-23 08:00:00",
+    "positions_to_fill": 4,
+    "is_work_shift": true,
+    "self_scheduling": true,
+    "self_scheduling_requires_approval": true,
+    "crewsense_eligible": true,
+    "hide_open_slots": false,
+    "color": "#CCCCCC"
+  },
+  {
+    "id": 124,
+    "position": 4,
+    "name": "Station 2",
+    "date": "2014-01-22",
+    "start": "2014-01-22 08:00:00",
+    "end": "2014-01-23 08:00:00",
+    "positions_to_fill": 3,
+    "is_work_shift": true,
+    "self_scheduling": true,
+    "self_scheduling_requires_approval": true,
+    "crewsense_eligible": true,
+    "hide_open_slots": false,
+    "color": "#CCCCCC"
+  },
+  ...
+]
+```
+
+<span class="get">GET</span> /assignments
+
+Returns all *non-archived* assignments of your organization. An assignment is archive
+if it has an Until date in the past, or is non-recurring and has already ended.
 
 ## GET /assignments/{id}
 
-<span class="get">GET</span> /assignmnets/{id}
+<span class="get">GET</span> /assignments/{id}
 *coming soon*
 
 ## POST /assignments
@@ -441,22 +479,22 @@ Create new CrewScheduler Assignments
 
 ## PATCH /assignments/{id}
 
-<span class="patch">PATCH</span> /assignmnets/{id}
+<span class="patch">PATCH</span> /assignments/{id}
 *coming soon*
 
 ## DELETE /assignments/{id}
 
-<span class="delete">delete</span> /assignmnets/{id}
+<span class="delete">delete</span> /assignments/{id}
 *coming soon*
 
 ## GET /assignments/{id}
 
-<span class="get">GET</span> /assignmnets/{id}/groups
+<span class="get">GET</span> /assignments/{id}/groups
 *coming soon*
 
 ## PUT /assignments/{id}/groups
 
-<span class="put">PUT</span> /assignmnets/{id}/groups
+<span class="put">PUT</span> /assignments/{id}/groups
 *coming soon*
 
 ## DELETE /assignments/{id}/groups
@@ -471,22 +509,22 @@ Create new CrewScheduler Assignments
 
 ## GET /assignments/{id}/admins
 
-<span class="get">GET</span> /assignmnets/{id}/admins
+<span class="get">GET</span> /assignments/{id}/admins
 *coming soon*
 
 ## PUT /assignments/{id}/admin
 
-<span class="put">PUT</span> /assignmnets/{id}/admins
+<span class="put">PUT</span> /assignments/{id}/admins
 *coming soon*
 
 ## DELETE /assignments/{id}/admin
 
-<span class="delete">DELETE</span> /assignmnets/{id}/admins
+<span class="delete">DELETE</span> /assignments/{id}/admins
 *coming soon*
 
 ## DELETE /assignments/{id}/admins/{admin_id}
 
-<span class="delete">DELETE</span> /assignmnets/{id}/admins/{admin_id}
+<span class="delete">DELETE</span> /assignments/{id}/admins/{admin_id}
 *coming soon*
 
 # Time Off's
