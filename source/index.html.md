@@ -463,6 +463,24 @@ Allows you to retrieve, modify and create new CrewScheduler Assignments
 Returns all *non-archived* assignments of your organization. An assignment is archive
 if it has an Until date in the past, or is non-recurring and has already ended.
 
+### Properties
+
+Name | Description
+-----|------------
+id | The unique identifier of the assignment
+position | The order in which assignments should be displayed
+name | Assignment name
+date | The date this assignment started on
+start | The full date/time of the start of the first occurrence of the assignment
+end | The full date/time of the end of the first occurrence of the assignment
+positions_to_fill | Number of required personnel on the assignment
+is_work_shift | If `false`, shifts in this assignment are ignored by the rest of the system
+self_scheduling | Are employees allowed to schedule themselves
+self_scheduling_requires_approval | Only if the above is true: if this is true, self scheduling requires the approval of an administrator
+crewsense_eligible | Should this assignment be analyzed with CrewSense Intelligence
+hide_open_slots | Condense the assignment in display, do not show vacant positions
+color | Background color of the assignment for display purposes, in HEX format
+
 ## <span class="get">GET</span> /assignments/{id}
 
 ```json
