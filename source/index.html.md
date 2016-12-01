@@ -421,41 +421,129 @@ This contains the Crew Scheduler notes for the day formatted in <code>HTML</code
 
 Allows you to retrieve, modify and create new CrewScheduler Assignments
 
-## GET /assignments
-Return CrewScheduler Assignments
+## <span class="get">GET</span> /assignments
 
-<span class="get">GET</span> /assignmnets
-*coming soon*
+```json
+[
+  {
+    "id": 123,
+    "position": 3,
+    "name": "Station 1",
+    "date": "2014-01-22",
+    "start": "2014-01-22 08:00:00",
+    "end": "2014-01-23 08:00:00",
+    "positions_to_fill": 4,
+    "is_work_shift": true,
+    "self_scheduling": true,
+    "self_scheduling_requires_approval": true,
+    "crewsense_eligible": true,
+    "hide_open_slots": false,
+    "color": "#CCCCCC"
+  },
+  {
+    "id": 124,
+    "position": 4,
+    "name": "Station 2",
+    "date": "2014-01-22",
+    "start": "2014-01-22 08:00:00",
+    "end": "2014-01-23 08:00:00",
+    "positions_to_fill": 3,
+    "is_work_shift": true,
+    "self_scheduling": true,
+    "self_scheduling_requires_approval": true,
+    "crewsense_eligible": true,
+    "hide_open_slots": false,
+    "color": "#CCCCCC"
+  },
+  ...
+]
+```
 
-## GET /assignments/{id}
+Returns all *non-archived* assignments of your organization. An assignment is archive
+if it has an Until date in the past, or is non-recurring and has already ended.
 
-<span class="get">GET</span> /assignmnets/{id}
-*coming soon*
+The return format is an array of JSON objects.
 
-## POST /assignments
-Create new CrewScheduler Assignments
+### Properties
 
-<span class="post">POST</span> /assignments
-*coming soon* 
+Name | Description | Format | Default
+-----|-------------|--------|--------
+id | The unique identifier of the assignment | integer | 
+position | The order in which assignments should be displayed | integer | 
+name | Assignment name | string | 
+date | The date this assignment started on | date | 
+start | The full date/time of the start of the first occurrence of the assignment | datetime | 
+end | The full date/time of the end of the first occurrence of the assignment | datetime | 
+positions_to_fill | Number of required personnel on the assignment | integer | 1
+is_work_shift | If `false`, shifts in this assignment are ignored by the rest of the system | boolean | `true`
+self_scheduling | Are employees allowed to schedule themselves | boolean | `false`
+self_scheduling_requires_approval | Only if the above is true: if this is true, self scheduling requires the approval of an administrator | boolean | `false`
+crewsense_eligible | Should this assignment be analyzed with CrewSense Intelligence | boolean | `false`
+hide_open_slots | Condense the assignment in display, do not show vacant positions | boolean | `false`
+color | Background color of the assignment for display purposes, in HEX format | string `#RRGGBB` | #F5F4F2
+
+## <span class="get">GET</span> /assignments/{id}
+
+```json
+{
+  "id": 670,
+  "position": 1,
+  "name": "Station 1",
+  "date": "2012-12-25 00:00:00",
+  "start": "2012-12-25 08:00:00",
+  "end": "2012-12-26 08:00:00",
+  "positions_to_fill": 2,
+  "is_work_shift": true,
+  "self_scheduling": true,
+  "self_scheduling_requires_approval": true,
+  "crewsense_eligible": true,
+  "hide_open_slots": false,
+  "color": "#F5F4F2"
+}
+```
+
+Retrieve a specific assignment.
+
+For the meaning and format of properties, see [GET /assignments](#get-assignments).
+
+## <span class="post">POST</span> /assignments
+
+Create a new Crew Scheduler Assignment.
+
+### Parameters
+
+Name | Description | Format | Required?
+-----|-------------|--------|----------
+name | Assignment name | string | yes
+start | The full date/time of the start of the first occurrence of the assignment | `2016-11-28 07:00:00` | yes
+end | The full date/time of the end of the first occurrence of the assignment | `2016-11-28 19:00:00` | yes
+positions_to_fill | Number of required personnel on the assignment | integer | yes
+position | The order in which assignments should be displayed | integer | 
+is_work_shift | If `false`, shifts in this assignment are ignored by the rest of the system | boolean | 
+self_scheduling | Are employees allowed to schedule themselves | boolean | 
+self_scheduling_requires_approval | Only if the above is true: if this is true, self scheduling requires the approval of an administrator | boolean | 
+crewsense_eligible | Should this assignment be analyzed with CrewSense Intelligence | boolean | 
+hide_open_slots | Condense the assignment in display, do not show vacant positions | boolean | 
+color | Background color of the assignment for display purposes, in HEX format | string `#RRGGBB` | 
 
 ## PATCH /assignments/{id}
 
-<span class="patch">PATCH</span> /assignmnets/{id}
+<span class="patch">PATCH</span> /assignments/{id}
 *coming soon*
 
 ## DELETE /assignments/{id}
 
-<span class="delete">delete</span> /assignmnets/{id}
+<span class="delete">delete</span> /assignments/{id}
 *coming soon*
 
 ## GET /assignments/{id}
 
-<span class="get">GET</span> /assignmnets/{id}/groups
+<span class="get">GET</span> /assignments/{id}/groups
 *coming soon*
 
 ## PUT /assignments/{id}/groups
 
-<span class="put">PUT</span> /assignmnets/{id}/groups
+<span class="put">PUT</span> /assignments/{id}/groups
 *coming soon*
 
 ## DELETE /assignments/{id}/groups
@@ -470,22 +558,22 @@ Create new CrewScheduler Assignments
 
 ## GET /assignments/{id}/admins
 
-<span class="get">GET</span> /assignmnets/{id}/admins
+<span class="get">GET</span> /assignments/{id}/admins
 *coming soon*
 
 ## PUT /assignments/{id}/admin
 
-<span class="put">PUT</span> /assignmnets/{id}/admins
+<span class="put">PUT</span> /assignments/{id}/admins
 *coming soon*
 
 ## DELETE /assignments/{id}/admin
 
-<span class="delete">DELETE</span> /assignmnets/{id}/admins
+<span class="delete">DELETE</span> /assignments/{id}/admins
 *coming soon*
 
 ## DELETE /assignments/{id}/admins/{admin_id}
 
-<span class="delete">DELETE</span> /assignmnets/{id}/admins/{admin_id}
+<span class="delete">DELETE</span> /assignments/{id}/admins/{admin_id}
 *coming soon*
 
 # Time Off's
