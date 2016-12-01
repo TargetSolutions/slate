@@ -13,14 +13,13 @@ search: true
 
 # Introduction
 
-Welcome to the CrewSense API!
-Find out how to send requests to our API, and what you can do with it.
+Welcome to the CrewSense API
 
-At this time, the API does not expose every part of the application, but you can already 
-do lots of very useful things with it. Query the schedule, manage labels, create reports, add / edit work types, add / edit users, view system log,
-time off types, list shift trades and much more.
+Find out how to send requests to our API, and what you can do with it using this developer resource.
 
-Our examples are in cURL.
+The CrewSense API exposes very useful endpoints from within the CrewSense platform. You can do things like query the Schedule, manage Roster Data, Add Time Off's, Manage Trades, View System Log entries, CallBack History, and much more.
+
+All of our examples are in cURL, however any scripting language that supports RESTful integrations can be utilized.
 
 
 # Authentication
