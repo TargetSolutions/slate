@@ -506,6 +506,37 @@ Retrieve a specific assignment.
 
 For the meaning and format of properties, see [GET /assignments](#get-assignments).
 
+## <span class="get">GET</span> /assignments/{id}/groups
+
+Returns assignment group label data
+
+```json
+[
+    {
+        "id": "943",
+        "name": "7367",
+        "color": "#1700e6"
+    }
+]
+```
+
+## GET /assignments/{id}/admins
+
+<span class="get">GET</span> /assignments/{id}/admins
+
+Returns data on who created the assignment
+
+
+```json
+[
+    {
+        "id": "953",
+        "name": "John Smith",
+        "href": "https://api.crewsense.com/v1/users/953"
+    }
+]
+```
+
 ## <span class="post">POST</span> /assignments
 
 Create a new Crew Scheduler Assignment.
@@ -529,52 +560,94 @@ color | Background color of the assignment for display purposes, in HEX format |
 ## PATCH /assignments/{id}
 
 <span class="patch">PATCH</span> /assignments/{id}
-*coming soon*
+
+Updates assignment info
 
 ## DELETE /assignments/{id}
 
 <span class="delete">delete</span> /assignments/{id}
-*coming soon*
 
-## GET /assignments/{id}
-
-<span class="get">GET</span> /assignments/{id}/groups
-*coming soon*
+Deletes assignment
 
 ## PUT /assignments/{id}/groups
 
 <span class="put">PUT</span> /assignments/{id}/groups
-*coming soon*
+
+Updates assignment group label
 
 ## DELETE /assignments/{id}/groups
 
 <span class="delete">DELETE</span> /assignments/{id}/groups
-*coming soon*
+
+Deletes ALL assignment group label(s)
 
 ## DELETE /assignments/{id}/groups/{group_id}
 
 <span class="delete">DELETE</span> /assignments/{id}/groups/{group_id}
-*coming soon*
 
-## GET /assignments/{id}/admins
-
-<span class="get">GET</span> /assignments/{id}/admins
-*coming soon*
+Deletes specific assignment group label
 
 ## PUT /assignments/{id}/admin
 
 <span class="put">PUT</span> /assignments/{id}/admins
-*coming soon*
 
-## DELETE /assignments/{id}/admin
+Updates admin data for who created the assignment
 
-<span class="delete">DELETE</span> /assignments/{id}/admins
-*coming soon*
+# Visual Cycles
 
-## DELETE /assignments/{id}/admins/{admin_id}
+This endpoint will list all visual cycles an Organization is using in their CrewScheduler. Visual Cycles are used for displaying things like 'FLSA cycles graphically in their calendars.
 
-<span class="delete">DELETE</span> /assignments/{id}/admins/{admin_id}
-*coming soon*
+In the following sections, we try to introduce all the important data in the schedule resource.
+
+## GET /visual_cycles
+
+> An example of returned /visual_cycles data GET request looks like this:
+
+```json
+[
+   {
+   "id": 2,
+   "name": "FLSA Cycle #1",
+   "start": "2017-01-01",
+   "end": "2017-01-28",
+   "color": "#f00",
+   "text_color": "#fff",
+   "created_by": 14690,
+   "created_at": "2017-02-06 04:34:04",
+   "deleted_by": null,
+   "deleted_at": null
+   }
+,...
+]
+```
+<span class="get">GET</span> /visual_cycles
+
+### Optional Parameters
+
+Passing the following parameters will return only visual cycles that fall within the start and end date
+
+Name | Description | Format | Required?
+-----|-------------|--------|----------
+start | Start date | 2017-11-28 | no
+end | End date | 2017-11-29 | no
+
+
+## GET /visual_cycles/{id}
+
+<span class="get">GET</span> /visual_cycles/{id}
+
+## POST /visual_cycles
+
+<span class="post">POST</span> /visual_cycles
+
+## PUT /visual_cycles/{id}
+
+<span class="put">PUT</span> /visual_cycles/{id}
+
+## DELETE /visual_cycles/{id}
+
+<span class="delete">DELETE</span> /visual_cycles/{id}
+
 
 # Time Off's
 
@@ -668,8 +741,6 @@ user_note | brief note; Max limit 1000 characters | N
 ## DELETE /time_offs/{id}
 <span class="delete">DELETE</span> /time_offs/{id}
 
-*coming soon...*
-
 ## POST /time_offs/{id}/deny
 <span class="post">POST</span> /time_offs/{id}/deny
 
@@ -680,9 +751,41 @@ Deny time off request
 
 Approve time off request
 
-## GET /timeoff/accrual/profile
+# Accruals
 
-> GET /timeoff/accrual/profile example response
+## GET /accruals
+<span class="get">GET</span> /accruals
+
+> GET /accruals example response
+
+```json
+[
+    {
+        "time_off_type": {
+            "id": "37",
+            "name": "Sick"
+        },
+        "accrual_type": "Accrues 6 hours every pay period (max. 150 hours)"
+    },
+    {
+        "time_off_type": {
+            "id": "38",
+            "name": "Vacation"
+        },
+        "accrual_type": "Accrues 144 hours every year (max. 300 hours)"
+    },
+]
+```
+View all accrual profiles for company
+
+## GET /accruals/users
+<span class="get">GET</span> /accruals/users
+
+Lists all users associated with accrual profile
+
+## GET /users/{user_id}/timeoff/accrual/profile
+
+> GET /users/1234/timeoff/accrual/profile example:
 
 ```json
 [
@@ -712,25 +815,93 @@ Approve time off request
 
 ]
 ```
-List all accrual profiles for the company
+Return the accrual type for each time off type based on the employee’s accrual profile.
 
-<span class="get">GET</span> /timeoff/accrual/profile
+<span class="get">GET</span> /users/{user_id}/timeoff/accrual/profile
+
+## GET /users/{user_id}/timeoff/accrual/bank
+<span class="get">GET</span> /users/{user_id}/timeoff/accrual/bank
+
+> GET /users/{user_id}/timeoff/accrual/bank example response
+
+```json
+[
+    {
+        "hours": 592.5,
+        "time_off_type": {
+            "id": "5",
+            "name": "Sick"
+        }
+    },
+    {
+        "hours": 746.7104,
+        "time_off_type": {
+            "id": "6",
+            "name": "Vacation"
+        }
+    }
+]
+```
+Returns all accrual balances for each bank the user has
+
+## POST /users/{user_id}/timeoff/accrual/bank/{id}
+<span class="post">POST</span> /users/{user_id}/timeoff/accrual/bank{id}
+
+Updates users accrual bank balance. Reference time_off_type_id
 
 # Trades
-View and modify Shift Trades
 
 ## GET /trades
 <span class="get">GET</span> /trades
 
+> GET /trades example response
 
-##GET /trades/{id}
-<span class="get">GET</span> /trades/{id}
+```json
+   [
+        {
+            "id": "44799",
+            "requesting_user": {
+                "id": "956",
+                "name": "Vincent Ownbey",
+                "href": "https://api.crewsense.com/v1/users/956"
+            },
+            "request_date": "2016-05-10T17:16:15-07:00",
+            "start": "2016-06-17T07:00:00-07:00",
+            "end": "2016-06-18T07:00:00-07:00",
+            "swap_start": "2017-07-14T13:21:18-07:00",
+            "swap_end": "2017-07-14T13:21:18-07:00",
+            "status": "filled"
+        },
+```
 
 ##GET /trades/{id}/users
 <span class="get">GET</span> /trades/{id}/users
 
 ## POST /trades
 <span class="post">POST</span> /trades
+
+> GET /trades example response
+
+```json
+   [
+        {
+            "requesting_user": "956",
+            "start": "2016-06-17 07:00:00",
+            "end": "2016-06-18 07:00:00",
+            "accepting_user_id": "145",
+            "approving_user_id": "123"
+        },
+```
+
+### Rquired Parameters
+
+Field | Description | Type
+--------- | ------- | -----------
+requesting_user | the person who requested the trade | integer
+start | start date / time of trade | 2016-06-17 07:00:00
+end | end date | 2016-06-18 07:00:00
+approving_user_id | who approved the trade | integer
+
 
 ## PATCH /trades/{id}
 <span class="patch">PATCH</span> /trades/{id}
@@ -1065,80 +1236,82 @@ Edit time off request Data
 
 <span class="patch"> PATCH</span> /users/{user_id}/time_offs/{id}
 
-## GET /users/{user_id}/timeoff/accrual/bank
+# Certifications
 
-> GET /users/1234/timeoff/accrual/bank example:
+Query user certifications
 
-```json
-[
-   {
-      "hours": 1001,
-      "time_off_type": {
-         "id": 5,
-         "name": "Sick"
-      }
-   },
-   {
-      "hours": -125.024,
-      "time_off_type": {
-         "id": 6,
-         "name": "Vacation"
-      }
-   },
-   {
-      "hours": 29.2125,
-      "time_off_type": {
-         "id": 7,
-         "name": "Earned Time"
-      }
-   },
+## GET /certifications
 
-   ...
-]
-```
-Return the current time off bank of the user with the <code>user_id</code>. 
+<span class="get"> GET</span> /certifications
 
-<span class="get">GET</span> /users/{user_id}/timeoff/accrual/bank
+Returns all Certifications in system. 
 
-## POST /users/{user_id}/timeoff/accrual/bank
+## GET /certifications/{id}
 
-Update user accrual bank. Reference <code>id</code> of accrual profile to update appropriate bank
+<span class="get"> GET</span> /certifications/{id}
 
-## GET /users/{user_id}/timeoff/accrual/profile
+Returns certification by id. 
 
-> GET /users/1234/timeoff/accrual/profile example:
+## PUT /certifications/{id}
 
-```json
-[
-   {
-      "time_off_type": {
-         "id": 5,
-         "name": "Sick"
-      },
-      "accrual_type": "Accrues 10 hours every 28 days"
-   },
-   {
-      "time_off_type": {
-         "id": 6,
-         "name": "Vacation"
-      },
-      "accrual_type": "Accrues one hour every 10 hours worked (max. 12 hours)"
-   },
-   {
-      "time_off_type": {
-         "id": 7,
-         "name": "Earned Time"
-      },
-      "accrual_type": "No automatic accrual"
-   },
+<span class="put"> PUT</span> /certifications/{id}
 
-   ...
+Updates a certification info.
 
-]
-```
-Return the accrual type for each time off type based on the employee’s accrual profile.
+## POST /certifications
 
-<span class="get">GET</span> /users/{user_id}/timeoff/accrual/profile
+<span class="post"> POST</span> /certifications
+
+Creates a new certificaiton in system
+
+## DELETE /certifications/{id}
+
+<span class="delete"> DELETE</span> /certifications/{id}
+
+Deletes a certification in the system.
+
+## GET /users/{user_id}/certifications
+
+<span class="get"> GET</span> /users/{user_id}/certifications
+
+Returns all certifications of a user in the system.
+
+## GET /users/{user_id}/certifications/{id}
+
+<span class="get"> GET</span> /users/{user_id}/certifications/{id}
+
+Returns specific certification info for a user.
+
+## POST /users/{user_id}/certifications
+
+<span class="post"> POST</span> /users/{user_id}/certifications
+
+Add a certification to a user in the system.
+
+## DELETE /users/{user_id}/certifications/{id}
+
+<span class="delete"> DELETE</span> /users/{user_id}/certifications/{id}
+
+Deletes a certification of a user in the system.
+
+## PUT /users/{user_id}/certifications/{id}
+
+<span class="put"> PUT</span> /users/{user_id}/certifications/{id}
+
+Updates a certification record for an employee.
+
+## DELETE /users/{user_id}/certifications
+
+<span class="get"> GET</span> /users/{user_id}/certifications
+
+Deletes all certifications of a user
+
+## POST /users/{user_id}/certifications/{id}/file
+
+<span class="post"> POST</span> /users/{user_id}/certifications/{id}/file
+
+Uploads file (pdf, jpeg or doc) of certification for user
+
 
 # Logs
 
@@ -1198,7 +1371,6 @@ Retreive historical data on CallBacks
 
 ## GET /callbacks
 
-Returns CallBacks in the system 
 
 > GET /callbacks sample response:
 
@@ -1250,8 +1422,19 @@ Returns CallBacks in the system
 }
 ```
 
+Returns CallBacks in the system 
 
 <span class="get">GET</span> /callbacks
+
+### Optional Parameters
+
+Passing the following parameters will return only callbacks that fall within the start and end date
+
+Name | Description | Format | Required?
+-----|-------------|--------|----------
+start | Start date | 2017-11-28 07:00:00 | no
+end | End date | 2017-11-29 07:00:00 | no
+
 
 ## GET /callbacks/{id}
 
@@ -1318,6 +1501,7 @@ Returns data for specific users of the CallBack
   }
 ]
 ```
+<span class="get">GET</span> /callbacks/{id}/users
 
 # Announcements
 
@@ -1628,7 +1812,5 @@ email | (boolean) send email as well? |
 
 ## GET /company
 <span class="get">GET</span> /company
-
-*coming soon...*
 
 Returns company information
