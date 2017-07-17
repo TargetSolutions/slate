@@ -19,7 +19,7 @@ Find out how to send requests to our API, and what you can do with it using this
 
 The CrewSense API exposes very useful endpoints from within the CrewSense platform. You can do things like query the Schedule, manage Roster Data, Add Time Off's, Manage Trades, View System Log entries, CallBack History, and much more.
 
-All of our examples are in cURL, however any scripting language that supports RESTful integrations can be utilized.
+All of our examples are in cURL, however any scripting language that supports RESTful calls can be utilized.
 
 
 # Authentication
@@ -33,7 +33,7 @@ of any subsequent requests.
 
 To generate API key/secret pairs, go to the [System Settings](https://crewsense.com/Application/ControlPanel/Options/) page, click "Integrations", and click "Generate new API credentials". The credentials will be listed in the table on that page. 
 
-*note: Only users with System Settings permission will be able to access tokens / keys interface within the CrewSense platform*
+<aside class='warning'>note: Only users with System Settings permission will be able to access tokens / keys interface within the CrewSense platform</aside>
 
 If you no longer use the API credentials or you suspect they have been compromised, please delete them, and generate new ones instead, if needed.
 
@@ -168,12 +168,6 @@ start | The date you need the data from | datetime
 end | 	The date you need the data to | datetime
 
 <aside class='warning'>While we are trying to make the API RESTful, some resources, including this one, are more of a convenient packaging of multiple resources for querying. You cannot issue a <span class="post">POST</span> or <span class="delete">DELETE</span> request on this endpoint.</aside>
-
-## POST /schedule
-Allows you to add employee to CrewScheduler Assignment
-
-<span class="post">POST</span> /schedule
-*coming soon*
 
 ## days
 
@@ -640,6 +634,18 @@ end | End date | 2017-11-29 | no
 
 <span class="post">POST</span> /visual_cycles
 
+### Required Parameters
+
+When creating a new visual cycle, the following are required
+
+Name | Description | Format | Required?
+-----|-------------|--------|----------
+name | name of visual cycle | string | y
+start | start date of cycle | datetime | y
+end | end date of cycle | datetime | y
+color | rgb value of background color | rgbhex | y
+text_color | rgb value of background color | rgbhex | y
+
 ## PUT /visual_cycles/{id}
 
 <span class="put">PUT</span> /visual_cycles/{id}
@@ -653,13 +659,106 @@ end | End date | 2017-11-29 | no
 
 View, Edit and Create new Time Off entries in the system
 
+## GET /time_offs
+
+Get all time off entries for a given date range
+
+<span class="get">GET</span> /time_offs
+
+> GET /time_offs example response:
+
+```json
+[
+    {
+        "id": "744837",
+        "time_off_type": {
+            "id": "6",
+            "name": "Vacation",
+            "work_code": "VAC001"
+        },
+        "user": {
+            "id": "98",
+            "name": "Brycen Doe",
+            "href": "/users/98"
+        },
+        "admin": {
+            "id": "34942",
+            "name": "Oliver CrewSense",
+            "href": "/users/34942"
+        },
+        "start": "2017-07-10 07:00:00",
+        "end": "2017-07-11 07:00:00",
+        "rrule": null,
+        "status": "1",
+        "request_date": "2017-07-10T08:19:57-07:00",
+        "approval_date": "1969-12-31T16:00:00-08:00",
+        "acknowledgement_date": "1969-12-31T16:00:00-08:00",
+        "user_note": null,
+        "traded_with": null
+    }
+]
+```
+
+### Required Parameters
+
+Field | Description | Type
+--------- | ------- | -----------
+start |	Start date of query timeframe|	datetime
+end |	End date of query timeframe |	datetime
+
+## POST /time_offs
+
+<span class="post">POST</span> /time_offs
+
+> POST /time_offs example JSON body:
+
+```json
+{
+	"user_id": 138,
+	"admin_ids": [848, 6461],
+	"start_date": "2016-11-02 08:00:00",
+	"end_date": "2016-11-03 08:00:00",
+	"time_off_type_id": 456,
+	"user_note": "I would like to go to Hawaii",
+	"status": 1
+}
+```
+Create a new Time Off entry in system
+
+<aside class="notice">note: you can optionally approve the time off by calling /time_offs/{id}/approve or sending a status parameter of "1"</aside>
+
+### Query Parameters
+
+Field  | Description |Required?
+--------- | --------- | -----------
+user_id|	user id of employee | Y
+admin_ids | user id of approving admin | Y
+start_date | start date / time of time off entry| Y
+end_date | end date / time of time off entry| Y
+time_off_type_id | id of time off type to use| Y
+status | pending or approved? *boolean (0 = pending, 1 = approved)* | N
+user_note | brief note; Max limit 1000 characters | N
+
+## DELETE /time_offs/{id}
+<span class="delete">DELETE</span> /time_offs/{id}
+
+## POST /time_offs/{id}/deny
+<span class="post">POST</span> /time_offs/{id}/deny
+
+Deny time off request
+
+## POST /time_offs/{id}/approve
+<span class="post">POST</span> /time_offs/{id}/deny
+
+Approve time off request
+
 ## GET /time_off_types
 
 Get all *non-deleted* time off types in the system. 
 
 <span class="get">GET</span> /time_off_types
 
-> /time_off_types
+> GET /time_off_types example response
 
 ```json
 [
@@ -690,6 +789,12 @@ Get all *non-deleted* time off types in the system.
 ]
 ```
 
+## POST /time_off_types
+
+Create new time off type in the system.
+
+<span class="post">POST</span> /time_off_types
+
 ### Query Parameters
 
 Field | Description | Type
@@ -704,52 +809,6 @@ primary_color|	Main color of the type (background color)|	RGB hex
 secondary_color|	Text color of the type|	RGB hex
 force_include|	Ignore time off of this type in callbacks|	boolean
 forward|	Forward time off of this type to other admins if not handled|	boolean
-
-## POST /time_offs
-
-<span class="get">POST</span> /time_offs
-
-> POST /time_offs example JSON body:
-
-```json
-{
-	"user_id": 138,
-	"admin_ids": [848, 6461],
-	"start_date": "2016-11-02 08:00:00",
-	"end_date": "2016-11-03 08:00:00",
-	"time_off_type_id": 456,
-	"user_note": "I would like to go to Hawaii",
-	"status": 1
-}
-```
-Create a new Time Off entry in system
-
-** note: you can approve the time off by calling /time_offs/{id}/approve or sending status parameter of 1**
-
-### Query Parameters
-
-Field  | Description |Required?
---------- | --------- | -----------
-user_id|	user id of employee | Y
-admin_ids | user id of approving admin | Y
-start_date | start date / time of time off entry| Y
-end_date | end date / time of time off entry| Y
-time_off_type_id | id of time off type to use| Y
-status | pending or approved? *boolean (0 = pending, 1 = approved)* | N
-user_note | brief note; Max limit 1000 characters | N
-
-## DELETE /time_offs/{id}
-<span class="delete">DELETE</span> /time_offs/{id}
-
-## POST /time_offs/{id}/deny
-<span class="post">POST</span> /time_offs/{id}/deny
-
-Deny time off request
-
-## POST /time_offs/{id}/approve
-<span class="post">POST</span> /time_offs/{id}/deny
-
-Approve time off request
 
 # Accruals
 
@@ -777,11 +836,6 @@ Approve time off request
 ]
 ```
 View all accrual profiles for company
-
-## GET /accruals/users
-<span class="get">GET</span> /accruals/users
-
-Lists all users associated with accrual profile
 
 ## GET /users/{user_id}/timeoff/accrual/profile
 
@@ -815,7 +869,7 @@ Lists all users associated with accrual profile
 
 ]
 ```
-Return the accrual type for each time off type based on the employee’s accrual profile.
+Return the accrual profiles for each user
 
 <span class="get">GET</span> /users/{user_id}/timeoff/accrual/profile
 
@@ -842,7 +896,7 @@ Return the accrual type for each time off type based on the employee’s accrual
     }
 ]
 ```
-Returns all accrual balances for each bank the user has
+Returns all accrual balances a user
 
 ## POST /users/{user_id}/timeoff/accrual/bank/{id}
 <span class="post">POST</span> /users/{user_id}/timeoff/accrual/bank{id}
@@ -877,8 +931,12 @@ Updates users accrual bank balance. Reference time_off_type_id
 ##GET /trades/{id}/users
 <span class="get">GET</span> /trades/{id}/users
 
+List all users who were apart of a specific trade and their responses / status
+
 ## POST /trades
 <span class="post">POST</span> /trades
+
+Initiate a new trade in the system
 
 > GET /trades example response
 
@@ -893,14 +951,14 @@ Updates users accrual bank balance. Reference time_off_type_id
         },
 ```
 
-### Rquired Parameters
+### Required Parameters
 
-Field | Description | Type
---------- | ------- | -----------
-requesting_user | the person who requested the trade | integer
-start | start date / time of trade | 2016-06-17 07:00:00
-end | end date | 2016-06-18 07:00:00
-approving_user_id | who approved the trade | integer
+Field | Description | Type | Required?
+--------- | ------- | ----------- | -----------
+requesting_user | the person who requested the trade | integer | y
+start | start date / time of trade | 2016-06-17 07:00:00 | y
+end | end date | 2016-06-18 07:00:00 | y
+approving_user_id | who approved the trade | integer | y
 
 
 ## PATCH /trades/{id}
@@ -908,6 +966,8 @@ approving_user_id | who approved the trade | integer
 
 ## DELETE /trades/{id}
 <span class="delete">DELETE</span> /trades/{id}
+
+Deletes a trade from the system
 
 ## PUT /trades/{id}
 <span class="put">PUT</span> /trades/{id}
@@ -976,17 +1036,15 @@ Create a new crew scheduler label in the system.
 
 <span class="post">POST</span> /labels
 
-Required Fields:
 
-<code>label</code> - the text on the label
+### Parameters
 
-<code>color</code> - the background color of the label, in HEX format (#RRGGBB)
-
-<code>text_color</code> - the text color of the label, in HEX format
-
-Optional fields:
-
-<code>position</code> - The relative position of shifts with this label inside an assignment
+Field | Description | Type | Required?
+--------- | ------- | ----------- | -----------
+label | the text on the label | string | y
+color | the background color of the label, in HEX format (#RRGGBB) | rgbhex | y
+text_color | the text color of the label, in HEX format (#RRGGBB) | rgbhex | y
+position | crewscheduler ordering position | integer | n
 
 ## POST /labels/{id}
 
@@ -994,17 +1052,14 @@ Change an existing crew scheduler label in the system.
 
 <span class="post">POST</span> /labels/{id}
 
-Required Fields:
+### Parameters
 
-<code>label</code> - the text on the label
-
-<code>color</code> - the background color of the label, in HEX format (#RRGGBB)
-
-<code>text_color</code> - the text color of the label, in HEX format
-
-Optional fields:
-
-<code>position</code> - The relative position of shifts with this label inside an assignment
+Field | Description | Type | Required?
+--------- | ------- | ----------- | -----------
+label | the text on the label | string | y
+color | the background color of the label, in HEX format (#RRGGBB) | rgbhex | y
+text_color | the text color of the label, in HEX format (#RRGGBB) | rgbhex | y
+position | crewscheduler ordering position | integer | n
 
 ## DELETE /labels/{id}
 
@@ -1014,8 +1069,6 @@ Remove an existing crew scheduler label from the system.
 
 
 # Filters
-
-Manage specialty classification filters
 
 ## GET /filters
 
@@ -1084,9 +1137,11 @@ Create a new specialty classification filter in the system. Required fields:
 
 <span class="post">POST</span> /filters
 
-Required Fields:
+### Parameters
 
-<code>label</code> - the name of the new specialty classification filter
+Field | Description | Type | Required?
+--------- | ------- | ----------- | -----------
+label | the name of the new specialty classification filt | string | y
 
 ## POST /filters/{id}
 
@@ -1094,9 +1149,11 @@ Change an existing specialty classification filter in the system. Required field
 
 <span class="post">POST</span> /filters/{id}
 
-Required Fields:
+### Parameters
 
-<code>label</code> - the new name of the classification filter
+Field | Description | Type | Required?
+--------- | ------- | ----------- | -----------
+label | the new name of the new specialty classification filt | string | y
 
 ## DELETE /filters/{id}
 
@@ -1105,8 +1162,6 @@ Remove an existing specialty classification filter from the system.
 <span class="delete">DELETE</span> /filters/{id}
 
 # Users
-
-Returns info on users in the system. Allows for deleting, updating, adding new users to the system.
 
 ## GET /users
 
@@ -1134,15 +1189,15 @@ Returns info on users in the system. Allows for deleting, updating, adding new u
    ...
 ]
 ```
-List all *non-deleted, active* users of the company
-
 <span class="get"> GET</span> /users
+
+List all *non-deleted, active* users of the company
 
 ## GET /users/{user_id}
 
-Returns specific user info
-
 <span class="get"> GET</span> /users/{user_id}
+
+Returns specific user info
 
 > GET /users/{user_id}
 
@@ -1167,21 +1222,21 @@ Returns specific user info
 ```
 ## GET /users/{user_id}/titles
 
-Returns all CallBack lists user is associated with
-
 <span class="get"> GET</span> /users/{user_id}/titles
+
+Returns all CallBack lists user is associated with
 
 ## GET /users/{user_id}/filters
 
-Returns all Speciality Filers user is associated with
-
 <span class="get"> GET</span> /users/{user_id}/filters
+
+Returns all Speciality Filers user is associated with
 
 ## GET /users/{user_id}/groups
 
-Returns all Groups user is associated with
-
 <span class="get"> GET</span> /users/{user_id}/groups
+
+Returns all Groups user is associated with
 
 ## PUT /users
 
@@ -1202,6 +1257,19 @@ Returns all Groups user is associated with
 }
 ```
 Create a new user. Send <code>JSON</code> data in the body
+
+### Parameters
+
+Field | Description | Type | Required?
+--------- | ------- | ----------- | -----------
+username | the username for the user | string | y
+first_name | first name | string | y
+last_name | last name | string | y
+mail | email address | string | y
+password | password for the user | string | y
+employee_id | internal employee id # | integer | n
+phone_numbers | phone number for user (format: 5555555555) | integer | n
+role | permission role for user | string | integer
 
 ## PATCH /users/{user_id}
 
@@ -1367,8 +1435,6 @@ after|	date / time to return logs from | n
 
 # CallBacks
 
-Retreive historical data on CallBacks
-
 ## GET /callbacks
 
 
@@ -1422,9 +1488,9 @@ Retreive historical data on CallBacks
 }
 ```
 
-Returns CallBacks in the system 
-
 <span class="get">GET</span> /callbacks
+
+Returns CallBacks in the system 
 
 ### Optional Parameters
 
@@ -1461,15 +1527,14 @@ end | End date | 2017-11-29 07:00:00 | no
             "status": "filled"
         }
 ```
-Returns data for a specific CallBack
 
 <span class="get">GET</span> /callbacks/{id}/
+
+Returns data for a specific CallBack
 
 ## GET /callbacks/{id}/users
 
 > GET /callbacks/123456/users example response
-
-Returns data for specific users of the CallBack
 
 ```json
 [
@@ -1503,9 +1568,9 @@ Returns data for specific users of the CallBack
 ```
 <span class="get">GET</span> /callbacks/{id}/users
 
-# Announcements
+Returns data for specific users of the CallBack
 
-Manage system announcements of your company.
+# Announcements
 
 ## GET /announcements
 
@@ -1535,16 +1600,15 @@ Manage system announcements of your company.
     }
 }
 ```
+<span class="get">GET</span> /announcements
 
 Retrieve the latest, non-deleted announcements.
 
-<span class="get">GET</span> /announcements
-
 ## POST /announcements
 
-Create a new company announcement.
-
 <span class="post">POST</span> /announcements
+
+Create a new company announcement.
 
 ### Query Parameters
 
@@ -1567,9 +1631,9 @@ title|	Announcement title
 
 ## DELETE /announcements/{id}
 
-Delete the announcement by the id <code>id</code>.
-
 <span class="delete">DELETE</span> /announcements/{id}
+
+Delete the announcement by the id <code>id</code>.
 
 # Qualifiers
 
@@ -1596,9 +1660,9 @@ Delete the announcement by the id <code>id</code>.
 ]
 ```
 
-Retrieve all active qualifiers in your system. 
-
 <span class="get">GET</span> /qualifiers
+
+Retrieve all active CrewSense intelligence qualifiers in your system. 
 
 ## GET /qualifiers/{id}
 
@@ -1619,15 +1683,15 @@ Retrieve all active qualifiers in your system.
 }
 ```
 
-Retreive all information about a specific qualifer by <code>id</code>.
-
 <span class="get">GET</span> /qualifiers/{id}
+
+Retreive all information about a specific qualifer by <code>id</code>.
 
 ## POST /qualifers
 
-Create a new qualifier.
-
 <span class="post">POST</span> /qualifiers
+
+Create a new qualifier.
 
 > POST /qualifiers example response:
 
@@ -1645,9 +1709,9 @@ shortcode	| Shortened name of the qualifier, to be displayed on the Crew Schedul
 
 ## DELETE /qualifiers/{id}
 
-Delete a qualifier. The qualifier will be *soft-deleted*, which means we can manually restore it if you think you’ve made a mistake deleting it.
-
 <span class="delete">DELETE</span> /qualifiers/{id}
+
+Delete a qualifier. The qualifier will be *soft-deleted*, which means we can manually restore it if you think you’ve made a mistake deleting it.
 
 ## GET /qualifiers/{id}/users
 
@@ -1669,13 +1733,11 @@ Delete a qualifier. The qualifier will be *soft-deleted*, which means we can man
 ]
 ```
 
-Retrieve all associated users of a specific qualifier. 
-
 <span class="get">GET</span> /qualifiers/{id}/users
 
-# Payroll
+Retrieve all associated users of a specific qualifier. 
 
-Access payroll data within the system, included hours; work types; work codes; position data and more.
+# Payroll
 
 ## GET /payroll
 
@@ -1701,11 +1763,9 @@ Access payroll data within the system, included hours; work types; work codes; p
 ]
 ```
 
-Returns all payroll data for date range / time. 
-
-Can optionally return single employee payroll data by passing <code>user_id</code>
-
 <span class="get">GET</span> /payroll
+
+Returns all payroll data for date range / time. 
 
 <span class="get">GET</span> /payroll/{user_id}
 
@@ -1719,11 +1779,36 @@ user_id | user id of employee |
 
 # Forms
 
-Returns all submitted form data within the company account.
+## GET /forms/
+
+> GET /forms example response:
+
+```json
+{
+    "141": {
+        "title": "Test form",
+        "created_at": "2016-08-05 09:32:46",
+        "created_by": "Brandon CrewSense"
+    },
+    "196": {
+        "title": "Exposure Form",
+        "created_at": "2016-08-06 16:49:33",
+        "created_by": "Casey CrewSense"
+    },
+    "203": {
+        "title": "Truck Check - Daily",
+        "created_at": "2016-03-01 22:04:18",
+        "created_by": "John Doe"
+    }
+}
+```
+<span class="get">GET</span> /forms/
+
+Lists all forms in the system
 
 ## GET /forms/{id}/submissions
 
-> example GET /forms/44/submissions:
+> example GET /forms/144/submissions:
 
 ```json
 [
@@ -1769,19 +1854,14 @@ Returns all submitted form data within the company account.
 ]
 ```
 
-Returns submitted form data
-
-<span class="get">GET</span> /forms/
-
 <span class="get">GET</span> /forms/{id}/submissions
+
+Returns submitted form data for a specific form
 
 # ReadyAlert
 
-Send ReadyAlert notifications.
-
-*note: Rate limits are in effect. Limited to 30 ReadyAlerts per day via API. To increase this limit, please contact us.*
-
 ## POST /ready_alerts
+
 > POST /ready_alerts example JSON
 
 ```json
@@ -1795,8 +1875,9 @@ Send ReadyAlert notifications.
 ```
 <span class="post"> POST</span> /ready_alerts
 
-
 Send ReadyAlert
+
+<aside class="info">note: Rate limits are in effect. Limited to 30 ReadyAlerts per day via API. To increase this limit, please contact us.</aside>
 
 ### Query Parameters
 
