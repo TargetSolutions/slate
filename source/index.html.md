@@ -908,7 +908,7 @@ Updates users accrual bank balance. Reference time_off_type_id
 Field | Description | Type | Required?
 --------- | ------- | ----------- | -----------
 time_off_type_id | You can issue a GET request to /time_off_types to get a list of your types in the system, and reference the id attribute in that list to find this ID | integer | y
-hours | The number of hours to add. If you want to deduct hours, provide a negative number. | integer | y
+hours | The number of hours to add to their bank. If you want to deduct hours, provide a negative number. | integer | y
 admin_id | The User ID of the user issuing the manual adjustment. | integer | y
 
 # Trades
