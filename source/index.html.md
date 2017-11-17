@@ -1578,6 +1578,76 @@ Returns data for a specific CallBack
 
 Returns data for specific users of the CallBack
 
+# Availability
+
+## GET /availability_periods
+
+
+> GET /availability_periods sample response:
+
+```json
+[   
+    {
+        "id": 47348,
+        "user": {
+            "id": 98,
+            "name": "Boss Doe",
+            "href": "https://api.crewsense.com/v1/users/98"
+        },
+        "start": "2017-09-04 08:00:00",
+        "end": "2017-09-05 08:00:00",
+        "admin": {
+            "id": 34940,
+            "name": "Oliver Nagy",
+            "href": "https://api.crewsense.com/v1/users/34940"
+        },
+        "notes": "Travelling out of country",
+        "unavailability_reason": {
+            "id": 6,
+            "name": "Default"
+        }
+    }
+]
+```
+
+<span class="get">GET</span> /availability_periods
+
+### Query Parameters
+
+Field | Description | Required?
+--------- | ------- | -----------
+start | date / time to return availability periods from | y
+end | date / time to return availability periods to | y
+
+## POST /availability_periods
+
+
+> POST /availability_periods sample JSON body:
+
+```json
+{
+    "user_id": 98,
+    "start": "2017-11-17 08:00:00",
+    "end": "2017-11-30 08:00:00",
+    "unavailability_reason_id": 6,
+    "admin_id": 98,
+    "notes": "Added via the API"
+}
+```
+
+<span class="get">POST</span> /availability_periods
+
+### Query Parameters
+
+Field | Description | Required?
+--------- | ------- | -----------
+user_id | The ID of the user that is (un)available | y
+start | date / time to return availability periods from | y
+end | date / time to return availability periods to | y
+unavailability_reason_id | The ID of the unavailability reason (if any) | n
+admin_id | The User ID of the admin adding the period. If omitted, it will appear as if the user added the period themselves | n
+notes | Notes about the period | n
+
 # Announcements
 
 ## GET /announcements
