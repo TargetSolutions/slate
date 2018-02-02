@@ -1296,9 +1296,52 @@ Update a user with the <code>user_id</code>. Send <code>JSON</code> data in the 
 
 ##  GET /users/{user_id}/time_offs
 
-Retrieve time off entries for user(s)
+Retrieve time off entries for a user
 
 <span class="get"> GET</span> /users/{user_id}/time_offs
+
+> GET /users/{user_id}/time_offs example response:
+
+```json
+[
+    {
+        "id": "744837",
+        "time_off_type": {
+            "id": "6",
+            "name": "Vacation",
+            "work_code": "VAC001"
+        },
+        "user": {
+            "id": "98",
+            "name": "Brycen Doe",
+            "href": "/users/98"
+        },
+        "admin": {
+            "id": "34942",
+            "name": "Oliver CrewSense",
+            "href": "/users/34942"
+        },
+        "start": "2017-07-10 07:00:00",
+        "end": "2017-07-11 07:00:00",
+        "rrule": null,
+        "status": "1",
+        "request_date": "2017-07-10T08:19:57-07:00",
+        "approval_date": "1969-12-31T16:00:00-08:00",
+        "acknowledgement_date": "1969-12-31T16:00:00-08:00",
+        "user_note": null,
+        "traded_with": null
+    }
+]
+```
+
+### Optional Parameters
+
+The start/end parameters filter the results to time off entries occurring inside the selected timeframe.
+
+Field | Description | Type
+--------- | ------- | -----------
+start | Start date of query timeframe. Defaults to one month ago. | datetime
+end | End date of query timeframe. Defaults to the current date. | datetime
 
 ## POST /users/{user_id}/time_offs
 
