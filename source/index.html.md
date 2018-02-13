@@ -432,7 +432,16 @@ Allows you to retrieve, modify and create new CrewScheduler Assignments
     "self_scheduling_requires_approval": true,
     "crewsense_eligible": true,
     "hide_open_slots": false,
-    "color": "#CCCCCC"
+    "color": "#CCCCCC",
+    "location": {
+        "address": "199 Northwest Hillcrest Drive",
+        "city": "Grants Pass",
+        "state": "OR",
+        "country": "United States",
+        "zip": "97526",
+        "latitude": "42.45771410",
+        "longitude": "-123.32473050"
+    }
   },
   {
     "id": 124,
@@ -447,7 +456,8 @@ Allows you to retrieve, modify and create new CrewScheduler Assignments
     "self_scheduling_requires_approval": true,
     "crewsense_eligible": true,
     "hide_open_slots": false,
-    "color": "#CCCCCC"
+    "color": "#CCCCCC",
+    "location": null
   },
   ...
 ]
@@ -475,24 +485,34 @@ self_scheduling_requires_approval | Only if the above is true: if this is true, 
 crewsense_eligible | Should this assignment be analyzed with CrewSense Intelligence | boolean | `false`
 hide_open_slots | Condense the assignment in display, do not show vacant positions | boolean | `false`
 color | Background color of the assignment for display purposes, in HEX format | string `#RRGGBB` | #F5F4F2
+location | Detailed location information on the assignment. `null` if no location is set. | location | `null`
 
 ## <span class="get">GET</span> /assignments/{id}
 
 ```json
 {
-  "id": 670,
-  "position": 1,
-  "name": "Station 1",
-  "date": "2012-12-25 00:00:00",
-  "start": "2012-12-25 08:00:00",
-  "end": "2012-12-26 08:00:00",
-  "positions_to_fill": 2,
-  "is_work_shift": true,
-  "self_scheduling": true,
-  "self_scheduling_requires_approval": true,
-  "crewsense_eligible": true,
-  "hide_open_slots": false,
-  "color": "#F5F4F2"
+    "id": 670,
+    "position": 1,
+    "name": "Station 1",
+    "date": "2012-12-25 00:00:00",
+    "start": "2012-12-25 08:00:00",
+    "end": "2012-12-26 08:00:00",
+    "positions_to_fill": 2,
+    "is_work_shift": true,
+    "self_scheduling": true,
+    "self_scheduling_requires_approval": true,
+    "crewsense_eligible": true,
+    "hide_open_slots": false,
+    "color": "#F5F4F2",
+    "location": {
+        "address": "199 Northwest Hillcrest Drive",
+        "city": "Grants Pass",
+        "state": "OR",
+        "country": "United States",
+        "zip": "97526",
+        "latitude": "42.45771410",
+        "longitude": "-123.32473050"
+    }
 }
 ```
 
