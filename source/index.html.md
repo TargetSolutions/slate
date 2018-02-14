@@ -1892,6 +1892,7 @@ Retrieve all associated users of a specific qualifier.
     "employee_id": "417",
     "name": "DAVID SMITH",
     "work_type": "Regular Time",
+    "work_subtype": "Weekday",
     "work_code": "REG01",
     "start": "2016-08-13 08:00:00",
     "end": "2016-08-14 08:00:00",
