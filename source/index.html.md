@@ -2037,3 +2037,46 @@ email | (boolean) send email as well? |
 <span class="get">GET</span> /company
 
 Returns company information
+
+# Bulletin Board
+
+## GET /bulletin_board
+
+> GET /bulletin_board example JSON
+
+```json
+{
+    "content": "<h1>Hey there!!!</h1><p>Please read the bulletin board</p>",
+    "last_updated_by": {
+        "id": 848,
+        "name": "Boss Doe",
+        "href": "https://api.crewsense.com/v1/users/848"
+    },
+    "last_updated_at": "2018-02-27T19:04:29+01:00"
+}
+```
+<span class="get"> GET</span> /bulletin_board
+
+Get the currently active Bulletin Board data. HTML is sanitized on the input side, it should be safe to output the `content` without further filtering.
+
+## PUT /bulletin_board
+
+> PUT /bulletin_board example request body
+
+```json
+{
+    "admin_id": 848,
+    "content": "<h1>Hey there!!!</h1><p>Please read the UPDATED bulletin board</p>"
+}
+```
+<span class="put"> PUT</span> /bulletin_board
+
+Replaces the existing bulletin board entry with the one you send in the `content` parameter.
+Note that if the Bulletin Board is opened for editing in the web app, you'll get a `409 Conflict` response. In that case you should <span class="get">GET</span> the resource again, implement your changes on the updated data, and send the <span class="put">PUT</span> request again.
+
+### Query Parameters
+
+Field | Description | Required?
+--------- | ------- | -----------
+admin_id | User ID of the admin updating the Bulletin Board | Y
+content | HTML of the Bulletin Board content. Some HTML is allowed. | Y
