@@ -609,6 +609,11 @@ Updates admin data for who created the assignment
 
 # Shifts
 
+Allows you to retrieve, modify and create new CrewScheduler Shifts.
+Recurrence rules are not supported at this time, only one-off shifts can be processed with these endpoints.
+
+## <span class="get">GET</span> /shifts
+
 ```json
 [
     {
@@ -692,11 +697,6 @@ Updates admin data for who created the assignment
     },
 ]
 ```
-
-Allows you to retrieve, modify and create new CrewScheduler Shifts.
-Recurrence rules are not supported at this time, only one-off shifts can be processed with these endpoints.
-
-## <span class="get">GET</span> /shifts
 
 Retrieve all one-off non-recurring shifts of a certain user. This endpoint will be extended with more filtering options in the near future.
 
