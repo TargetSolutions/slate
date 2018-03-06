@@ -607,13 +607,7 @@ Deletes specific assignment group label
 
 Updates admin data for who created the assignment
 
-
 # Shifts
-
-Allows you to retrieve, modify and create new CrewScheduler Shifts.
-Recurrence rules are not supported at this time, only one-off shifts can be processed with these endpoints.
-
-## <span class="get">GET</span> /shifts
 
 ```json
 [
@@ -699,9 +693,18 @@ Recurrence rules are not supported at this time, only one-off shifts can be proc
 ]
 ```
 
-## <span class="get">GET</span> /shifts/{id}
+Allows you to retrieve, modify and create new CrewScheduler Shifts.
+Recurrence rules are not supported at this time, only one-off shifts can be processed with these endpoints.
 
-See above for the output format
+## <span class="get">GET</span> /shifts
+
+Retrieve all one-off non-recurring shifts of a certain user. This endpoint will be extended with more filtering options in the near future.
+
+### Parameters
+
+Name | Description | Format | Required?
+-----|-------------|--------|----------
+user_id | ID of the user to query shifts for | integer | **yes**
 
 ## <span class="post">POST</span> /shifts
 
@@ -711,18 +714,79 @@ Create a new single-day shift for a user.
 
 Name | Description | Format | Required?
 -----|-------------|--------|----------
-assignment_id | Assignment id | integer | *yes*
-user_id | The ID of the user being assigned to a shift | integer | *yes*
-date | The full date of the calendar day the shift should appear on | `2016-11-28` | *yes*
-start | The full date/time of the start of the shift | `2016-11-28 07:00:00` | *yes*
-end | The full date/time of the end of the shift | `2016-11-28 19:00:00` | *yes*
-work_type_id | The ID of the work type to be used. See <span class="get">GET</span> /work_types | integer | *yes*
+assignment_id | Assignment id | integer | **yes**
+user_id | The ID of the user being assigned to a shift | integer | **yes**
+date | The full date of the calendar day the shift should appear on | `2016-11-28` | **yes**
+start | The full date/time of the start of the shift | `2016-11-28 07:00:00` | **yes**
+end | The full date/time of the end of the shift | `2016-11-28 19:00:00` | **yes**
+work_type_id | The ID of the work type to be used. See <span class="get">GET</span> /work_types | integer | **yes**
 work_subtype_id | The ID of the work subtype to be used. See <span class="get">GET</span> /work_types | integer | no
 notes | Any admin notes that should appear on the shift | string | no
 from_callback | The ID of the Callback the shift is a result of | integer | no
 traded_with | The ID of the user the shift is traded with | integer | no
 labels | An array of Label IDs to apply to the shift. See <span class="get">GET</span> /labels | array | no
 qualifiers | An array of Qualifier IDs to apply to the shift. See <span class="get">GET</span> /qualifiers | array | no
+
+## <span class="get">GET</span> /shifts/{id}
+
+See above for the output format
+
+## <span class="delete">DELETE</span> /shifts/{id}
+
+Permanently remove all instances of a shift from the schedule.
+
+<aside class="warning">
+    This action is not reversible! The shift data will be permanently lost. 
+    Make sure not to delete recurring shifts from the system by accident.
+</aside>
+
+## <span class="patch">PATCH</span> /shifts/{id}
+
+> Example PATCH payload
+
+```json
+{
+    "date": "2018-03-01",
+    "start": "2018-03-01 08:00:00",
+    "end": "2018-03-01 20:00:00",
+    "notes": "Changed to AM shift"
+}
+```
+
+Update an existing shift. Provide any subset of the parameters described in the <span class="post">POST</span> /shifts section.
+Currently, the `date`, `start` and `end` parameters are always required for a PATCH operation.
+
+## <span class="get">GET</span> /shifts/{id}/qualifiers
+
+See <span class="get">GET</span> /shifts `qualifiers` key for the output format
+
+## <span class="post">POST</span> /shifts/{id}/qualifiers
+
+Replace the qualifiers on the shift. Provide an array of qualifier ID's as the request body.
+
+## <span class="delete">DELETE</span> /shifts/{id}/qualifiers
+
+Remove all qualifiers from the shift.
+
+## <span class="delete">DELETE</span> /shifts/{id}/qualifiers/{qualifierId}
+
+Remove the qualifier in the second parameter from the shift.
+
+## <span class="get">GET</span> /shifts/{id}/labels
+
+See <span class="get">GET</span> /shifts `labels` key for the output format
+
+## <span class="post">POST</span> /shifts/{id}/labels
+
+Replace the labels on the shift. Provide an array of qualifier ID's as the request body.
+
+## <span class="delete">DELETE</span> /shifts/{id}/labels
+
+Remove all labels from the shift.
+
+## <span class="delete">DELETE</span> /shifts/{id}/labels/{labelId}
+
+Remove the label in the second parameter from the shift.
 
 # Visual Cycles
 
