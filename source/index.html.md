@@ -607,6 +607,123 @@ Deletes specific assignment group label
 
 Updates admin data for who created the assignment
 
+
+# Shifts
+
+Allows you to retrieve, modify and create new CrewScheduler Shifts.
+Recurrence rules are not supported at this time, only one-off shifts can be processed with these endpoints.
+
+## <span class="get">GET</span> /shifts
+
+```json
+[
+    {
+        "id": 28871,
+        "date": "2013-08-21",
+        "start": "2013-08-21 07:00:00",
+        "end": "2013-08-22 07:00:00",
+        "user": {
+            "id": 848,
+            "name": "Boss Doe",
+            "href": "https://api.crewsense.com/v1/users/848"
+        },
+        "scheduled_by": {
+            "id": 98,
+            "name": "Hass Brycen",
+            "href": "https://api.crewsense.com/v1/users/98"
+        },
+        "work_type": {
+            "id": 1,
+            "href": "https://api.crewsense.com/v1/work_types/1",
+            "name": "Regular time",
+            "work_code": "REG001",
+            "subtype_id": null
+        },
+        "labels":  [
+            {
+                "id": 123,
+                "href": "https://api.crewsense.com/v1/labels/123",
+                "label": "A Shift"
+            }
+        ],
+        "qualifiers":  [
+            {
+                "id": 246027,
+                "href": "https://api.crewsense.com/v1/qualifiers/246027",
+                "shortcode": "FF-01",
+                "name": "Firefighters"
+            },
+            {
+                "id": 246027,
+                "href": "https://api.crewsense.com/v1/qualifiers/246027",
+                "shortcode": "TST",
+                "name": "Test"
+            }
+        ],
+        "traded_with": null,
+        "from_callback": null,
+        "notes": null,
+        "created_at": "2018-03-06T08:45:00-08:00",
+        "updated_at": "2018-03-06T08:45:00-08:00"
+    },
+    {
+        "id": 35444,
+        "date": "2013-08-18",
+        "start": "2013-09-30 01:00:00",
+        "end": "2013-09-30 08:00:00",
+        "user": {
+            "id": 848,
+            "name": "Boss Doe",
+            "href": "https://api.crewsense.com/v1/users/848"
+        },
+        "scheduled_by": {
+            "id": 848,
+            "name": "Boss Doe",
+            "href": "https://api.crewsense.com/v1/users/848"
+        },
+        "work_type": {
+            "id": 1,
+            "href": "https://api.crewsense.com/v1/work_types/1",
+            "name": "Regular time",
+            "work_code": "REG001",
+            "subtype_id": null
+        },
+        "labels": null,
+        "qualifiers": null,
+        "traded_with": null,
+        "from_callback": null,
+        "notes": null,
+        "created_at": "2018-03-06T08:45:00-08:00",
+        "updated_at": "2018-03-06T08:45:00-08:00"
+    },
+]
+```
+
+## <span class="get">GET</span> /shifts/{id}
+
+See above for the output format
+
+## <span class="post">POST</span> /shifts
+
+Create a new single-day shift for a user.
+
+### Parameters
+
+Name | Description | Format | Required?
+-----|-------------|--------|----------
+assignment_id | Assignment id | integer | *yes*
+user_id | The ID of the user being assigned to a shift | integer | *yes*
+date | The full date of the calendar day the shift should appear on | `2016-11-28` | *yes*
+start | The full date/time of the start of the shift | `2016-11-28 07:00:00` | *yes*
+end | The full date/time of the end of the shift | `2016-11-28 19:00:00` | *yes*
+work_type_id | The ID of the work type to be used. See <span class="get">GET</span> /work_types | integer | *yes*
+work_subtype_id | The ID of the work subtype to be used. See <span class="get">GET</span> /work_types | integer | no
+notes | Any admin notes that should appear on the shift | string | no
+from_callback | The ID of the Callback the shift is a result of | integer | no
+traded_with | The ID of the user the shift is traded with | integer | no
+labels | An array of Label IDs to apply to the shift. See <span class="get">GET</span> /labels | array | no
+qualifiers | An array of Qualifier IDs to apply to the shift. See <span class="get">GET</span> /qualifiers | array | no
+
 # Visual Cycles
 
 This endpoint will list all visual cycles an Organization is using in their CrewScheduler. Visual Cycles are used for displaying things like 'FLSA cycles graphically in their calendars.
