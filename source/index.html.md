@@ -239,7 +239,13 @@ This array holds data about the employees scheduled for the assignment on the gi
       "id": 33,
       "href": "https://api.crewsense.com/v1/work_types/33",
       "name": "Regular Time",
-      "work_code": "REG001"
+      "work_code": "REG001",
+      "subtypes": [
+        {
+          "id": 2,
+          "label": "Mandatory"
+        }
+      ]
    },
    "labels": [
       {
@@ -291,7 +297,20 @@ All approved time off for the day is in this array, including long term and recu
    "time_off_type": {
       "id": 45,
       "href": "https://api.crewsense.com/v1/time_off_types/45",
-      "name": "Sick Leave [SL]"
+      "name": "Vacation",
+      "work_code": "VAC",
+      "color": "#3f5647",
+      "text_color": "#FFFFFF",
+      "subtypes": [
+        {
+          "id": 1,
+          "label": "Mandatory"
+        },
+        {
+          "id": 3,
+          "label": "Comp"
+        }
+      ]
    }
 }
 ```
