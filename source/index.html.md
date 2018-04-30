@@ -807,6 +807,60 @@ Remove all labels from the shift.
 
 Remove the label in the second parameter from the shift.
 
+## GET /work_types
+
+Get all *non-deleted* work types in the system. 
+
+<span class="get">GET</span> /work_types
+
+> GET /work_types example response
+
+```json
+[
+    {
+        "id": 5,
+        "label": "Earned time off",
+        "work_code": "ETO",
+        "primary_color": "#3B4650",
+        "secondary_color": "#FFFFFF",
+        "excludes_from_callback": true,
+        "position": 0,
+        "href": "https://api.crewsense.com/v1/work_types/5"
+    },
+    {
+        "id": 7,
+        "label": "Comp time",
+        "work_code": null,
+        "primary_color": "#3B4650",
+        "secondary_color": "#FFFFFF",
+        "excludes_from_callback": true,
+        "position": 1,
+        "href": "https://api.crewsense.com/v1/work_types/7"
+    }
+]
+```
+
+## GET /work_types/{id}
+
+Get a specific work type in the system. 
+
+<span class="get">GET</span> /work_types/{id}
+
+> GET /work_types/{id} example response
+
+```json
+{
+    "id": 5,
+    "label": "Earned time off",
+    "work_code": "ETO",
+    "primary_color": "#3B4650",
+    "secondary_color": "#FFFFFF",
+    "excludes_from_callback": true,
+    "position": 0,
+    "href": "https://api.crewsense.com/v1/work_types/5"
+}
+```
+
 # Visual Cycles
 
 This endpoint will list all visual cycles an Organization is using in their CrewScheduler. Visual Cycles are used for displaying things like 'FLSA cycles graphically in their calendars.
