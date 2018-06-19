@@ -1444,6 +1444,41 @@ Remove an existing specialty classification filter from the system.
 
 <span class="delete">DELETE</span> /filters/{id}
 
+# Groups
+
+## GET /groups
+
+> GET /groups example response:
+
+```json
+[
+   {
+      "id": "1",
+      "label": "A Shift"
+   },
+   {
+      "id": "2",
+      "label": "B Shift"
+   }
+]
+```
+
+Receive a list of all groups
+
+<span class="get">GET</span> /groups
+
+## POST /groups
+
+Create a new group in the system. Required fields:
+
+<span class="post">POST</span> /groups
+
+### Parameters
+
+Field | Description | Type | Required?
+--------- | ------- | ----------- | -----------
+name | the name of the new group | string | y
+
 # Users
 
 ## GET /users
