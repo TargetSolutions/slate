@@ -1556,6 +1556,44 @@ Returns all Speciality Filers user is associated with
 
 Returns all Groups user is associated with
 
+> GET /users/{user_id}/groups
+
+```json
+[
+    {
+        "id": 2097,
+        "name": "Platoon 1"
+    },
+    {
+        "id": 2128,
+        "name": "A Shift"
+    }
+]
+```
+
+## PUT /users/{user_id}/groups
+
+<span class="post"> PUT</span> /users/{user_id}/groups
+
+Update the list of Groups the user is associated with.
+Pass the group IDS in the `ids` parameter in the request body. The users current groups will be overwritten with the ones provided in the parameter.
+
+> PUT /users/{user_id}/groups example request
+
+```json
+{
+    "ids": [2097, 2128]
+}
+```
+
+> PUT /users/{user_id}/groups example response
+
+```json
+{
+    "success": true
+}
+```
+
 ## PUT /users
 
 <span class="put">PUT</span> /users
