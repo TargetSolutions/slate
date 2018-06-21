@@ -1509,7 +1509,15 @@ name | the name of the new group | string | y
 ```
 <span class="get"> GET</span> /users
 
-List all *non-deleted, active* users of the company
+List all *non-deleted, active* users of the company.
+
+### Parameters
+
+Field | Description | Type | Required?
+--------- | ------- | ----------- | -----------
+employee_id | The employee ID of the employee being searched for | string | n
+
+<aside class="info">If an employee ID is provided in the parameters, instead of an array, we return just the User object found (if any).</aside>
 
 ## GET /users/{user_id}
 
