@@ -1544,11 +1544,57 @@ Returns specific user info
 
 Returns all CallBack lists user is associated with
 
+## PUT /users/{user_id}/titles
+
+> PUT /users/{user_id}/titles example request
+
+```json
+{
+    "ids": [101, 104]
+}
+```
+
+> PUT /users/{user_id}/titles example response
+
+```json
+{
+    "success": true
+}
+```
+
+<span class="put"> PUT</span> /users/{user_id}/titles
+
+Update the list of Callback Lists the user is associated with.
+Pass the IDs in the `ids` parameter in the request body. The user's current Callback Lists will be overwritten with the ones provided in the parameter.
+
 ## GET /users/{user_id}/filters
 
 <span class="get"> GET</span> /users/{user_id}/filters
 
 Returns all Speciality Filers user is associated with
+
+## PUT /users/{user_id}/filters
+
+> PUT /users/{user_id}/filters example request
+
+```json
+{
+    "ids": [10, 11, 55, 132]
+}
+```
+
+> PUT /users/{user_id}/filters example response
+
+```json
+{
+    "success": true
+}
+```
+
+<span class="put"> PUT</span> /users/{user_id}/filters
+
+Update the list of Specialty Filters the user is associated with.
+Pass the IDs in the `ids` parameter in the request body. The user's current Specialty Filters will be overwritten with the ones provided in the parameter.
 
 ## GET /users/{user_id}/groups
 
@@ -1573,11 +1619,6 @@ Returns all Groups user is associated with
 
 ## PUT /users/{user_id}/groups
 
-<span class="post"> PUT</span> /users/{user_id}/groups
-
-Update the list of Groups the user is associated with.
-Pass the group IDS in the `ids` parameter in the request body. The users current groups will be overwritten with the ones provided in the parameter.
-
 > PUT /users/{user_id}/groups example request
 
 ```json
@@ -1593,6 +1634,11 @@ Pass the group IDS in the `ids` parameter in the request body. The users current
     "success": true
 }
 ```
+
+<span class="put"> PUT</span> /users/{user_id}/groups
+
+Update the list of Groups the user is associated with.
+Pass the group IDS in the `ids` parameter in the request body. The user's current groups will be overwritten with the ones provided in the parameter.
 
 ## PUT /users
 
