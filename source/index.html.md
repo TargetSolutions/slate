@@ -1495,6 +1495,9 @@ name | the name of the new group | string | y
       "last_name": "Nagy",
       "full_name": "Oliver Nagy",
       "role": "Deputy",
+      "avatar_url": "https://s3-us-west-2.amazonaws.com/cbs-file-storage/company-8/avatars/586cf2dd6db20-boss_doe-thumb.jpg",
+      "date_of_hire": "2011-03-04",
+      "date_of_birth": "1987-07-04",
       "emails": [
          "oli.nagy@example.com",
          "oli.nagy@otherexample.net"
@@ -1536,6 +1539,9 @@ Returns specific user info
    "last_name": "Nagy",
    "full_name": "Oliver Nagy",
    "role": "Deputy",
+   "avatar_url": "https://s3-us-west-2.amazonaws.com/cbs-file-storage/company-8/avatars/586cf2dd6db20-boss_doe-thumb.jpg",
+   "date_of_hire": "2011-03-04",
+   "date_of_birth": "1987-07-04",
    "emails": [
       "oli.nagy@example.com",
       "oli.nagy@otherexample.net"
@@ -1662,6 +1668,8 @@ Pass the group IDS in the `ids` parameter in the request body. The user's curren
    "last_name": "Nagy",
    "full_name": "Oliver Nagy",
    "role": "Deputy",
+   "date_of_hire": "2011-03-04",
+   "date_of_birth": "1987-07-04",
    "phone": "5555555555",
    "mail": "info@example.com"
 }
@@ -1680,6 +1688,8 @@ password | password for the user | string | y
 employee_id | internal employee id # | integer | n
 phone_numbers | phone number for user (format: 5555555555) | integer | n
 role | permission role for user | string | integer
+date_of_hire | Hire/promotion date in YYYY-MM-DD format | date | n
+date_of_birth | Birthdate in YYYY-MM-DD format | date | n
 
 ## PATCH /users/{user_id}
 
