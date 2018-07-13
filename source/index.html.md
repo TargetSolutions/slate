@@ -1526,7 +1526,7 @@ employee_id | The employee ID of the employee being searched for | string | n
 
 <span class="get"> GET</span> /users/{user_id}
 
-Returns specific user info
+Returns specific user info. This call will retrieve any extra fields that you might have set up for the user in System Settings.
 
 > GET /users/{user_id}
 
@@ -1549,7 +1549,24 @@ Returns specific user info
    "phone_numbers": [
       "5555555555",
       "1231231232"
-   ]
+   ],
+    "fields": [
+        {
+            "id": 1,
+            "label": "Retired?",
+            "value": "1"
+        },
+        {
+            "id": 2,
+            "label": "Gender",
+            "value": "Male"
+        },
+        {
+            "id": 3,
+            "label": "Eligible for leave",
+            "value": "0"
+        }
+    ]
 }
 ```
 ## GET /users/{user_id}/titles
