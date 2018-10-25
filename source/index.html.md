@@ -108,6 +108,15 @@ In the following sections, we try to introduce all the important data in the sch
 
 ## GET /schedule
 
+> Example request
+
+```shell
+curl -v https://api.crewsense.com/v1/schedule -G \
+     -H "Authorization: Bearer CKRskOAU2tqYItxqlGnTt0VwXm4L0QABIvYrTBPr" \
+     -d "start=2015-03-15 08:00:00" \
+     -d "end=2015-03-22 08:00:00"
+```
+
 > An example of returned /schedule data GET request looks like this:
 
 ```json
@@ -171,17 +180,9 @@ end | 	The date you need the data to | datetime
 
 ## days
 
-<code>days</code>
-
 This array contains all days occurring between the start and end date requested. Each object in the array contains the <code>date</code> key, and arrays of objects occurring that day. For the following sections, we refer to one object in this array as a <code>day</code>.
 
 ## day.assignments
-
-<code>day.assignments</code>
-
-> day.assignments
-
-This array contains the Crew Scheduler assignments of the day.
 
 ```json
 {
@@ -192,13 +193,17 @@ This array contains the Crew Scheduler assignments of the day.
    "end": "2015-03-16 08:00:00",
    "name": "Station 1",
    "minimum_staffing": 3,
+   "is_finalized": true,
+   "notes": "Assignment notes on date",
    "shifts": [
       ... see next section ...
    ]
 }
 ```
 
-### Query Parameters
+This array contains the Crew Scheduler assignments of the day.
+
+### Parameters
 
 Field | Description | Type
 --------- | ------- | -----------
@@ -209,13 +214,11 @@ start | Start date of assignment |datetime
 end | End date of assignment | datetime
 name | Title of assignment | string
 minimum_staffing | Employees needed |	integer
+is_finalized | Is the assignment finalized on the date | boolean
+notes | Assignment notes on the date | string
 shifts | Employees working the assignment	| array
 
 ## day.assignment.shifts
-
-> day.assignment.shifts
-
-This array holds data about the employees scheduled for the assignment on the given day.
 
 ```json
 {
@@ -240,6 +243,8 @@ This array holds data about the employees scheduled for the assignment on the gi
       "href": "https://api.crewsense.com/v1/work_types/33",
       "name": "Regular Time",
       "work_code": "REG001",
+      "color": "#3B4650",
+      "text_color": "#FFFFFF",
       "subtypes": [
         {
           "id": 2,
@@ -251,12 +256,25 @@ This array holds data about the employees scheduled for the assignment on the gi
       {
          "id": 12,
          "href": "https://api.crewsense.com/v1/labels/12",
-         "label": "ENG"
+         "label": "ENG",
+         "color": "#CCCCCC",
+         "text_color": "#333333"
+      }
+   ],
+   "qualifiers": [
+      {
+         "id": 7,
+         "href": "https://api.crewsense.com/v1/qualifiers/7",
+         "shortcode": "CPT",
+         "name": "Captains"
       }
    ]
 }
 ```
-### Query Parameters
+
+This array holds data about the employees scheduled for the assignment on the given day.
+
+### Parameters
 
 Field | Description | Type
 --------- | ------- | -----------
@@ -269,14 +287,13 @@ user|Employee working the shift|	See Users
 scheduled_by|	Admin who assigned the shift|	See Users
 work_type|	Type of work shift|	See section-wt
 labels|	Applied Crew Scheduler labels|	array; see Labels
+qualifiers | Applied CrewSense Qualifiers on the shift | see Qualifiers
 
+<aside class="notice">
 You will notice that some of the included objects have <code>href</code> properties. This is because we are only returning a sensible subset of the available data about these objects. If you make a <span class="get">GET</span> request to the provided URL, you can retrieve all of the available information about them.
+</aside>
 
 ## day.time_off
-
-All approved time off for the day is in this array, including long term and recurring leave that has an occurrence fall on this day. 
-
-> day.time_off
 
 ```json
 {
@@ -315,7 +332,9 @@ All approved time off for the day is in this array, including long term and recu
 }
 ```
 
-### Query Parameters
+All approved time off for the day is in this array, including long term and recurring leave that has an occurrence fall on this day. 
+
+### Parameters
 
 Field | Description | Type
 --------- | ------- | -----------
@@ -328,10 +347,6 @@ admin|	Admin who approved time off|	See Users
 time_off_type|	Type of time off |	See Time off Types
 
 ## day.callbacks
-
-> day.callbacks
-
-In this array you will find all finalized CallBacks for the day. CallBack shifts that were drag & dropped to a work assignment will not be included, as they are found under <code>day.assignment.shifts</code>
 
 ```json
 {
@@ -352,7 +367,7 @@ In this array you will find all finalized CallBacks for the day. CallBack shifts
          "end": "2015-03-16 08:00:00",
          "work_site": null
       }
-   ]
+   ],
    "title": {
       "id": 112,
       "href": "https://api.crewsense.com/v1/titles/112",
@@ -360,6 +375,8 @@ In this array you will find all finalized CallBacks for the day. CallBack shifts
    }
 }
 ```
+
+In this array you will find all finalized CallBacks for the day. CallBack shifts that were drag & dropped to a work assignment will not be included, as they are found under <code>day.assignment.shifts</code>
 
 ### Query Parameters
 
@@ -370,14 +387,12 @@ href |Link to full object	| string (URL)
 start | Start date of the callback shift|datetime
 end | End date of the callback shift| datetime
 minimum_staffing| Number of employees needed in this callback| integer
-records|	Accepting employees	array| ; see section-cbr
+records|	Accepting employees | array; see section-cbr
 title|Employee type needed time off|	See section-title
 
 <aside class="notice"><code>records</code> returns all accepting employees pertinent to the CallBack. You can request more data about certain pieces of the CallBack data using the <code>href</code> links provided.</aside>
 
 ## day.trades
-> day.trades
-
 
 ```json
 {
@@ -402,13 +417,12 @@ title|Employee type needed time off|	See section-title
    }
 }
 ```
-Contains all accepted and finalized shift trades for the day.
 
 > Follow the top-level href link to receive all information about the trade.
 
-## day.misc
+Contains all accepted and finalized shift trades for the day.
 
-> day.misc
+## day.misc
 
 ```json
 {
@@ -427,14 +441,16 @@ Contains all accepted and finalized shift trades for the day.
 This array provides data about any miscellaneous hours added for the day.
 
 ## day.notes, day.activities
-This contains the Crew Scheduler notes for the day formatted in <code>HTML</code> format
 
+This contains the Crew Scheduler notes for the day formatted in <code>HTML</code> format
 
 # Assignments
 
 Allows you to retrieve, modify and create new CrewScheduler Assignments
 
 ## <span class="get">GET</span> /assignments
+
+> Example response 
 
 ```json
 [
@@ -555,11 +571,6 @@ Returns assignment group label data
 
 ## GET /assignments/{id}/admins
 
-<span class="get">GET</span> /assignments/{id}/admins
-
-Returns data on who created the assignment
-
-
 ```json
 [
     {
@@ -569,6 +580,14 @@ Returns data on who created the assignment
     }
 ]
 ```
+
+Returns data on who created the assignment
+
+## PUT /assignments/{id}/admins
+
+<span class="put">PUT</span> /assignments/{id}/admins
+
+Updates admin data for who created the assignment
 
 ## <span class="post">POST</span> /assignments
 
@@ -620,11 +639,96 @@ Deletes ALL assignment group label(s)
 
 Deletes specific assignment group label
 
-## PUT /assignments/{id}/admin
+## POST /assignments/{id}/finalization
 
-<span class="put">PUT</span> /assignments/{id}/admins
+> Example request
 
-Updates admin data for who created the assignment
+```shell
+curl -v https://api.crewsense.com/v1/assignments/123/finalization -G \
+     -H "Authorization: Bearer CKRskOAU2tqYItxqlGnTt0VwXm4L0QABIvYrTBPr" \
+     -d "date=2015-03-15" \
+     -d "admin_id=111"
+```
+
+> Example response (success)
+
+```json
+{
+    "success": true
+}
+```
+
+> Example response (already finalized on selected date)
+
+```json
+{
+    "error": "invalid_params",
+    "status": 422,
+    "error_message": [
+        "Assignment (#123) has already been finalized on 2015-03-15."
+    ]
+}
+```
+
+> Example response (invalid admin ID)
+
+```json
+{
+    "error": "invalid_params",
+    "status": 422,
+    "error_message": [
+        "The selected admin id is invalid."
+    ]
+}
+```
+
+Finalize an assignment on a given date. <span class="post">POST</span>ing to this endpoint will set the finalized flag &mdash; indicated by a green check mark in the Crew Scheduler &mdash; on the assignment on the date sent in the parameters.
+
+### Request parameters
+
+Name | Description | Format | Required?
+-----|-------------|--------|----------
+date | The date to finalize the assignment on. | Date (YYYY-MM-DD) | **Y**
+admin_id | ID of the admin user that finalizes the assignment. | Integer | **Y**
+
+## DELETE /assignments/{id}/finalization
+
+> Example request
+
+```shell
+curl -v https://api.crewsense.com/v1/assignments/123/finalization \
+     --request DELETE \
+     -H "Authorization: Bearer CKRskOAU2tqYItxqlGnTt0VwXm4L0QABIvYrTBPr" \
+     -d "{ \"date\": \"2015-03-15\" }"
+```
+
+> Example response (success)
+
+```json
+{
+    "success": true
+}
+```
+
+> Example response (not finalized on selected date)
+
+```json
+{
+    "error": "invalid_params",
+    "status": 422,
+    "error_message": [
+        "Assignment (#123) is not finalized on 2015-03-15."
+    ]
+}
+```
+
+Remove finalization of an assignment on a given date. 
+
+### Request parameters
+
+Name | Description | Format | Required?
+-----|-------------|--------|----------
+date | The date to remove finalization from the assignment. | Date (YYYY-MM-DD) | **Y**
 
 # Shifts
 
@@ -637,6 +741,7 @@ Recurrence rules are not supported at this time, only one-off shifts can be proc
 [
     {
         "id": 28871,
+        "assignment_id": 670,
         "date": "2013-08-21",
         "start": "2013-08-21 07:00:00",
         "end": "2013-08-22 07:00:00",
@@ -686,6 +791,7 @@ Recurrence rules are not supported at this time, only one-off shifts can be proc
     },
     {
         "id": 35444,
+        "assignment_id": 671,
         "date": "2013-08-18",
         "start": "2013-09-30 01:00:00",
         "end": "2013-09-30 08:00:00",
@@ -809,11 +915,14 @@ Remove the label in the second parameter from the shift.
 
 ## GET /work_types
 
-Get all *non-deleted* work types in the system. 
+> Example request
 
-<span class="get">GET</span> /work_types
+```shell
+curl -v https://api.crewsense.com/v1/work_types -G \
+     -H "Authorization: Bearer CKRskOAU2tqYItxqlGnTt0VwXm4L0QABIvYrTBPr"
+```
 
-> GET /work_types example response
+> Example response
 
 ```json
 [
@@ -840,13 +949,18 @@ Get all *non-deleted* work types in the system.
 ]
 ```
 
+Get all *non-deleted* work types in the system. 
+
 ## GET /work_types/{id}
 
-Get a specific work type in the system. 
+> Example request
 
-<span class="get">GET</span> /work_types/{id}
+```shell
+curl -v https://api.crewsense.com/v1/work_types/5 -G \
+     -H "Authorization: Bearer CKRskOAU2tqYItxqlGnTt0VwXm4L0QABIvYrTBPr"
+```
 
-> GET /work_types/{id} example response
+> Example response
 
 ```json
 {
@@ -860,6 +974,68 @@ Get a specific work type in the system.
     "href": "https://api.crewsense.com/v1/work_types/5"
 }
 ```
+
+Get a specific work type in the system. 
+
+## GET /work_types/{id}/subtypes
+
+> Example request
+
+```shell
+curl -v https://api.crewsense.com/v1/work_types/2/subtypes -G \
+     -H "Authorization: Bearer CKRskOAU2tqYItxqlGnTt0VwXm4L0QABIvYrTBPr"
+```
+
+> Example response
+
+```json
+[
+    {
+        "id": 4,
+        "work_type_id": 2,
+        "label": "Holdover",
+        "work_code": "HO"
+    },
+    {
+        "id": 8,
+        "work_type_id": 2,
+        "label": "Mandatory",
+        "work_code": "M-OT"
+    }
+]
+```
+
+Get all subtypes of a work type.
+
+## GET /work_subtypes
+
+> Example request
+
+```shell
+curl -v https://api.crewsense.com/v1/work_subtypes -G \
+     -H "Authorization: Bearer CKRskOAU2tqYItxqlGnTt0VwXm4L0QABIvYrTBPr"
+```
+
+> Example response
+
+```json
+[
+    {
+        "id": 4,
+        "work_type_id": 2,
+        "label": "Holdover",
+        "work_code": "HO"
+    },
+    {
+        "id": 8,
+        "work_type_id": 2,
+        "label": "Mandatory",
+        "work_code": "M-OT"
+    }
+]
+```
+
+Get all *non-deleted* work subtypes in the system. 
 
 # Visual Cycles
 
@@ -2291,7 +2467,16 @@ Retrieve all associated users of a specific qualifier.
 
 ## GET /payroll
 
-> GET /payroll example passing start and end parameters for a 24 hour period
+> Example request
+
+```shell
+curl -v https://api.crewsense.com/v1/payroll -G \
+     -H "Authorization: Bearer CKRskOAU2tqYItxqlGnTt0VwXm4L0QABIvYrTBPr" \
+     -d "start=2016-08-13 08:00:00" \
+     -d "end=2016-08-14 08:00:00"
+```
+
+> Example response
 
 ```json
 [
@@ -2305,6 +2490,7 @@ Retrieve all associated users of a specific qualifier.
     "work_code": "REG01",
     "start": "2016-08-13 08:00:00",
     "end": "2016-08-14 08:00:00",
+    "assignment_id": 670,
     "assignment_name": "Engine 1",
     "labels": "CPT",
     "notes": "Worked as captain due to jones being sick",
@@ -2320,19 +2506,21 @@ Returns all payroll data for date range / time.
 
 <span class="get">GET</span> /payroll/{user_id}
 
+Returns payroll data for the User in the given date range.
+
 ### Query Parameters
 
 Field | Description | Required?
 --------- | ------- | -----------
-start |	start date / time of payroll range| Y
-end	| end date / time of payroll range | Y
-user_id | user id of employee |
+start |	start date / time of payroll range| **Y**
+end	| end date / time of payroll range | **Y**
+user_id | user id of employee | N
 
 # Forms
 
 ## GET /forms/
 
-> GET /forms example response:
+> Example response
 
 ```json
 {
