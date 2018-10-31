@@ -100,6 +100,28 @@ We use a simplified version of the ISO 8601 standard. Dates are represented in t
 
 For a few timestamp type data fields, we use the (still ISO 8601 standard) <codE>YYYY-MM-DDThh:mm:ss+00:00</code> format (example: “2015-03-21T19:45:33-06:00”). This is used for fields like contact time, response time, creation date etc., where the timezone may be important (due to daylight savings time for example).
 
+# Changelog
+
+## 10/31/2018
+
+```json
+{
+    "length": 24,
+    "break_start": "2018-10-31 12:00:00",
+    "break_end": "2018-10-31 12:45:00",
+    "break_length": 0.75,
+}
+```
+
+### New fields in /schedule#day.assignment.shifts
+
+The following fields have been added to the `GET /schedule` endpoint, under shifts:
+
+* `length` - The full length of the shift in hours, including break periods.
+* `break_start` - Start of the break period, if any. `null` otherwise.
+* `break_end` - End of the break period, if any. `null` otherwise.
+* `break_length` - Length of the break period, if any, in hours.
+
 # Schedule
 
 The schedule end point consists of shifts, time offs, callbacks, trades, notes, activities and misc. hours. They are wrapped by a top-level object containing metadata about the requested schedule (start date, end date, links for the next and previous period).
@@ -186,18 +208,36 @@ This array contains all days occurring between the start and end date requested.
 
 ```json
 {
-   "id": 1234,
-   "href": "https://api.crewsense.com/v1/assignments/1234",
-   "date": "2015-03-15",
-   "start": "2015-03-15 08:00:00",
-   "end": "2015-03-16 08:00:00",
-   "name": "Station 1",
-   "minimum_staffing": 3,
-   "is_finalized": true,
-   "notes": "Assignment notes on date",
-   "shifts": [
-      ... see next section ...
-   ]
+    "id": 1234,
+    "href": "https://api.crewsense.com/v1/assignments/1234",
+    "date": "2015-03-15",
+    "start": "2015-03-15 08:00:00",
+    "end": "2015-03-16 08:00:00",
+    "name": "Station 1",
+    "qualifiers_needed": [
+        {
+            "id": 7,
+            "name": "Captains",
+            "shortcode": "CPT",
+            "color": "#d81b60",
+            "text_color": "#FFFFFF",
+            "minimum_staffing": 1
+        },
+        {
+            "id": 8,
+            "name": "Firefighters",
+            "shortcode": "FF-01",
+            "color": "#e53935",
+            "text_color": "#000000",
+            "minimum_staffing": 2
+        }
+    ],
+    "minimum_staffing": 3,
+    "is_finalized": true,
+    "notes": "Assignment notes on date",
+    "shifts": [
+        ... see next section ...
+    ]
 }
 ```
 
@@ -213,6 +253,7 @@ date | The day the assignment starts on | date
 start | Start date of assignment |datetime
 end | End date of assignment | datetime
 name | Title of assignment | string
+qualifiers_needed | Qualifier requirements for the assignment, if any. The `minimum_staffing` fields hold the number of people needed for the position. | array
 minimum_staffing | Employees needed |	integer
 is_finalized | Is the assignment finalized on the date | boolean
 notes | Assignment notes on the date | string
@@ -226,6 +267,10 @@ shifts | Employees working the assignment	| array
    "href": "https://api.crewsense.com/v1/shifts/456789",
    "start": "2015-03-15 08:00:00",
    "end": "2015-03-16 08:00:00",
+   "length": 24,
+   "break_start": "2015-03-15 12:00:00",
+   "break_end": "2015-03-15 12:30:00",
+   "break_length": 0.5,
    "hold_over": 0,
    "recurring": true,
    "user": {
@@ -274,7 +319,7 @@ shifts | Employees working the assignment	| array
 
 This array holds data about the employees scheduled for the assignment on the given day.
 
-### Parameters
+### Fields
 
 Field | Description | Type
 --------- | ------- | -----------
@@ -282,6 +327,10 @@ id | Unique identifier of the work shift|integer
 href |Link to full object	| string (URL)
 start | Start date of shift |datetime
 end | End date of shift | datetime
+length | The full length of the shift (including breaks) in hours | float
+break_start | Start of the break period, if any | datetime
+break_end | End of the break period, if any | datetime
+break_length | Length of the break period in hours | float
 recurring	| Is it a regularly occurring shift? | boolean
 user|Employee working the shift|	See Users
 scheduled_by|	Admin who assigned the shift|	See Users
