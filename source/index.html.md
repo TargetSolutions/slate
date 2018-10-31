@@ -644,7 +644,7 @@ Deletes specific assignment group label
 > Example request
 
 ```shell
-curl -v https://api.crewsense.com/v1/assignments/123/finalization -G \
+curl -v https://api.crewsense.com/v1/assignments/123/finalization \
      -H "Authorization: Bearer CKRskOAU2tqYItxqlGnTt0VwXm4L0QABIvYrTBPr" \
      -d "date=2015-03-15" \
      -d "admin_id=111"
@@ -1962,37 +1962,172 @@ Edit time off request Data
 
 # Certifications
 
-Query user certifications
+These endpoints allow you to create, update and delete certifications. You can also use them to 
+add or remove them to users.
 
 ## GET /certifications
 
-<span class="get"> GET</span> /certifications
+> Example request
 
-Returns all Certifications in system. 
+```shell
+curl -v https://api.crewsense.com/v1/certifications \
+     -H "Authorization: Bearer CKRskOAU2tqYItxqlGnTt0VwXm4L0QABIvYrTBPr"
+```
+
+> Example response
+
+```json
+[
+    {
+        "id": 1,
+        "name": "Emergency",
+        "cert_id": "EMERG",
+        "created_by": {
+            "id": 98,
+            "name": "Hass Brycen",
+            "href": "https://api.crewsense.com/v1/users/98"
+        }
+    },
+    {
+        "id": 2,
+        "name": "First Responder",
+        "cert_id": "FRS",
+        "created_by": {
+            "id": 98,
+            "name": "Hass Brycen",
+            "href": "https://api.crewsense.com/v1/users/98"
+        }
+    }
+]
+```
+
+Returns all non-deleted Certifications in system. 
 
 ## GET /certifications/{id}
 
-<span class="get"> GET</span> /certifications/{id}
+> Example request
 
-Returns certification by id. 
+```shell
+curl -v https://api.crewsense.com/v1/certifications/2 \
+     -H "Authorization: Bearer CKRskOAU2tqYItxqlGnTt0VwXm4L0QABIvYrTBPr"
+```
 
-## PUT /certifications/{id}
+> Example response
 
-<span class="put"> PUT</span> /certifications/{id}
+```json
+{
+    "id": 2,
+    "name": "First Responder",
+    "cert_id": "FRS",
+    "created_by": {
+        "id": 98,
+        "name": "Hass Brycen",
+        "href": "https://api.crewsense.com/v1/users/98"
+    }
+}
+```
 
-Updates a certification info.
+Returns a specific Certification by ID. 
 
 ## POST /certifications
 
-<span class="post"> POST</span> /certifications
+> Example request
 
-Creates a new certificaiton in system
+```shell
+curl -v https://api.crewsense.com/v1/certifications \
+     -H "Authorization: Bearer CKRskOAU2tqYItxqlGnTt0VwXm4L0QABIvYrTBPr" \
+     -H "Content-Type: application/json" \
+     -d '{ "name": "First Responder", "cert_id": "FRS", "created_by": 123 }'
+```
+
+> Example response
+
+```json
+{
+    "success": true,
+    "code": 201,
+    "status": "created",
+    "message": "Added new certification First Responder.",
+    "id": 321
+}
+```
+
+Create a new certification. The `id` received in the response can be used to add the certification to users.
+
+### Request Parameters
+
+Key | Description | Type | Required
+----|-------------|------|---------
+name | The name of the new certification | string | **Y**
+cert_id | The shortcode for the new certification. | string | **Y**
+created_by | The ID of the user that should be indicated as the creator of the certification. | integer | **Y**
+
+## PUT /certifications/{id}
+
+> Example request
+
+```shell
+curl -v https://api.crewsense.com/v1/certifications/321 \
+     -H "Authorization: Bearer CKRskOAU2tqYItxqlGnTt0VwXm4L0QABIvYrTBPr" \
+     -H "Content-Type: application/json" \
+     --request PUT \
+     -d '{ "name": "Second Responder", "cert_id": "SRS" }'
+```
+
+> Example response
+
+```json
+{
+    "success": true,
+    "code": 200,
+    "status": "created",
+    "message": "Updated certification Second Responder.",
+    "id": 321
+}
+```
+
+Updates a certification. Only provided fields will be updated, other fields will remain unchanged.
+
+### Request Parameters
+
+Key | Description | Type | Required
+----|-------------|------|---------
+name | The name of the certification | string | N
+cert_id | The shortcode for the certification. | string | N
 
 ## DELETE /certifications/{id}
 
-<span class="delete"> DELETE</span> /certifications/{id}
+> Example request
 
-Deletes a certification in the system.
+```shell
+curl -v https://api.crewsense.com/v1/certifications/321 \
+     -H "Authorization: Bearer CKRskOAU2tqYItxqlGnTt0VwXm4L0QABIvYrTBPr" \
+     -H "Content-Type: application/json" \
+     --request DELETE 
+```
+
+> Example response
+
+```json
+{
+    "success": true,
+    "code": 200,
+    "status": "ok",
+    "message": "Deleted certification First Responder."
+}
+```
+
+> Example response (already deleted)
+
+```json
+{
+    "error": "bad_request",
+    "status": 400,
+    "error_message": "Certification already deleted."
+}
+```
+
+Deletes a certification. Certifications in the system are soft-deleted, which means they can be restored alongside their users in an event of accidental deletion. They won't show up in GET requests after deleting.
 
 ## GET /users/{user_id}/certifications
 
