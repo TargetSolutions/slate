@@ -401,6 +401,15 @@ html, body {
     font-size: 10px;
   }
 
+  a, a:visited {
+    color: $highlight-text;
+    text-decoration: none;
+    &:hover, &:active {
+        text-decoration: underline;
+        color: $main-text;
+    }
+  }
+
   hr {
     margin: 2em 0;
     border-top: 2px solid $examples-bg;
@@ -457,7 +466,8 @@ html, body {
   }
 
   code {
-    background-color: #c5c5c5;
+    background-color: #d6e8f1;
+    color: $nav-bg;
     padding: 3px;
     border-radius: 3px;
     @extend %break-words;
@@ -466,6 +476,7 @@ html, body {
 
   pre>code {
     background-color: transparent;
+    color: #fff;
     padding: 0;
   }
 

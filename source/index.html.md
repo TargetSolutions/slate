@@ -2277,7 +2277,6 @@ after|	date / time to return logs from | n
 
 ## GET /callbacks
 
-
 > GET /callbacks sample response:
 
 ```json
@@ -2409,6 +2408,129 @@ Returns data for a specific CallBack
 <span class="get">GET</span> /callbacks/{id}/users
 
 Returns data for specific users of the CallBack
+
+# Signup Board
+
+## GET /signup_events
+
+> Example request
+
+```shell
+curl -v https://api.crewsense.com/v1/signup_events \
+     -H "Authorization: Bearer CKRskOAU2tqYItxqlGnTt0VwXm4L0QABIvYrTBPr"
+```
+
+> Example request (only active signup events)
+
+```shell
+curl -v https://api.crewsense.com/v1/signup_events -G \
+     -H "Authorization: Bearer CKRskOAU2tqYItxqlGnTt0VwXm4L0QABIvYrTBPr" \
+     -d "status=active"
+```
+
+> Example response (no filters applied)
+
+```json
+[
+    {
+        "id": 5,
+        "work_type_id": 1,
+        "work_subtype_id": null,
+        "title": "May the 4th be with you",
+        "start": "2018-05-04 08:00:00",
+        "end": "2018-05-05 08:00:00",
+        "description": "<p>Testing!</p>",
+        "created_by": 34942,
+        "created_at": "2018-11-01T09:34:45-07:00",
+        "modified_by": 34942,
+        "modified_at": "2018-11-01T09:34:45-07:00",
+        "employees_needed": 2,
+        "status": "partially_filled"
+    },
+    {
+        "id": 6,
+        "work_type_id": 2,
+        "work_subtype_id": 8,
+        "title": "Cinco de Cuatro",
+        "start": "2018-05-04 08:00:00",
+        "end": "2018-05-05 08:00:00",
+        "description": "<p>Chickens don't CLAP!</p>",
+        "created_by": 34942,
+        "created_at": "2018-09-05T05:32:36-07:00",
+        "modified_by": 34942,
+        "modified_at": "2018-09-05T05:32:36-07:00",
+        "employees_needed": 10,
+        "status": "active"
+    }
+]
+```
+
+Retrieve Signup Events. 
+
+### Parameters
+
+Name | Description | Type
+-----|-------------|-----
+id | Unique identifier of the Signup Event. | integer
+work_type_id | The ID of the work type used for signed up employees. | integer
+work_subtype_id | The ID of the subtype of the work type (if any) | integer
+title | A descriptive name for the Signup Event. | string
+start | Event start | datetime
+end | Event end | datetime
+description | Longer description of the Signup Event in HTML | string
+created_by | The user ID of the person creating the event. | integer
+created_at | ISO8601 timestamp of the creation date | ISO datetime
+modified_by | The user ID of the person who last modified the event. | integer
+modified_at | ISO8601 timestamp of the last modification date | ISO datetime
+employees_needed | The number of employees required to sign up before the event is closed. | integer
+status | The current status of the Signup Event. One of `active`, `partially_filled`, `filled`, `not_filled`, `deleted`
+
+By default, all but deleted events will be returned from the system. You can apply some parameters to refine the returned result set:
+
+### Query Parameters
+
+Name | Description | Type
+-----|-------------|-----
+deleted | If set and has a positive value (ie. `1`, `true`), we only return deleted events. | boolean
+archived | If set and has a positive value (ie. `1`, `true`), we only return non-deleted, non-active events. | boolean
+status | If set, we only return non-deleted events of the given status. One of `active`, `partially_filled`, `filled`, `not_filled`. | string
+start | If set, we only return non-deleted Signup Events with a `start` value greater than or equal to the given timestamp | datetime
+end | If set, we only return non-deleted Signup Events with an `end` value less than or equal to the given timestamp | datetime
+
+`start` and `end` can be used together to query a time period for Signup Events.
+
+## GET /signup_events/{id}
+
+> Example request
+
+```shell
+curl -v https://api.crewsense.com/v1/signup_events/5 \
+     -H "Authorization: Bearer CKRskOAU2tqYItxqlGnTt0VwXm4L0QABIvYrTBPr"
+```
+
+> Example response
+
+```json
+{
+    "id": 5,
+    "work_type_id": 1,
+    "work_subtype_id": null,
+    "title": "May the 4th be with you",
+    "start": "2018-05-04 08:00:00",
+    "end": "2018-05-05 08:00:00",
+    "description": "<p>Testing!</p>",
+    "created_by": 34942,
+    "created_at": "2018-11-01T09:34:45-07:00",
+    "modified_by": 34942,
+    "modified_at": "2018-11-01T09:34:45-07:00",
+    "deleted_by": 34942,
+    "deleted_at": "2018-11-05T11:24:23-07:00",
+    "employees_needed": 2,
+    "status": "deleted"
+}
+```
+
+Return a specific Signup Event of the company. This endpoint will return data even for deleted Signup Events for auditing reasons, in which case `deleted_by` and `deleted_at` will not be `null`. Other parameters match those of a single value from the [GET /signup_events](#get-signup_events) endpoint.
 
 # Availability
 
