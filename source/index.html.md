@@ -102,6 +102,10 @@ For a few timestamp type data fields, we use the (still ISO 8601 standard) <codE
 
 # Changelog
 
+## 11/02/2018
+
+[Signup Board](#signup-board) now available via API! Create new signup events, list signed up users, add users to the event and more.
+
 ## 10/31/2018
 
 ```json
