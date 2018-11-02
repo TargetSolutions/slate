@@ -332,8 +332,8 @@ break_start | Start of the break period, if any | datetime
 break_end | End of the break period, if any | datetime
 break_length | Length of the break period in hours | float
 recurring	| Is it a regularly occurring shift? | boolean
-user|Employee working the shift|	See Users
-scheduled_by|	Admin who assigned the shift|	See Users
+user|Employee working the shift|	See [Users](#get-users-user_id)
+scheduled_by|	Admin who assigned the shift|	See [Users](#get-users-user_id)
 work_type|	Type of work shift|	See section-wt
 labels|	Applied Crew Scheduler labels|	array; see Labels
 qualifiers | Applied CrewSense Qualifiers on the shift | see Qualifiers
@@ -391,9 +391,9 @@ id | Unique identifier of the time off|integer
 href |Link to full object	| string (URL)
 start | Start date of time off entry|datetime
 end | End date of time off entry | datetime
-user|Employee on time off| See Users
-admin|	Admin who approved time off|	See Users
-time_off_type|	Type of time off |	See Time off Types
+user|Employee on time off| See [Users](#get-users-user_id)
+admin|	Admin who approved time off|	See [Users](#get-users-user_id)
+time_off_type|	Type of time off |	See [Time off Types](#get-time_off_types)
 
 ## day.callbacks
 
@@ -436,7 +436,7 @@ href |Link to full object	| string (URL)
 start | Start date of the callback shift|datetime
 end | End date of the callback shift| datetime
 minimum_staffing| Number of employees needed in this callback| integer
-records|	Accepting employees | array; see section-cbr
+records|	Accepting employees | array; see [Callback Users](#get-callbacks-id-users)
 title|Employee type needed time off|	See section-title
 
 <aside class="notice"><code>records</code> returns all accepting employees pertinent to the CallBack. You can request more data about certain pieces of the CallBack data using the <code>href</code> links provided.</aside>
@@ -2531,6 +2531,194 @@ curl -v https://api.crewsense.com/v1/signup_events/5 \
 ```
 
 Return a specific Signup Event of the company. This endpoint will return data even for deleted Signup Events for auditing reasons, in which case `deleted_by` and `deleted_at` will not be `null`. Other parameters match those of a single value from the [GET /signup_events](#get-signup_events) endpoint.
+
+## POST /signup_events
+
+> Example request
+
+```shell
+curl -v https://api.crewsense.com/v1/signup_events/5 \
+     -H "Authorization: Bearer CKRskOAU2tqYItxqlGnTt0VwXm4L0QABIvYrTBPr" \
+     -d '{ "admin_id": 848, "title": "My Signup Event", \ 
+           "work_type_id": 123, "work_subtype_id": 222, \
+           "start": "2019-01-01 08:00:00", "end": "2018-01-02 08:00:00", \ 
+           "description": "First shift in New Year", "employees_needed": 10 }'
+```
+
+> Example response (Event created successfully)
+
+```json
+{
+    "success": true,
+    "code": 201,
+    "status": "created",
+    "message": "Added signup event My Signup Event",
+    "id": 7
+}
+```
+
+Create a new Signup Event in the system that employees can sign up for. The newly created event will have a status `active`, which means it's immediately available for signup.
+
+### Parameters
+
+Name | Description | Type | Required?
+-----|-------------|------|----------
+admin_id | The user ID of the admin creating the Signup Event. | integer | **Y**
+title | A descriptive name for the Signup Event. | string | **Y**
+start | Event start | datetime | **Y**
+end | Event end | datetime | **Y**
+employees_needed | The number of employees required to sign up before the event is closed. | integer | **Y**
+work_type_id | The ID of the work type used for signed up employees. | integer | **Y**
+work_subtype_id | The ID of the subtype of the work type (if any) | integer | N
+description | Longer description of the Signup Event in HTML | string | N
+
+## PUT /signup_events/{id}
+
+> Example request
+
+```shell
+curl -v https://api.crewsense.com/v1/signup_events/5 \
+     -H "Authorization: Bearer CKRskOAU2tqYItxqlGnTt0VwXm4L0QABIvYrTBPr" \
+     -X PUT
+     -d '{ "admin_id": 848, "title": "My Changed Signup Event", \ 
+           "work_type_id": 123, "work_subtype_id": 222, \
+           "start": "2019-01-01 08:30:00", "end": "2018-01-02 08:00:00", \ 
+           "description": "First shift in New Year", "employees_needed": 10 }'
+```
+
+> Example response (Event updated successfully)
+
+```json
+{
+    "success": true,
+    "code": 200,
+    "status": "ok",
+    "message": "Updated signup event My Changed Signup Event",
+    "id": 7
+}
+```
+
+Update a Signup Event. This is a <span class="PUT">PUT</span> request that requires *all* fields to be sent in again. This way you can <span class="GET">GET</span> a Signup Event, make some modifications, and <span class="PUT">PUT</span> the entire document to apply changes.
+
+### Parameters
+
+See [POST /signup_events parameters](#post-signup_events).
+
+## GET /signup_events/{id}/users
+
+> Example request
+
+```shell
+curl -v https://api.crewsense.com/v1/signup_events/5/users \
+     -H "Authorization: Bearer CKRskOAU2tqYItxqlGnTt0VwXm4L0QABIvYrTBPr"
+```
+
+> Example response
+
+```json
+[
+    {
+        "id": 2,
+        "user": {
+            "id": 138,
+            "name": "Olivér Nagy",
+            "href": "https://api.crewsense.com/v1/users/138"
+        },
+        "misc_hour_id": 12969
+    },
+    {
+        "id": 3,
+        "user": {
+            "id": 848,
+            "name": "Boss Doe",
+            "href": "https://api.crewsense.com/v1/users/848"
+        },
+        "misc_hour_id": 12970
+    }
+]
+```
+
+Lists the users signed up for the Event.
+
+### Parameters
+
+Name | Description | Type
+-----|-------------|-----
+id | Unique identifier of the Signup Event User record. | integer
+user | User who signed up for the Event. | [User](#get-users)
+misc_hour_id | The ID of the Misc. hours entry that was created when the user signed up. | integer
+
+## POST /signup_events/{id}/users
+
+> Example request
+
+```shell
+curl -v https://api.crewsense.com/v1/signup_events/5/users \
+     -H "Authorization: Bearer CKRskOAU2tqYItxqlGnTt0VwXm4L0QABIvYrTBPr" \
+     -d '{ "user_id": 848 }'
+```
+
+> Example response
+
+```json
+{
+    "success": true,
+    "code": 201,
+    "status": "created",
+    "message": "Signed Hass Brycen up for event My Changed Signup Event",
+    "id": 7
+}
+```
+
+> Example response if user is already signed up
+
+```json
+{
+    "error": "invalid_params",
+    "status": 422,
+    "error_message": [
+        "User #848 is already signed up for event #5"
+    ]
+}
+```
+
+Sign a user up for an event. A Misc. hour entry will automatically be created for the Signup Event duration with the selected work type / subtype.
+
+## DELETE /signup_events/{id}/users/{user_id}
+
+> Example request
+
+```shell
+curl -v https://api.crewsense.com/v1/signup_events/5/users/848 \
+     -H "Authorization: Bearer CKRskOAU2tqYItxqlGnTt0VwXm4L0QABIvYrTBPr" \
+     -X DELETE
+```
+
+> Example response
+
+```json
+{
+    "success": true,
+    "code": 200,
+    "status": "ok",
+    "message": "Removed Hass Brycen from event My Changed Signup Event",
+    "id": 8
+}
+```
+
+> Example response if user is not signed up
+
+```json
+{
+    "error": "invalid_params",
+    "status": 422,
+    "error_message": [
+        "User #848 not found in Signup Event."
+    ]
+}
+```
+
+Remove a user from a Signup Event. The auto-created Misc. hour entry will also be removed.
 
 # Availability
 
