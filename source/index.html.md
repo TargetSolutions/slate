@@ -102,6 +102,11 @@ For a few timestamp type data fields, we use the (still ISO 8601 standard) <codE
 
 # Changelog
 
+## 11/10/2018
+
+* Implemented [`DELETE /time_offs/{id}`](#delete-time_offs-id) endpoint
+* Added indicated groups to [shifts in `GET /schedule`](#day-assignment-shifts)
+
 ## 11/02/2018
 
 [Signup Board](#signup-board) now available via API! Create new signup events, list signed up users, add users to the event and more.
@@ -316,6 +321,12 @@ shifts | Employees working the assignment	| array
          "href": "https://api.crewsense.com/v1/qualifiers/7",
          "shortcode": "CPT",
          "name": "Captains"
+      }
+   ],
+   "groups": [
+      {
+         "id": 2108,
+         "label": "A Shift"
       }
    ]
 }
