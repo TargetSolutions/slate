@@ -106,6 +106,7 @@ For a few timestamp type data fields, we use the (still ISO 8601 standard) <codE
 
 * Implemented [`DELETE /time_offs/{id}`](#delete-time_offs-id) endpoint
 * Added indicated groups to [shifts in `GET /schedule`](#day-assignment-shifts)
+* Added color / text color to [Qualifiers](#qualifiers)
 
 ## 11/02/2018
 
@@ -320,7 +321,9 @@ shifts | Employees working the assignment	| array
          "id": 7,
          "href": "https://api.crewsense.com/v1/qualifiers/7",
          "shortcode": "CPT",
-         "name": "Captains"
+         "name": "Captains",
+         "color": "#d81b60",
+         "text_color": "#FFFFFF"
       }
    ],
    "groups": [
@@ -2923,6 +2926,8 @@ Delete the announcement by the id <code>id</code>.
       "id": 7,
       "name": "Captain",
       "shortcode": "CPT",
+      "color": "#d81b60",
+      "text_color": "#FFFFFF",
       "modified_by": null,
       "modified_on": null
    },
@@ -2930,6 +2935,8 @@ Delete the announcement by the id <code>id</code>.
       "id": 8,
       "name": "Firefighter",
       "shortcode": "FF",
+      "color": "#d81b60",
+      "text_color": "#FFFFFF",
       "modified_by": null,
       "modified_on": null
    }
@@ -2949,6 +2956,8 @@ Retrieve all active CrewSense intelligence qualifiers in your system.
    "id": 8,
    "name": "Firefighter",
    "shortcode": "FF-01",
+   "color": "#d81b60",
+   "text_color": "#FFFFFF",
    "title_id": 23,
    "created_by": 848,
    "created_on": "2015-11-18 05:19:27",
