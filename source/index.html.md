@@ -1158,17 +1158,20 @@ text_color | rgb value of background color | rgbhex | y
 <span class="delete">DELETE</span> /visual_cycles/{id}
 
 
-# Time Off's
+# Time Off
 
 View, Edit and Create new Time Off entries in the system
 
 ## GET /time_offs
 
-Get all time off entries for a given date range
+> Example request
 
-<span class="get">GET</span> /time_offs
+```shell
+curl -v https://api.crewsense.com/v1/time_offs \
+     -H "Authorization: Bearer CKRskOAU2tqYItxqlGnTt0VwXm4L0QABIvYrTBPr"
+```
 
-> GET /time_offs example response:
+> Example response
 
 ```json
 [
@@ -1202,6 +1205,8 @@ Get all time off entries for a given date range
 ]
 ```
 
+Get all time off entries for a given date range.
+
 ### Required Parameters
 
 Field | Description | Type
@@ -1234,16 +1239,51 @@ Create a new Time Off entry in system
 
 Field  | Description |Required?
 --------- | --------- | -----------
-user_id|	user id of employee | Y
-admin_ids | user id of approving admin | Y
-start_date | start date / time of time off entry| Y
-end_date | end date / time of time off entry| Y
-time_off_type_id | id of time off type to use| Y
+user_id|	user id of employee | **Y**
+admin_ids | user id of approving admin | **Y**
+start_date | start date / time of time off entry| **Y**
+end_date | end date / time of time off entry| **Y**
+time_off_type_id | id of time off type to use| **Y**
 status | pending or approved? *boolean (0 = pending, 1 = approved)* | N
 user_note | brief note; Max limit 1000 characters | N
 
 ## DELETE /time_offs/{id}
-<span class="delete">DELETE</span> /time_offs/{id}
+
+> Example request
+
+```shell
+curl -v https://api.crewsense.com/v1/time_offs/1234 \
+     -H "Authorization: Bearer CKRskOAU2tqYItxqlGnTt0VwXm4L0QABIvYrTBPr" \
+     -X DELETE
+```
+
+> Example response (success)
+
+```json
+{
+    "success": true,
+    "code": 200,
+    "status": "ok",
+    "message": "Time Off removed successfully."
+}
+```
+
+> Example response (not found)
+
+```json
+{
+    "error": "not found",
+    "status": 404,
+    "error_message": "No query results for model [TimeOff]."
+}
+```
+
+Delete a time off entry from the system.
+
+<aside class="warning">
+    This is an irreversible action! The time off entry (if recurring, all occurrences) will be permanently removed from the database.
+</aside>
+
 
 ## POST /time_offs/{id}/deny
 <span class="post">POST</span> /time_offs/{id}/deny
