@@ -349,9 +349,10 @@ break_length | Length of the break period in hours | float
 recurring	| Is it a regularly occurring shift? | boolean
 user|Employee working the shift|	See [Users](#get-users-user_id)
 scheduled_by|	Admin who assigned the shift|	See [Users](#get-users-user_id)
-work_type|	Type of work shift|	See section-wt
-labels|	Applied Crew Scheduler labels|	array; see Labels
-qualifiers | Applied CrewSense Qualifiers on the shift | see Qualifiers
+work_type|	Type of work shift|	See [Work Types](#get-work_types)
+labels|	Applied Crew Scheduler labels| See [Labels](#labels)
+qualifiers | Applied CrewSense Qualifiers on the shift | See [Qualifiers](#qualifiers)
+groups | User groups set to be indicated in the schedule | See [Groups](#groups)
 
 <aside class="notice">
 You will notice that some of the included objects have <code>href</code> properties. This is because we are only returning a sensible subset of the available data about these objects. If you make a <span class="get">GET</span> request to the provided URL, you can retrieve all of the available information about them.
