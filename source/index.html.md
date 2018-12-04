@@ -102,6 +102,11 @@ For a few timestamp type data fields, we use the (still ISO 8601 standard) <codE
 
 # Changelog
 
+## 12/04/2018
+
+Batch processing finaliziations now available!  
+See [`POST /finaliziation`](#post-finalization) and [`DELETE /finaliziation`](#delete-finalization) for details.
+
 ## 11/10/2018
 
 * Implemented [`DELETE /time_offs/{id}`](#delete-time_offs-id) endpoint
