@@ -759,6 +759,89 @@ Name | Description | Format | Required?
 date | The date to finalize the assignment on. | Date (YYYY-MM-DD) | **Y**
 admin_id | ID of the admin user that finalizes the assignment. | Integer | **Y**
 
+
+## POST /finalization
+
+> Example request
+
+```shell
+curl -v https://api.crewsense.com/v1/finalization \
+     -H "Authorization: Bearer CKRskOAU2tqYItxqlGnTt0VwXm4L0QABIvYrTBPr" \
+     -d "{ \"assignments\": [ { \"id\": 882, \"dates\": [\"2018-12-01\", \"2018-12-05\"] } ], \"admin_id\": 848 }"
+```
+
+> Example response (success)
+
+```json
+{
+    "success": true,
+    "code": 200,
+    "status": "ok",
+    "message": "All finaliziations processed successfully."
+}
+```
+
+> Example response (already finalized on certain dates)
+
+```json
+{
+    "success": true,
+    "code": 200,
+    "status": "ok",
+    "message": "Finalizations processed with errors. See the error_messages field.",
+    "success_messages": [
+        "Assignment (#882) finalized on 2018-12-01."
+    ],
+    "error_messages": [
+        "Assignment (#882) is already finalized on 2018-12-05."
+    ]
+}
+```
+
+> Example response (none succeeded, future date selected)
+
+```json
+{
+    "error": "invalid_params",
+    "status": 422,
+    "error_message": [
+        "Assignment (#882) Finalization is only allowed on past and current dates."
+    ]
+}
+```
+
+> Example response (invalid admin ID)
+
+```json
+{
+    "error": "not found",
+    "status": 404,
+    "error_message": "No query results for model [User]."
+}
+```
+
+Batch apply finalization on selected assignments on selected dates and/or date ranges. <span class="post">POST</span>ing to this endpoint will set the finalized flag &mdash; indicated by a green check mark in the Crew Scheduler &mdash; on the assignments on the dates sent in the parameters.
+
+### Request parameters
+
+Name | Description | Format | Required?
+-----|-------------|--------|----------
+assignments | An array of objects containing assignment IDs and dates to finalize. See below | array | **Y**
+admin_id | ID of the admin user that finalizes the assignment. | Integer | **Y**
+
+### Assignment object format
+
+You can select individual dates or a range of dates, or both, for each assignment.
+Dates in the `dates` array and between (inclusively) the `start` and `end` parameters will be merged and all processed.  
+Either `dates` or `start` **and** `end` are required.
+
+Name | Description | Format | Required?
+-----|-------------|--------|----------
+id | The ID of the assignment being finalized. | integer | **Y**
+dates | Array of dates to finalize in YYYY-MM-DD format. | array | N
+start | Start of the date range to finalize in YYYY-MM-DD format. | date | N
+end | End of the date range to finalize in YYYY-MM-DD format. The end date will be included in the dates finalized. | date | N
+
 ## DELETE /assignments/{id}/finalization
 
 > Example request
@@ -797,6 +880,90 @@ Remove finalization of an assignment on a given date.
 Name | Description | Format | Required?
 -----|-------------|--------|----------
 date | The date to remove finalization from the assignment. | Date (YYYY-MM-DD) | **Y**
+
+
+## DELETE /finalization
+
+> Example request
+
+```shell
+curl -v https://api.crewsense.com/v1/finalization \
+     -H "Authorization: Bearer CKRskOAU2tqYItxqlGnTt0VwXm4L0QABIvYrTBPr" \
+     --request DELETE \
+     -d "{ \"assignments\": [ { \"id\": 882, \"dates\": [\"2018-12-01\", \"2018-12-05\"] } ], \"admin_id\": 848 }"
+```
+
+> Example response (success)
+
+```json
+{
+    "success": true,
+    "code": 200,
+    "status": "ok",
+    "message": "All finaliziations processed successfully."
+}
+```
+
+> Example response (not finalized on certain dates)
+
+```json
+{
+    "success": true,
+    "code": 200,
+    "status": "ok",
+    "message": "Finalizations processed with errors. See the error_messages field.",
+    "success_messages": [
+        "Assignment (#882) finalized on 2018-12-01."
+    ],
+    "error_messages": [
+        "Assignment (#882) is not finalized on 2018-12-05."
+    ]
+}
+```
+
+> Example response (none succeeded, future date selected)
+
+```json
+{
+    "error": "invalid_params",
+    "status": 422,
+    "error_message": [
+        "Assignment (#882) Finalization is only allowed on past and current dates."
+    ]
+}
+```
+
+> Example response (invalid admin ID)
+
+```json
+{
+    "error": "not found",
+    "status": 404,
+    "error_message": "No query results for model [User]."
+}
+```
+
+Batch remove finalization on selected assignments on selected dates and/or date ranges. <span class="delete">DELETE</span>ing on this endpoint will remove the finalized flag &mdash; indicated by a green check mark in the Crew Scheduler &mdash; on the assignments on the dates sent in the parameters.
+
+### Request parameters
+
+Name | Description | Format | Required?
+-----|-------------|--------|----------
+assignments | An array of objects containing assignment IDs and dates to unfinalize. See below | array | **Y**
+admin_id | ID of the admin user that unfinalizes the assignment. | Integer | **Y**
+
+### Assignment object format
+
+You can select individual dates or a range of dates, or both, for each assignment.
+Dates in the `dates` array and between (inclusively) the `start` and `end` parameters will be merged and all processed.  
+Either `dates` or `start` **and** `end` are required.
+
+Name | Description | Format | Required?
+-----|-------------|--------|----------
+id | The ID of the assignment being unfinalized. | integer | **Y**
+dates | Array of dates to unfinalize in YYYY-MM-DD format. | array | N
+start | Start of the date range to unfinalize in YYYY-MM-DD format. | date | N
+end | End of the date range to unfinalize in YYYY-MM-DD format. The end date will be included in the dates finalized. | date | N
 
 # Shifts
 
