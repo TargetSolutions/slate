@@ -1948,6 +1948,97 @@ Field | Description | Type | Required?
 --------- | ------- | ----------- | -----------
 name | the name of the new group | string | y
 
+# Lists
+
+## GET /lists
+
+> Example request
+
+```shell
+curl -v https://api.crewsense.com/v1/lists \
+     -H "Authorization: Bearer CKRskOAU2tqYItxqlGnTt0VwXm4L0QABIvYrTBPr"
+```
+
+> Example response
+
+```json
+[
+    {
+        "id": 101,
+        "name": "Captain",
+        "max_consecutive_hours": 0,
+        "weekly_limit": 0,
+        "monthly_limit": 0,
+        "yearly_limit": 1560,
+        "position": 1
+    },
+    {
+        "id": 2669,
+        "name": "Firefighter",
+        "max_consecutive_hours": 48,
+        "weekly_limit": 0,
+        "monthly_limit": 0,
+        "yearly_limit": 0,
+        "position": 2
+    }
+]
+```
+
+Get a list of all active CallBack Lists in the system.  
+Alias: `GET /titles`
+
+## Parameters
+
+Name | Description | Type
+-----|-------------|------
+id | Unique identifier of the list. | integer
+name | Name of the list. | string
+max_consecutive_hours | Maximum number of consecutive hours allowed for users of this list. | integer
+weekly_limit | Maximum number of hours allowed in a week for users of this list. | integer
+monthly_limit | Maximum number of hours allowed in a month for users of this list. | integer
+yearly_limit | Maximum number of hours allowed in a year for users of this list. | integer
+position | The ordered position of the list among all lists. | integer
+
+## GET /lists/{id}
+
+> Example request
+
+```shell
+curl -v https://api.crewsense.com/v1/lists/101 \
+     -H "Authorization: Bearer CKRskOAU2tqYItxqlGnTt0VwXm4L0QABIvYrTBPr"
+```
+
+> Example response
+
+```json
+{
+    "id": 101,
+    "name": "Captain",
+    "max_consecutive_hours": 0,
+    "weekly_limit": 0,
+    "monthly_limit": 0,
+    "yearly_limit": 1560,
+    "position": 1,
+    "deleted": false
+}
+```
+
+Retrieve a list from the system.  
+Alias: `GET /titles/{id}`
+
+## Parameters
+
+Name | Description | Type
+-----|-------------|------
+id | Unique identifier of the list. | integer
+name | Name of the list. | string
+max_consecutive_hours | Maximum number of consecutive hours allowed for users of this list. | integer
+weekly_limit | Maximum number of hours allowed in a week for users of this list. | integer
+monthly_limit | Maximum number of hours allowed in a month for users of this list. | integer
+yearly_limit | Maximum number of hours allowed in a year for users of this list. | integer
+position | The ordered position of the list among all lists. | integer
+deleted | Is the list deleted and no longer usable? | boolean
+
 # Users
 
 ## GET /users
