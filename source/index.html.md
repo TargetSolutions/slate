@@ -102,6 +102,10 @@ For a few timestamp type data fields, we use the (still ISO 8601 standard) <codE
 
 # Changelog
 
+## 12/12/2018
+
+* [`GET /time_offs`](#get-time_offs) now includes `length` and `real_length` (length without break) in the response. Long time off entries are split up into their segments according to the underlying rotation of the user.
+
 ## 12/04/2018
 
 Batch processing finaliziations now available!  
