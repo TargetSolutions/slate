@@ -108,7 +108,8 @@ For a few timestamp type data fields, we use the (still ISO 8601 standard) <codE
 
 ## 12/11/2018
 
-New endpoints to manage user qualifiers. See [`GET /users/{user_id}/qualifiers`](#get-users-user_id-qualifiers) and the following few endpoints.
+* New endpoints to manage user qualifiers. See [`GET /users/{user_id}/qualifiers`](#get-users-user_id-qualifiers) and the following few endpoints.
+* [GET endpoint for a list of Lists.](#get-lists)
 
 ## 12/04/2018
 
