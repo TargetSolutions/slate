@@ -110,6 +110,7 @@ For a few timestamp type data fields, we use the (still ISO 8601 standard) <codE
 
 * New endpoints to manage user qualifiers. See [`GET /users/{user_id}/qualifiers`](#get-users-user_id-qualifiers) and the following few endpoints.
 * [GET endpoint for a list of Lists.](#get-lists)
+* `accrual_start_date`, `accrual_profile` and `accrual_track` in [`GET /users`, `GET /users/{id}` and `PATCH /users/{id}`](#get-users)
 
 ## 12/04/2018
 
@@ -2059,6 +2060,7 @@ deleted | Is the list deleted and no longer usable? | boolean
       "avatar_url": "https://s3-us-west-2.amazonaws.com/cbs-file-storage/company-8/avatars/586cf2dd6db20-boss_doe-thumb.jpg",
       "date_of_hire": "2011-03-04",
       "date_of_birth": "1987-07-04",
+      "accrual_start_date": "2012-05-05",
       "emails": [
          "oli.nagy@example.com",
          "oli.nagy@otherexample.net"
@@ -2066,7 +2068,15 @@ deleted | Is the list deleted and no longer usable? | boolean
       "phone_numbers": [
          "5555555555",
          "1231231232"
-      ]
+      ],
+      "accrual_track": {
+         "id": 4,
+         "name": "Firefighter"
+      },
+      "accrual_profile": {
+         "id": 5,
+         "name": "Firefighter 5-10 years"
+      }
    },
    ...
 ]
@@ -2103,6 +2113,7 @@ Returns specific user info. This call will retrieve any extra fields that you mi
    "avatar_url": "https://s3-us-west-2.amazonaws.com/cbs-file-storage/company-8/avatars/586cf2dd6db20-boss_doe-thumb.jpg",
    "date_of_hire": "2011-03-04",
    "date_of_birth": "1987-07-04",
+   "accrual_start_date": "2012-05-05",
    "emails": [
       "oli.nagy@example.com",
       "oli.nagy@otherexample.net"
@@ -2127,7 +2138,15 @@ Returns specific user info. This call will retrieve any extra fields that you mi
             "label": "Eligible for leave",
             "value": "0"
         }
-    ]
+    ],
+    "accrual_track": {
+      "id": 4,
+      "name": "Firefighter"
+    },
+    "accrual_profile": {
+      "id": 5,
+      "name": "Firefighter 5-10 years"
+    }
 }
 ```
 ## GET /users/{user_id}/titles
@@ -2400,8 +2419,15 @@ date_of_birth | Birthdate in YYYY-MM-DD format | date | n
 
 ```json
 {
-   "first_name": "Oliver",
-   "last_name": "Nagy"
+    "first_name": "Oliver",
+    "last_name": "Nagy",
+    "accrual_profile": {
+        "id": 7
+    },
+    "accrual_track": {
+        "id": 112
+    },
+    "accrual_start_date": "2017-05-11"
 }
 ```
 
