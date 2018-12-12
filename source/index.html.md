@@ -2136,6 +2136,131 @@ Returns all Groups user is associated with
 Update the list of Groups the user is associated with.
 Pass the group IDS in the `ids` parameter in the request body. The user's current groups will be overwritten with the ones provided in the parameter.
 
+## GET /users/{user_id}/qualifiers
+
+> Example request
+
+```shell
+curl -v https://api.crewsense.com/v1/users/848/qualifiers \
+     -H "Authorization: Bearer CKRskOAU2tqYItxqlGnTt0VwXm4L0QABIvYrTBPr"
+```
+
+> Example response
+
+```json
+[
+    {
+        "id": 7,
+        "name": "Captains",
+        "shortcode": "CPT",
+        "ranking": 1
+    },
+    {
+        "id": 8,
+        "name": "Firefighters",
+        "shortcode": "FF-01",
+        "ranking": 2
+    }
+]
+```
+
+Returns all qualifiers associated to the user.
+
+### Response parameters
+
+Name | Description | Type
+-----|-------------|------
+id | Unique identifier of the qualifier. | integer
+name | Name of the qualifier | string
+shortcode | Shortcode of the qualifier | string
+ranking | The position of the qualifier among the user's qualifiers. May be zero if the order of the user's qualifiers was never changed. | integer
+
+## POST /users/{user_id}/qualifiers
+
+> Example request
+
+```shell
+curl -v https://api.crewsense.com/v1/users/848/qualifiers \
+     -H "Authorization: Bearer CKRskOAU2tqYItxqlGnTt0VwXm4L0QABIvYrTBPr" \
+     -d "{ \"id\": 9, \"ranking\": 2 }"
+```
+
+> Example response
+
+```json
+{
+    "success": true,
+    "code": 201,
+    "status": "created",
+    "message": "Added user Boss Doe to qualifier Chief."
+}
+```
+
+Adds a qualifier to the user.
+
+### Request parameters
+
+Name | Description | Type | Required
+-----|-------------|------|----------
+id | Unique identifier of the qualifier. | integer | **Y**
+ranking | The position of the qualifier among the user's qualifiers. If not provided, the qualifier will go on the end of the user's qualifier list. | integer | N
+
+## DELETE /users/{user_id}/qualifiers/{id}
+
+> Example request
+
+```shell
+curl -v https://api.crewsense.com/v1/users/848/qualifiers/32 \
+     -H "Authorization: Bearer CKRskOAU2tqYItxqlGnTt0VwXm4L0QABIvYrTBPr" \
+     -X DELETE
+```
+
+> Example response
+
+```json
+{
+    "success": true,
+    "code": 200,
+    "status": "o",
+    "message": "Removed user Boss Doe from qualifier Chief."
+}
+```
+
+Removes a qualifier from the user.
+
+## PUT /users/{user_id}/qualifiers
+
+> Example request
+
+```shell
+curl -v https://api.crewsense.com/v1/users/848/qualifiers \
+     -H "Authorization: Bearer CKRskOAU2tqYItxqlGnTt0VwXm4L0QABIvYrTBPr" \
+     -X PUT
+     -d "{ \"ids\": [{ \"id\": 9, \"ranking\": 1 }, { \"id\": 10, \"ranking\": 2 }] }"
+```
+
+> Example response
+
+```json
+{
+    "success": true,
+    "code": 200,
+    "status": "ok",
+    "message": "Replaced user qualifiers."
+}
+```
+
+Replaces user qualifiers with the provided list of qualifiers.
+
+### Request parameters
+
+The request should have an `ids` containing an array of objects described below:
+
+Name | Description | Type | Required
+-----|-------------|------|----------
+id | Unique identifier of the qualifier. | integer | **Y**
+ranking | The position of the qualifier among the user's qualifiers. If not provided, the qualifier will go on the end of the user's qualifier list. | integer | N
+
 ## PUT /users
 
 <span class="put">PUT</span> /users
