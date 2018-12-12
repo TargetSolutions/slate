@@ -1363,31 +1363,36 @@ curl -v https://api.crewsense.com/v1/time_offs \
 ```json
 [
     {
-        "id": "744837",
+        "id": 744837,
         "time_off_type": {
-            "id": "6",
+            "id": 6,
             "name": "Vacation",
             "work_code": "VAC001"
         },
         "user": {
-            "id": "98",
+            "id": 98,
             "name": "Brycen Doe",
-            "href": "/users/98"
+            "href": "https://api.crewsense.com/v1/users/98"
         },
         "admin": {
-            "id": "34942",
+            "id": 34942,
             "name": "Oliver CrewSense",
-            "href": "/users/34942"
+            "href": "https://api.crewsense.com/v1/users/34942"
         },
         "start": "2017-07-10 07:00:00",
         "end": "2017-07-11 07:00:00",
-        "rrule": null,
-        "status": "1",
+        "length": 24,
+        "real_length": 23.5,
+        "status": 1,
         "request_date": "2017-07-10T08:19:57-07:00",
-        "approval_date": "1969-12-31T16:00:00-08:00",
-        "acknowledgement_date": "1969-12-31T16:00:00-08:00",
+        "approval_date": "2017-07-10T11:12:33-07:00",
+        "acknowledgement_date": null,
         "user_note": null,
-        "traded_with": null
+        "traded_with": {
+            "id": 848,
+            "name": "Boss Doe",
+            "href": "https://api.crewsense.com/v1/users/848"
+        }
     }
 ]
 ```
