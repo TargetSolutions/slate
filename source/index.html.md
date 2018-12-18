@@ -21,6 +21,11 @@ The CrewSense API exposes very useful endpoints from within the CrewSense platfo
 
 All of our examples are in cURL, however any scripting language that supports RESTful calls can be utilized.
 
+<aside class="warning">
+    <strong>BREAKING CHANGES</strong><br />
+    While we strive to not introduce breaking changes until a new version of the API is released, we had to add pagination to a few endpoints to accomodate requests for large datasets. Please see <a href="#changelog">the changelog</a> and <a href="#pagination">Pagination</a> for details!
+</aside>
+
 
 # Authentication
 
@@ -96,11 +101,37 @@ To access protected resources in the API, you have to sign the HTTP requests wit
 
 # Conventions
 
+## Date and time
+
 We use a simplified version of the ISO 8601 standard. Dates are represented in the <code>YYYY-MM-DD</code> format. Most dates with timestamps follow the <code>YYYY-MM-DD hh:mm:ss</code> format (e.g. “2015-03-15 19:33:59”), where the timestamp is “timezoneless”, it is implied to be in your organization’s timezone (or the timezone is irrelevant).
 
 For a few timestamp type data fields, we use the (still ISO 8601 standard) <codE>YYYY-MM-DDThh:mm:ss+00:00</code> format (example: “2015-03-21T19:45:33-06:00”). This is used for fields like contact time, response time, creation date etc., where the timezone may be important (due to daylight savings time for example).
 
+## Pagination
+
+```json
+{
+    "items": [ array of items on the current page of the response ],
+    "metadata": {
+        "links": {
+            "prev": "https://api.crewsense.com/v1/[resource]?limit=50&after=123456",
+            "next": "https://api.crewsense.com/v1/[resource]?limit=50&after=123556",
+        }
+    }
+}
+```
+
+Some endpoints might return a large dataset based on the request parameters used. On these endpoints, we split the results into pages to allow for optimal response times and to prevent timeouts. Paginated resources will generally look like the example to the right.
+
+The `metadata` object will generally include other metadata too, and you get the URL's for the `prev`ious and `next` pages to request. If `prev` is `null`, you are on the first result page, and if `next` is `null`, you are on the last page. If both links are `null`, the result set fit on one page.
+
+Parameters for the `prev` and `next` links differ based on the type of resource requested. If request parameters determine a date period to be returned, it will have a `start` and `end` parameter for the originally requested period, and an `after` date parameter that determines the start of the current page. In the response for these endpoints, the `metadata` object will also contain `start`, `end`, `page_start` and `page_end` dates, which are the original requested date period, and the returned date period on the current page, respectively. For an example, see [`GET /time_offs`](#get-time_offs).
+
 # Changelog
+
+## 12/18/2018
+
+<span class="delete">BREAKING CHANGE</span> Added pagination to the [`GET /time_offs`](#get-time_offs) endpoint, to allow large date periods to be queried efficiently.
 
 ## 12/12/2018
 
@@ -1371,43 +1402,58 @@ curl -v https://api.crewsense.com/v1/time_offs \
 > Example response
 
 ```json
-[
-    {
-        "id": 744837,
-        "time_off_type": {
-            "id": 6,
-            "name": "Vacation",
-            "work_code": "VAC001"
-        },
-        "user": {
-            "id": 98,
-            "name": "Brycen Doe",
-            "href": "https://api.crewsense.com/v1/users/98"
-        },
-        "admin": {
-            "id": 34942,
-            "name": "Oliver CrewSense",
-            "href": "https://api.crewsense.com/v1/users/34942"
-        },
-        "start": "2017-07-10 07:00:00",
-        "end": "2017-07-11 07:00:00",
-        "length": 24,
-        "real_length": 23.5,
-        "status": 1,
-        "request_date": "2017-07-10T08:19:57-07:00",
-        "approval_date": "2017-07-10T11:12:33-07:00",
-        "acknowledgement_date": null,
-        "user_note": null,
-        "traded_with": {
-            "id": 848,
-            "name": "Boss Doe",
-            "href": "https://api.crewsense.com/v1/users/848"
+{
+    "items": [
+        {
+            "id": 744837,
+            "time_off_type": {
+                "id": 6,
+                "name": "Vacation",
+                "work_code": "VAC001"
+            },
+            "user": {
+                "id": 98,
+                "name": "Brycen Doe",
+                "href": "https://api.crewsense.com/v1/users/98"
+            },
+            "admin": {
+                "id": 34942,
+                "name": "Oliver CrewSense",
+                "href": "https://api.crewsense.com/v1/users/34942"
+            },
+            "start": "2017-07-10 07:00:00",
+            "end": "2017-07-11 07:00:00",
+            "length": 24,
+            "real_length": 23.5,
+            "status": 1,
+            "request_date": "2017-07-10T08:19:57-07:00",
+            "approval_date": "2017-07-10T11:12:33-07:00",
+            "acknowledgement_date": null,
+            "user_note": null,
+            "traded_with": {
+                "id": 848,
+                "name": "Boss Doe",
+                "href": "https://api.crewsense.com/v1/users/848"
+            }
+        }
+    ],
+    "metadata": {
+        "start": "2018-10-01 00:00:00",
+        "end": "2019-01-01 00:00:00",
+        "page_start": "2018-10-01 00:00:00",
+        "page_end": "2018-11-01 00:00:00",
+        "links": {
+            "prev": null,
+            "next": "http://api.crewsense.local/v1/time_offs?start=2018-10-01+00%3A00%3A00&end=2019-01-01+00%3A00%3A00&after=2018-11-01+00%3A00%3A00"
         }
     }
-]
+}
+
 ```
 
 Get all time off entries for a given date range.
+
+Results of this endpoint are paginated. If the request is for more than a months data, the API will return data for the first month, and provide links for the next page of the dataset. If the `next` link is empty, that result set was the last page of the data.
 
 ### Required Parameters
 
@@ -1415,6 +1461,102 @@ Field | Description | Type
 --------- | ------- | -----------
 start |	Start date of query timeframe|	datetime
 end |	End date of query timeframe |	datetime
+
+### Metadata
+
+Field | Description | Type
+-----|---------|-------
+start | Start of the originally requested date period | datetime
+end | End of the originally requested date period | datetime
+page_start | Start date of data returned on the current page | datetime
+page_end | End date of data returned on the current page | datetime
+links | URLs to request to get the previous and next page of the dataset | array<URL>
+
+## GET /time_offs/{id}
+
+> Example request
+
+```shell
+curl -v https://api.crewsense.com/v1/time_offs/744837 \
+     -H "Authorization: Bearer CKRskOAU2tqYItxqlGnTt0VwXm4L0QABIvYrTBPr"
+```
+
+> Example response
+
+```json
+{
+    "items": [
+        {
+            "id": 744837,
+            "time_off_type": {
+                "id": 6,
+                "name": "Vacation",
+                "work_code": "VAC001"
+            },
+            "user": {
+                "id": 98,
+                "name": "Brycen Doe",
+                "href": "https://api.crewsense.com/v1/users/98"
+            },
+            "admin": {
+                "id": 34942,
+                "name": "Oliver CrewSense",
+                "href": "https://api.crewsense.com/v1/users/34942"
+            },
+            "start": "2017-07-10 07:00:00",
+            "end": "2017-07-11 07:00:00",
+            "length": 24,
+            "real_length": 23.5,
+            "status": 1,
+            "request_date": "2017-07-10T08:19:57-07:00",
+            "approval_date": "2017-07-10T11:12:33-07:00",
+            "acknowledgement_date": null,
+            "user_note": null,
+            "traded_with": {
+                "id": 848,
+                "name": "Boss Doe",
+                "href": "https://api.crewsense.com/v1/users/848"
+            }
+        }, {
+            "id": 744837,
+            "time_off_type": {
+                "id": 6,
+                "name": "Vacation",
+                "work_code": "VAC001"
+            },
+            "user": {
+                "id": 98,
+                "name": "Brycen Doe",
+                "href": "https://api.crewsense.com/v1/users/98"
+            },
+            "admin": {
+                "id": 34942,
+                "name": "Oliver CrewSense",
+                "href": "https://api.crewsense.com/v1/users/34942"
+            },
+            "start": "2017-07-11 07:00:00",
+            "end": "2017-07-12 07:00:00",
+            "length": 24,
+            "real_length": 23.5,
+            "status": 1,
+            "request_date": "2017-07-10T08:19:57-07:00",
+            "approval_date": "2017-07-10T11:12:33-07:00",
+            "acknowledgement_date": null,
+            "user_note": null,
+            "traded_with": {
+                "id": 848,
+                "name": "Boss Doe",
+                "href": "https://api.crewsense.com/v1/users/848"
+            }
+        }
+    ],
+    "metadata": []
+}
+
+```
+
+Get all occurrences of a specific time off entry.
+
 
 ## POST /time_offs
 
