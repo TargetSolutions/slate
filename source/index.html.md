@@ -129,6 +129,10 @@ Parameters for the `prev` and `next` links differ based on the type of resource 
 
 # Changelog
 
+## 10/10/2019
+
+* [`GET /day_labels`](#get-day_labels): query day header colors and labels by date range.
+
 ## 12/18/2018
 
 <span class="delete">BREAKING CHANGE</span> Added pagination to the [`GET /time_offs`](#get-time_offs) endpoint, to allow large date periods to be queried efficiently.
@@ -558,7 +562,7 @@ This array provides data about any miscellaneous hours added for the day.
 
 This contains the Crew Scheduler notes for the day formatted in <code>HTML</code> format
 
-## GET /day_labels
+## <span class="get">GET</span> /day_labels
 
 > Example request
 
@@ -597,7 +601,7 @@ Defaults to returning today's color and label.
 ### Query Parameters
 
 Field | Description | Type | Default
---------- | ------- | -----------|
+--------- | ------- | ----- | ------
 start | Start date of the queried date range|date|today 12:00 am
 end | End date of the queried date range| date|end of today
 
