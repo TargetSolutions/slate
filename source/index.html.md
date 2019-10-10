@@ -558,6 +558,49 @@ This array provides data about any miscellaneous hours added for the day.
 
 This contains the Crew Scheduler notes for the day formatted in <code>HTML</code> format
 
+## GET /day_labels
+
+> Example request
+
+```shell
+curl -v https://api.crewsense.com/v1/day_labels -G \
+     -H "Authorization: Bearer CKRskOAU2tqYItxqlGnTt0VwXm4L0QABIvYrTBPr" \
+     -d "start=2019-10-01" \
+     -d "end=2019-10-31"
+```
+
+> An example of returned /day_labels data GET request looks like this:
+
+```json
+{
+    "days": {
+        "2019-10-01": {
+            "color": "#00acc1",
+            "label": "C Shift"
+        },
+        "2019-10-02": {
+            "color": "#753254",
+            "label": "B Shift"
+        },
+        "2019-10-03": {
+            "color": "#00acc1",
+            "label": "C Shift"
+        },
+        ...
+    }
+}
+```
+
+Get the color and label of days in the selected date range.
+Defaults to returning today's color and label.
+
+### Query Parameters
+
+Field | Description | Type | Default
+--------- | ------- | -----------|
+start | Start date of the queried date range|date|today 12:00 am
+end | End date of the queried date range| date|end of today
+
 # Assignments
 
 Allows you to retrieve, modify and create new CrewScheduler Assignments
