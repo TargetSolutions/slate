@@ -3853,3 +3853,73 @@ Field | Description | Required?
 --------- | ------- | -----------
 admin_id | User ID of the admin updating the Bulletin Board | Y
 content | HTML of the Bulletin Board content. Some HTML is allowed. | Y
+
+# TargetSolutions integration
+
+## GET /target_solutions/users
+
+> GET /target_solutions/users example JSON
+
+```json
+[
+    {
+        "id": 123456,
+        "first_name": "Hass",
+        "last_name": "Brycen",
+        "crewsense_user_id": 98,
+        "crewsense_company_id": 8,
+        "target_solutions_customer_id": 1
+    },
+    {
+        "id": 123457,
+        "first_name": "John",
+        "last_name": "Doe",
+        "crewsense_user_id": 138,
+        "crewsense_company_id": 8,
+        "target_solutions_customer_id": 1
+    },
+]
+```
+<span class="get"> GET</span> /target_solutions/users
+
+Get all mapped TargetSolutions users of the company.
+
+### Parameters
+
+Field | Description | Type 
+--------- | ------- | ----
+id | TargetSolutions user ID. | integer
+first_name | First name in the CrewSense system. | string
+last_name | Last name in the CrewSense system. | string
+crewsense_user_id | CrewSense user ID. | integer
+crewsense_company_id | CrewSense Company ID. | integer
+target_solutions_customer_id | TargetSolutions customer ID. | integer
+
+## GET /target_solutions/users/{id}
+
+> GET /target_solutions/users/{id} example JSON
+
+```json
+{
+    "id": 123456,
+    "first_name": "Hass",
+    "last_name": "Brycen",
+    "crewsense_user_id": 98,
+    "crewsense_company_id": 8,
+    "target_solutions_customer_id": 1
+}
+```
+<span class="get"> GET</span> /target_solutions/users/{id}
+
+Get a mapped TargetSolutions user based on their TargetSolutions user ID.
+
+### Parameters
+
+Field | Description | Type 
+--------- | ------- | ----
+id | TargetSolutions user ID. | integer
+first_name | First name in the CrewSense system. | string
+last_name | Last name in the CrewSense system. | string
+crewsense_user_id | CrewSense user ID. | integer
+crewsense_company_id | CrewSense Company ID. | integer
+target_solutions_customer_id | TargetSolutions customer ID. | integer
