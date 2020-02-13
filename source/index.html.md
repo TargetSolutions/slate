@@ -129,6 +129,10 @@ Parameters for the `prev` and `next` links differ based on the type of resource 
 
 # Changelog
 
+## 02/13/2020
+
+* [Qualifiers](#qualifiers) endpoints include optional Target Solutions Credential ID.
+
 ## 10/10/2019
 
 * [`GET /day_labels`](#get-day_labels): query day header colors and labels by date range.
@@ -3546,7 +3550,8 @@ Delete the announcement by the id <code>id</code>.
       "color": "#d81b60",
       "text_color": "#FFFFFF",
       "modified_by": null,
-      "modified_on": null
+      "modified_on": null,
+      "target_solutions_credential_id": 1234
    },
    {
       "id": 8,
@@ -3555,7 +3560,8 @@ Delete the announcement by the id <code>id</code>.
       "color": "#d81b60",
       "text_color": "#FFFFFF",
       "modified_by": null,
-      "modified_on": null
+      "modified_on": null,
+      "target_solutions_credential_id": 1235
    }
 ]
 ```
@@ -3581,7 +3587,8 @@ Retrieve all active CrewSense intelligence qualifiers in your system.
    "modified_by": null,
    "modified_on": null,
    "deleted_at": null,
-   "deleted_by": null
+   "deleted_by": null,
+   "target_solutions_credential_id": 1234
 }
 ```
 
@@ -3608,6 +3615,7 @@ Field | Description | Required?
 --------- | ------- | -----------
 name |	Descriptive name of the qualifier| Y
 shortcode	| Shortened name of the qualifier, to be displayed on the Crew Scheduler
+target_solutions_credential_id | (optional) ID of the Target Solutions credential linked to the qualifier.
 
 ## DELETE /qualifiers/{id}
 
