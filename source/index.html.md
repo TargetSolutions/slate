@@ -131,7 +131,7 @@ Parameters for the `prev` and `next` links differ based on the type of resource 
 
 ## 03/13/2020
 
-* Endpoint to [restore deleted Qualifiers](#get-qualifiers-id).
+* Endpoint to [restore deleted Qualifiers](#put-qualifiers-id).
 
 ## 02/13/2020
 
