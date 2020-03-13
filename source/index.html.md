@@ -3629,11 +3629,6 @@ Delete a qualifier. The qualifier will be *soft-deleted*, which means we can man
 
 ## PUT /qualifiers/{id}
 
-<span class="put">PUT</span> /qualifiers/{id}
-
-This endpoint is used to restore a soft-deleted qualifier. It only works on deleted qualifiers.  
-Provide an `undelete` parameter with a truish value, e.g. `1`.
-
 > Example response (success)
 
 ```json
@@ -3659,6 +3654,11 @@ Provide an `undelete` parameter with a truish value, e.g. `1`.
     "error_message": "Qualifier Captain [CPT] is not deleted, cannot restore."
 }
 ```
+
+<span class="put">PUT</span> /qualifiers/{id}
+
+This endpoint is used to restore a soft-deleted qualifier. It only works on deleted qualifiers.  
+Provide an `undelete` parameter with a truish value, e.g. `1`.
 
 ### Query Parameters
 
