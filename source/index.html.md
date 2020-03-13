@@ -129,6 +129,10 @@ Parameters for the `prev` and `next` links differ based on the type of resource 
 
 # Changelog
 
+## 03/13/2020
+
+* Endpoint to [restore deleted Qualifiers](#get-qualifiers-id).
+
 ## 02/13/2020
 
 * [Qualifiers](#qualifiers) endpoints include optional Target Solutions Credential ID.
@@ -3622,6 +3626,45 @@ target_solutions_credential_id | (optional) ID of the Target Solutions credentia
 <span class="delete">DELETE</span> /qualifiers/{id}
 
 Delete a qualifier. The qualifier will be *soft-deleted*, which means we can manually restore it if you think you’ve made a mistake deleting it.
+
+## PUT /qualifiers/{id}
+
+<span class="put">PUT</span> /qualifiers/{id}
+
+This endpoint is used to restore a soft-deleted qualifier. It only works on deleted qualifiers.  
+Provide an `undelete` parameter with a truish value, e.g. `1`.
+
+> Example response (success)
+
+```json
+{
+    "success": true,
+    "code": 200,
+    "status": "ok",
+    "message": "Qualifier Captain [CPT] restored successfully.",
+    "qualifier": {
+        "id": 34,
+        "name": "Captain",
+        "shortcode": "CPT"
+    }
+}
+```
+
+> Example response (qualifier not deleted)
+
+```json
+{
+    "error": "conflict",
+    "status": 409,
+    "error_message": "Qualifier Captain [CPT] is not deleted, cannot restore."
+}
+```
+
+### Query Parameters
+
+Field | Description | Required?
+--------- | ------- | -----------
+undelete |	Set to 1 to restore a deleted qualifier. | Y
 
 ## GET /qualifiers/{id}/users
 
